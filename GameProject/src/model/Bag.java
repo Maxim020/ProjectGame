@@ -7,7 +7,7 @@ public class Bag {
 	
 	//Attributes
 	private ArrayList<Character> letterList;
-	private String letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGHHIIIIIIIIJJKKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ**";
+	private final String LETTERS = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGHHIIIIIIIIJJKKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ**";
 	
 	//Constructor
 	/**
@@ -21,8 +21,8 @@ public class Bag {
 		
 		letterList = new ArrayList<>();
 		
-		for(int i = 0; i < letters.split("").length; i++) {
-		letterList.add(letters.toCharArray()[i]);
+		for(int i = 0; i < LETTERS.split("").length; i++) {
+		letterList.add(LETTERS.toCharArray()[i]);
 		}
 		
 	}
@@ -42,7 +42,7 @@ public class Bag {
 	 * @param char letter
 	 * @requires letter instanceOf char && letterList.contains(letter)
 	 * @exception IllegalArgumentException
-	 * @ensures letterList.contains(letter) = false;
+	 * @ensures letterList.size() - 1
 	 * @author Maxim
 	 */
 	public void removeFromBag(char letter) {
@@ -53,8 +53,36 @@ public class Bag {
 		}
 	}
 	
+	/**
+	 * Method for pulling a random letter from the bag. Should have additional protection in case of return 0.
+	 * @requires letterList != null;
+	 * @ensures Error message || return of random letter
+	 * @return char letter
+	 * @author Maxim
+	 */
+	public char pull() {
+		if(letterList.isEmpty()){System.out.println("The bag is already empty");}
+		else if(letterList.size() == 1) {
+			char letter = letterList.get(0);
+			letterList.remove(0);
+			return letter;
+		}
+		else {
+			int range = letterList.size();
+			char letter = letterList.get( (int) (Math.random()*range));
+			letterList.remove(letter);
+			return letter;
+		}
+		return 0;
+	}
+	
 	public ArrayList<Character> getLetterList(){
 		return letterList;
 	}
 	
 }
+
+
+
+
+
