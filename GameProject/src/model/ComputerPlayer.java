@@ -1,5 +1,7 @@
 package model;
 
+import model.player.Player;
+
 public class ComputerPlayer implements Player {
 	
 	private String name;

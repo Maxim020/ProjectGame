@@ -1,4 +1,6 @@
-package model;
+package model.player;
+
+import model.LetterDeck;
 
 public interface Player {
 	

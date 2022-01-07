@@ -1,4 +1,7 @@
-package model;
+package model.player;
+
+import model.Bag;
+import model.LetterDeck;
 
 public class HumanPlayer implements Player {
 	

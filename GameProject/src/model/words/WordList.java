@@ -1,4 +1,4 @@
-package model;
+package model.words;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

@@ -1,18 +1,21 @@
 package model;
 
+import model.player.HumanPlayer;
+import model.player.Player;
+
 import java.util.ArrayList;
 
 public class Game {
 	
 	//Attributes
 	private ArrayList<Player> listOfPlayers;
-	private GameBoard board;
+	private Board board;
 	private Bag bag;
 	
 	//Constructor
 	public Game() {
 		listOfPlayers = new ArrayList<>();
-		board = new GameBoard();
+		board = new Board();
 		bag = new Bag();
 	}
 	
