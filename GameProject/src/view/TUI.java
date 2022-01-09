@@ -1,84 +1,82 @@
 package view;
 import model.Board;
 
-import java.io.*;
-
 public class TUI {
+    /**
+     * @provides A Class for TUI. It enables the display of the game.
+     * @author Yasin Fahmy
+     */
     // Declaring ANSI_RESET so that we can reset the color
     public static final String ANSI_RESET = "\u001B[0m";
-    // Declaring the background color red
+    // Declaring the background color red, blue, purple, cyan
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
-    // Declaring the background color blue
+    public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
     public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
-    // Declaring the background color purple
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
-    // Declaring the background color cyan
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-
     private Board board;
 
+    /**
+     * @param board - Constructor needs an instance of the Class Board, in order to display the game
+     */
     public TUI(Board board){
         this.board = board;
     }
 
-    public String printSquare(int row, int column){ //Jedes Square einzeln behandeln und wenns besonders ist background setzen
-        //Center!!!!!
+    /**
+     * @param row - valid int to indicate row
+     * @param column - valid int to indicate column
+     * @return - The squares of the board that are the fields to place tiles on
+     */
+    public String printSquare(int row, int column) throws IllegalArgumentException{
+        if(!board.isFieldValid(row, column)){throw new IllegalArgumentException();}
+
         if (board.checkField(row, column).equals(Board.FieldType.TRIPLE_WORD_SCORE)){
-            return ANSI_RED_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
+            return "|"+ANSI_RED_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
         else if(board.checkField(row, column).equals(Board.FieldType.DOUBLE_WORD_SCORE)){
-            return ANSI_PURPLE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
+            return "|"+ANSI_PURPLE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
         else if(board.checkField(row, column).equals(Board.FieldType.TRIPLE_LETTER_SCORE)){
-            return ANSI_BLUE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
+            return "|"+ANSI_BLUE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
         else if(board.checkField(row, column).equals(Board.FieldType.DOUBLE_LETTER_SCORE)){
-            return ANSI_CYAN_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
+            return "|"+ANSI_CYAN_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
+        }
+        else if (board.checkField(row, column).equals(Board.FieldType.CENTER)){
+            return "|"+ANSI_YELLOW_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
         else {
-            return " "+board.getTile(row,column)+" ";
+            return "| "+board.getTile(row,column)+" ";
         }
     }
 
+    /**
+     * @param line - The number of the line, starting from 1
+     * @return - A line of the board (Upper bound + Fields)
+     */
     public String printLine(int line){//For Loop?
         int row = line-1;
-        return  " "+String.format("%2d",line)+" | "+board.getTile(row,0)+" | "+board.getTile(row,1)+" | "+board.getTile(row,2)+" | "+board.getTile(row,3)+" | "+board.getTile(row,4)+" | "+board.getTile(row,5)+" | "+board.getTile(row,6)+" | "+board.getTile(row,7)+" | "+board.getTile(row,8)+" | "+board.getTile(row,9)+" | "+board.getTile(row,10)+" | "+board.getTile(row,11)+" | "+board.getTile(row,12)+" | "+board.getTile(row,13)+" | "+board.getTile(row,14)+" | "+line+"\n";
+        String result = "";
+        result += " "+String.format("%2d",line)+" ";
+        for (int i=0; i<15; i++){
+            result += printSquare(row,i);
+        }
+        result += "| "+line+"\n";
+        return  result;
     }
 
+    /**
+     * @return - displays the whole with letters and numbers on the sides board
+     */
     public String toString(){
-        return
-                "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n" +
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(1)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(2)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(3)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(4)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(5)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(6)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(7)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(8)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(9)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(10)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(11)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(12)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(13)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(14)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                        printLine(15)+
-                "    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O";
+        String result = "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n";
+        for (int i=0; i<15; i++){
+            result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
+            result +=printLine(i+1);
+        }
+        result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+                 "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O";
+        return result;
     }
 }
