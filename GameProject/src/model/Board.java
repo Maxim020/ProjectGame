@@ -10,8 +10,9 @@ public class Board {
     private char[][] squares;
     public enum FieldType{NORMAL,TRIPLE_WORD_SCORE, DOUBLE_WORD_SCORE, TRIPLE_LETTER_SCORE, DOUBLE_LETTER_SCORE, CENTER}
     //A set holds all squares that belong to a special type of field
-    private HashSet<String> tripleWordScore; private HashSet<String> doubleWordScore;
-    private HashSet<String> tripleLetterScore; private HashSet<String> doubleLetterScore;
+    protected HashSet<String> tripleWordScore; protected HashSet<String> doubleWordScore;
+    protected HashSet<String> tripleLetterScore; protected HashSet<String> doubleLetterScore;
+    protected HashSet<String> center;
 
     /**
      * Constructor of the Board Class
@@ -94,6 +95,8 @@ public class Board {
         doubleLetterScore.add("A12");doubleLetterScore.add("H12");doubleLetterScore.add("O12");
         doubleLetterScore.add("G13");doubleLetterScore.add("I13");
         doubleLetterScore.add("D15");doubleLetterScore.add("L15");
+        center = new HashSet<>();
+        center.add("H8");
     }
 
     /**
@@ -108,7 +111,7 @@ public class Board {
         else if(doubleWordScore.contains(convert(row,column))){return FieldType.DOUBLE_WORD_SCORE;}
         else if(tripleLetterScore.contains(convert(row,column))){return FieldType.TRIPLE_LETTER_SCORE;}
         else if(doubleLetterScore.contains(convert(row,column))){return FieldType.DOUBLE_LETTER_SCORE;}
-        else if (row == 7 && column == 7){return FieldType.CENTER;}
+        else if(center.contains(convert(row,column))){return FieldType.CENTER;}
         else {return FieldType.NORMAL;}
     }
 

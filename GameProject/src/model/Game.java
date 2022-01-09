@@ -55,6 +55,7 @@ public class Game {
 	
 	/**
 	 * This method is executed when a game is set up and is ready to start. This is done manually by the user
+	 * WIP
 	 */
 	public void start() {
 		if(listOfPlayers.size() < 2) {System.out.println("A game must have at least two players");}
