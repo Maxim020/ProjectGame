@@ -139,6 +139,6 @@ public class WordScoreCounter {
 		}
 		
 		return score * finalWordMultiplier;
-		
+	 }
 	}
 	
