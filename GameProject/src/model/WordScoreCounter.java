@@ -84,7 +84,7 @@ public class WordScoreCounter {
 	}
 	
 	/**
-	 * !!CHECKS SCORE FOR VERTICAL WORDS!!
+	 * !!CHECKS SCORE FOR DOWNWARD VERTICAL WORDS!!
 	 * Takes the inserted letters as a character list. Every letter from this list has it's score checked and multiplied either by 1, 2 or 3.
 	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
 	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
@@ -97,7 +97,7 @@ public class WordScoreCounter {
 	 * @ensures return of proper score and removal of used multiplier tiles
 	 * @author Maxim
 	 */
-	public int getTotalWordScoreVertical(ArrayList<Character> letterList, int rowOfFirstLetter, int column){
+	public int getTotalWordScoreVerticalDown(ArrayList<Character> letterList, int rowOfFirstLetter, int column){
 		int score = 0;
 		int finalWordMultiplier = 1;
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
@@ -130,6 +130,65 @@ public class WordScoreCounter {
 			
 			if(board.center.contains(board.convert(rowOfFirstLetter + i, column))) {
 				board.center.remove(board.convert(rowOfFirstLetter + i, column));
+			}
+		}
+		
+		for(int i = 0; i < listOfWordMultipliers.size(); i++) {
+			
+			finalWordMultiplier = finalWordMultiplier * listOfWordMultipliers.get(i);
+		}
+		
+		return score * finalWordMultiplier;
+		
+	}
+	
+	/**
+	 * !!CHECKS SCORE FOR UPWARD VERTICAL WORDS!!
+	 * Takes the inserted letters as a character list. Every letter from this list has it's score checked and multiplied either by 1, 2 or 3.
+	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
+	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
+	 * Again in this cycle, all word multiplier tiles are removed and switched to normal tiles.
+	 * @param ArrayList<Character> letterList
+	 * @param int rowOfFirstLetter
+	 * @param int column
+	 * @return int score for entire word
+	 * @requires both checkers and board to be initialized
+	 * @ensures return of proper score and removal of used multiplier tiles
+	 * @author Maxim
+	 */
+	public int getTotalWordScoreVerticalUp(ArrayList<Character> letterList, int rowOfFirstLetter, int column){
+		int score = 0;
+		int finalWordMultiplier = 1;
+		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
+		
+		for(int i = 0; i < letterList.size(); i++) {
+			
+			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkField(rowOfFirstLetter - i, column)));
+			
+			if(board.doubleLetterScore.contains(board.convert(rowOfFirstLetter - i, column))) {
+				board.doubleLetterScore.remove(board.convert(rowOfFirstLetter - i, column));
+			}
+			
+			if(board.tripleLetterScore.contains(board.convert(rowOfFirstLetter - i, column))) {
+				board.tripleLetterScore.remove(board.convert(rowOfFirstLetter - i, column));
+			}
+		}
+		
+		for(int i = 0; i < letterList.size(); i++) {
+			
+			if(multiplierChecker.wordMultiplierChecker(board.checkField(rowOfFirstLetter - i, column)) > 1) {
+			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkField(rowOfFirstLetter - i, column)));
+			}
+			
+			if(board.doubleWordScore.contains(board.convert(rowOfFirstLetter - i, column))) {
+				board.doubleWordScore.remove(board.convert(rowOfFirstLetter - i, column));
+			}
+			if(board.tripleWordScore.contains(board.convert(rowOfFirstLetter - i, column))) {
+				board.tripleWordScore.remove(board.convert(rowOfFirstLetter - i, column));
+			}
+			
+			if(board.center.contains(board.convert(rowOfFirstLetter - i, column))) {
+				board.center.remove(board.convert(rowOfFirstLetter - i, column));
 			}
 		}
 		
