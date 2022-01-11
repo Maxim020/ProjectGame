@@ -45,7 +45,7 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkField(row, columnOfFirstLetter + i)));
+			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
 			
 			if(board.doubleLetterScore.contains(board.convert(row, columnOfFirstLetter + i))) {
 				board.doubleLetterScore.remove(board.convert(row, columnOfFirstLetter + i));
@@ -57,8 +57,8 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(multiplierChecker.wordMultiplierChecker(board.checkField(row, columnOfFirstLetter + i)) > 1) {
-			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkField(row, columnOfFirstLetter + i)));
+			if(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)) > 1) {
+			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
 			
 			if(board.doubleWordScore.contains(board.convert(row, columnOfFirstLetter + i))) {
 				board.doubleWordScore.remove(board.convert(row, columnOfFirstLetter + i));
@@ -104,7 +104,7 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkField(rowOfFirstLetter + i, column)));
+			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
 			
 			if(board.doubleLetterScore.contains(board.convert(rowOfFirstLetter + i, column))) {
 				board.doubleLetterScore.remove(board.convert(rowOfFirstLetter + i, column));
@@ -117,8 +117,8 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(multiplierChecker.wordMultiplierChecker(board.checkField(rowOfFirstLetter + i, column)) > 1) {
-			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkField(rowOfFirstLetter + i, column)));
+			if(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)) > 1) {
+			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
 			}
 			
 			if(board.doubleWordScore.contains(board.convert(rowOfFirstLetter + i, column))) {

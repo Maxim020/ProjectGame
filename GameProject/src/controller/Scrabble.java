@@ -1,7 +1,6 @@
 package controller;
 
 import model.Board;
-import model.Square;
 import view.TUI;
 
 public class Scrabble {

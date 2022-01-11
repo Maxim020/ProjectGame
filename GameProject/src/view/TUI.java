@@ -1,11 +1,12 @@
 package view;
 import model.Board;
+/**
+ * Class for TUI. It enables the display of the game.
+ * @author Yasin Fahmy
+ * @version 09.01.2022
+ */
 
 public class TUI {
-    /**
-     * @provides A Class for TUI. It enables the display of the game.
-     * @author Yasin Fahmy
-     */
     // Declaring ANSI_RESET so that we can reset the color
     public static final String ANSI_RESET = "\u001B[0m";
     // Declaring the background color red, blue, purple, cyan
@@ -31,19 +32,19 @@ public class TUI {
     public String printSquare(int row, int column) throws IllegalArgumentException{
         if(!board.isFieldValid(row, column)){throw new IllegalArgumentException();}
 
-        if (board.checkField(row, column).equals(Board.FieldType.TRIPLE_WORD_SCORE)){
+        if (board.checkFieldType(row, column).equals(Board.FieldType.TRIPLE_WORD_SCORE)){
             return "|"+ANSI_RED_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
-        else if(board.checkField(row, column).equals(Board.FieldType.DOUBLE_WORD_SCORE)){
+        else if(board.checkFieldType(row, column).equals(Board.FieldType.DOUBLE_WORD_SCORE)){
             return "|"+ANSI_PURPLE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
-        else if(board.checkField(row, column).equals(Board.FieldType.TRIPLE_LETTER_SCORE)){
+        else if(board.checkFieldType(row, column).equals(Board.FieldType.TRIPLE_LETTER_SCORE)){
             return "|"+ANSI_BLUE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
-        else if(board.checkField(row, column).equals(Board.FieldType.DOUBLE_LETTER_SCORE)){
+        else if(board.checkFieldType(row, column).equals(Board.FieldType.DOUBLE_LETTER_SCORE)){
             return "|"+ANSI_CYAN_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
-        else if (board.checkField(row, column).equals(Board.FieldType.CENTER)){
+        else if (board.checkFieldType(row, column).equals(Board.FieldType.CENTER)){
             return "|"+ANSI_YELLOW_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
         }
         else {
