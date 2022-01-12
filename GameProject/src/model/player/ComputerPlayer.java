@@ -1,5 +1,7 @@
-package model;
+package model.player;
 
+import model.Bag;
+import model.LetterDeck;
 import model.player.Player;
 
 public class ComputerPlayer implements Player {

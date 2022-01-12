@@ -1,5 +1,6 @@
 package model;
 
+import model.player.ComputerPlayer;
 import model.player.HumanPlayer;
 import model.player.Player;
 
