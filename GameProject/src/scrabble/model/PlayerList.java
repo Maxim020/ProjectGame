@@ -1,6 +1,4 @@
-package local.model.player;
-
-import scrabble.model.Player;
+package scrabble.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,4 +32,15 @@ public class PlayerList {
     }
 
 
+    public void setPlayers(List<Player> players){
+        this.players = players;
+    }
+
+    public void addPlayer(){
+
+    }
+
+    public void removePlayer(){
+
+    }
 }

@@ -1,6 +1,6 @@
 package scrabble.model;
 
-import scrabble.model.LetterDeck;
+import scrabble.model.letters.LetterDeck;
 
 public interface Player {
 	
@@ -13,5 +13,7 @@ public interface Player {
 	public int getScore();
 	
 	public void setScore(int score);
+
+	public String makeMove();
 
 }

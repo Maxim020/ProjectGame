@@ -1,7 +1,8 @@
 package scrabble.model;
 
-import local.model.player.ComputerPlayer;
-import local.model.player.HumanPlayer;
+import local.model.ComputerPlayer;
+import local.model.HumanPlayer;
+import scrabble.model.letters.Bag;
 
 import java.util.ArrayList;
 

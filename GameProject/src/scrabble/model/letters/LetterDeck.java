@@ -1,4 +1,6 @@
-package scrabble.model;
+package scrabble.model.letters;
+
+import scrabble.model.letters.Bag;
 
 import java.util.ArrayList;
 

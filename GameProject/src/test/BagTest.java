@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import scrabble.model.Bag;
+import scrabble.model.letters.Bag;
 
 class BagTest {
 	

@@ -1,79 +1,99 @@
 package local.view;
-import scrabble.model.Board;
-/**
- * Class for TUI. It enables the display of the game.
- * @author Yasin Fahmy
- * @version 09.01.2022
- */
 
-public class LocalTUI {
-    // Declaring ANSI_RESET so that we can reset the color
+import scrabble.model.Board;
+import scrabble.model.Player;
+import scrabble.view.UserInterface;
+import scrabble.view.utils.TextBoardRepresentation;
+
+import java.util.Scanner;
+
+public class LocalTUI implements UserInterface {
+    private Board board;
+    private TextBoardRepresentation representation;
+    private Player currentPlayer;
     public static final String ANSI_RESET = "\u001B[0m";
-    // Declaring the background color red, blue, purple, cyan
+    public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
-    private Board board;
 
-    /**
-     * @param board - Constructor needs an instance of the Class Board, in order to display the game
-     */
-    public LocalTUI(Board board){
+    public LocalTUI(Board board, Player currentPlayer){
         this.board = board;
+        this.representation = new TextBoardRepresentation(board);
+        this.currentPlayer = currentPlayer;
     }
 
-    /**
-     * @param row - valid int to indicate row
-     * @param column - valid int to indicate column
-     * @return - The squares of the board that are the fields to place tiles on
-     */
-    public String printSquare(int row, int column) throws IllegalArgumentException{
-        if(!board.isFieldValid(row, column)){throw new IllegalArgumentException();}
+    @Override
+    public boolean isInputValid(String input) {
+        String[] words = input.split(" ");
 
-        if (board.checkFieldType(row, column).equals(Board.FieldType.TRIPLE_WORD_SCORE)){
-            return "|"+ANSI_RED_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
-        }
-        else if(board.checkFieldType(row, column).equals(Board.FieldType.DOUBLE_WORD_SCORE)){
-            return "|"+ANSI_PURPLE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
-        }
-        else if(board.checkFieldType(row, column).equals(Board.FieldType.TRIPLE_LETTER_SCORE)){
-            return "|"+ANSI_BLUE_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
-        }
-        else if(board.checkFieldType(row, column).equals(Board.FieldType.DOUBLE_LETTER_SCORE)){
-            return "|"+ANSI_CYAN_BACKGROUND+" "+board.getTile(row,column)+" "+ANSI_RESET;
-        }
-        else {
-            return "| "+board.getTile(row,column)+" ";
+        if(words.length == 4){
+            return words[0].equalsIgnoreCase("word") &&
+                    board.isFieldValid(words[1]) &&
+                    words[2].equalsIgnoreCase("H") || words[1].equalsIgnoreCase("V");
+                    //&& does the word fit?
+
+        } else if(words.length == 2){
+            int count = 0;
+
+            for(int i=0; i< words[1].length(); i++){
+                if(currentPlayer.getLetterDeck().getLettersInDeck().contains(words[1].charAt(i))){
+                    count++;
+                }
+            }
+
+            return words[0].equalsIgnoreCase("swap")
+                    && count == words[1].length();
+
+        } else if(words.length == 1){
+            return words[0].equalsIgnoreCase("swap");
+
+        } else {
+            return false;
         }
     }
 
-    /**
-     * @param line - The number of the line, starting from 1
-     * @return - A line of the board (Upper bound + Fields)
-     */
-    public String printLine(int line){//For Loop?
-        int row = line-1;
-        String result = "";
-        result += " "+String.format("%2d",line)+" ";
-        for (int i=0; i<15; i++){
-            result += printSquare(row,i);
+    @Override
+    public String getInput() throws IllegalArgumentException{
+        Scanner scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+
+        if (!isInputValid(input)){
+            throw new IllegalArgumentException();
         }
-        result += "| "+line+"\n";
-        return  result;
+
+        scanner.close();
+
+        return input;
     }
 
-    /**
-     * @return - displays the whole with letters and numbers on the sides board
-     */
-    public String toString(){
-        String result = "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n";
-        for (int i=0; i<15; i++){
-            result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
-            result +=printLine(i+1);
+    @Override
+    public void updateBoard() {
+        printInstructions();
+        System.out.println(representation);
+        showRack();
+    }
+
+    @Override
+    public void showRack() {
+        String tiles = "\n"+currentPlayer.getName()+" has the tiles:";
+        for(int i=0; i<currentPlayer.getLetterDeck().getLettersInDeck().size(); i++){
+            tiles += " "+currentPlayer.getLetterDeck().getLettersInDeck().get(i);
         }
-        result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                 "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O";
-        return result;
+        System.out.println(tiles);
+    }
+
+    @Override
+    public void printInstructions() {
+        System.out.println(ANSI_GREEN+
+                "1) Place a word:  'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
+                +"2) Swap tiles:    'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
+                +"3) Skip turn:     'SWAP'\n\n"+ANSI_RESET
+
+                +ANSI_RED_BACKGROUND+"Triple Word Score"+ANSI_RESET+" "
+                +ANSI_PURPLE_BACKGROUND+"Double Word Score"+ANSI_RESET+" "
+                +ANSI_BLUE_BACKGROUND+"Triple Letter Score"+ANSI_RESET+" "
+                +ANSI_CYAN_BACKGROUND+"Double Letter Score"+ANSI_RESET+"\n");
     }
 }

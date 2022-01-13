@@ -1,5 +1,8 @@
 package scrabble.model;
 
+import scrabble.model.letters.LetterScoreChecker;
+import scrabble.model.letters.TileMultiplierChecker;
+
 import java.util.ArrayList;
 
 public class WordScoreCounter {
