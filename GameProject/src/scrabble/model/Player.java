@@ -34,10 +34,6 @@ public class Player {
         this.score = score;
     }
 
-    public String makeMove() {
-        return null;
-    }
-
     @Override
     public String toString(){
         return getName()+" (Score: "+getScore()+")";

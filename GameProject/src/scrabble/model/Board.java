@@ -1,4 +1,7 @@
 package scrabble.model;
+import local.view.LocalTUI;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -18,6 +21,10 @@ public class Board {
     protected HashSet<String> tripleLetterScore;
     protected HashSet<String> doubleLetterScore;
     private Player currentPlayer;
+    boolean isBoardEmpty;
+    boolean isCenterCovered;
+    private LocalTUI localTUI;
+
 
     /**
      * Constructor of the Board Class.
@@ -29,6 +36,8 @@ public class Board {
     	this.fields = new char[SIZE][SIZE];
         reset();
         filSets();
+        isBoardEmpty = true;
+        isCenterCovered = false;
     }
 
     /**
@@ -89,8 +98,8 @@ public class Board {
      * @param input the input that the user wrote
      * @author Yasin Fahmy
      */
-    public void processMove(String input){ //Anythin input related should belong to the view section
-        if(!isInputValid(input)){throw new IllegalArgumentException();}
+    public void processMove(String input){
+        //Validation required (currently in LocalController)
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
@@ -99,48 +108,40 @@ public class Board {
         else {
             System.out.println("Swaping not available yet");
         }
+        isBoardEmpty = false;
     }
 
     /**
-     * @param input from the user
-     * @return true if input is valid
+     * @param startCoordinate - the field of the first letter of a word
+     * @param direction - the direction of the word (h/v)
+     * @param word - word that is or will be on the board
+     * @return an ArrayList of Strings that represent each field that is covered by a word
      * @author Yasin Fahmy
      */
-    public boolean isInputValid(String input) {
-        String[] parts = input.split(" ");
+    public ArrayList<String> fieldsCovered (String startCoordinate, String direction, String word){
+        ArrayList<String> result = new ArrayList<>();
+        int[] coordinates = convert(startCoordinate);
 
-        if(parts.length == 4){
-            return parts[0].equalsIgnoreCase("word") &&
-                    isFieldValid(parts[1]) &&
-                    parts[2].equalsIgnoreCase("H") || parts[2].equalsIgnoreCase("V");
-            //&& does the word fit?
-            //&& does this player have these tiles
-
-        } else if(parts.length == 2){
-            int count = 0;
-
-            for(int i=0; i< parts[1].length(); i++){
-                if(currentPlayer.getLetterDeck().getLettersInDeck().contains(parts[1].charAt(i))){
-                    count++;
-                }
-            }//&& does this player have these tiles
-
-            return parts[0].equalsIgnoreCase("swap")
-                    && count == parts[1].length();
-
-        } else if(parts.length == 1){
-            return parts[0].equalsIgnoreCase("swap");
-
+        if(direction.equalsIgnoreCase("H")){
+            for (int i=0; i<word.length(); i++){
+                result.add(convert(coordinates[0],coordinates[1]+i));
+            }
         } else {
-            return false;
+            for (int i=0; i<word.length(); i++){
+                result.add(convert(coordinates[0]+i,coordinates[1]));
+            }
         }
+        return result;
     }
 
-    /**
-     * Method that checks if word fits on board
-     */
-    public boolean doesWordFit(){
-        return false;
+    public boolean doesWordFit(String field, String direction, String word){
+        int[] coordinates = convert(field);
+
+        if(direction.equalsIgnoreCase("H")){
+            return isFieldValid(coordinates[0],coordinates[1]+word.length()-1);
+        }else {
+            return isFieldValid(coordinates[0]+word.length()-1,coordinates[1]);
+        }
     }
 
     /**
@@ -249,7 +250,7 @@ public class Board {
      * @return true if field is empty
      * @author Yasin Fahmy
      */
-    public boolean isEmptyField(int row, int column){
+    public boolean isFieldEmpty(int row, int column){
         return fields[row][column] == ' ';
     }
 
@@ -288,4 +289,15 @@ public class Board {
         doubleLetterScore.add("D15");doubleLetterScore.add("L15");
     }
 
+    public boolean isBoardEmpty() {
+        return isBoardEmpty;
+    }
+
+    public void setCenterCovered(boolean centerCovered) {
+        isCenterCovered = centerCovered;
+    }
+
+    public boolean isCenterCovered() {
+        return isCenterCovered;
+    }
 }

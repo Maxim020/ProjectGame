@@ -30,13 +30,13 @@ public class LocalController {
         playerList.setPlayers(createPlayerArrayList(players));
 
 
-         //Instantiation
+        //Instantiation
         Board board = new Board();
         Bag bag = new Bag();
         Player currentPlayer;
         Game game = new Game(board, bag);
         int count = 0;
-        int playersTurn = count%amountOfPlayers;
+        int playersTurn;
 
         while (game.isGameRunning()){
 
@@ -50,10 +50,10 @@ public class LocalController {
 
             //Player makes move
             String move = scanner.nextLine();
-            if(!board.isInputValid(move)){
+            if(!localTUI.isInputValid(move)){
                 throw new IllegalArgumentException();
             }
-            board.processMove(move);
+            board.processMove(move); //Next: Having a universal bag of letters and
 
             localTUI.updateBoard();
 
