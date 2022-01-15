@@ -17,6 +17,9 @@ public class TileMultiplierChecker {
 	 */
 	public TileMultiplierChecker(){
 		
+		letterMultiplierMap = new HashMap<>();
+		wordMultiplierMap = new HashMap<>();
+		
 		letterMultiplierMap.put(FieldType.NORMAL, 1);
 		letterMultiplierMap.put(FieldType.TRIPLE_LETTER_SCORE, 3);
 		letterMultiplierMap.put(FieldType.DOUBLE_LETTER_SCORE, 2);

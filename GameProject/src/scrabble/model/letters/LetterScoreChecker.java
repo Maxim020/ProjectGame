@@ -13,6 +13,9 @@ public class LetterScoreChecker {
 	 * @author Maxim
 	 */
 	public LetterScoreChecker() {
+		
+		scoreMap = new HashMap<>();
+		
 		this.scoreMap.put('a', 1);
 		this.scoreMap.put('b', 3);
 		this.scoreMap.put('c', 3);

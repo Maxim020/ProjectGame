@@ -40,10 +40,15 @@ public class WordScoreCounter {
 	 * @ensures return of proper score and removal of used multiplier tiles
 	 * @author Maxim
 	 */
-	public int getTotalWordScoreHorizontal(ArrayList<Character> letterList, int row, int columnOfFirstLetter){
+	public int getTotalWordScoreHorizontal(String word, int row, int columnOfFirstLetter){
 		int score = 0;
 		int finalWordMultiplier = 1;
+		ArrayList<Character> letterList = new ArrayList<>();
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
+		
+		for(int i = 0; i < word.toCharArray().length; i++) {
+			letterList.add(word.toCharArray()[i]);
+		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
@@ -99,10 +104,15 @@ public class WordScoreCounter {
 	 * @ensures return of proper score and removal of used multiplier tiles
 	 * @author Maxim
 	 */
-	public int getTotalWordScoreVerticalDown(ArrayList<Character> letterList, int rowOfFirstLetter, int column){
+	public int getTotalWordScoreVerticalDown(String word, int rowOfFirstLetter, int column){
 		int score = 0;
 		int finalWordMultiplier = 1;
+		ArrayList<Character> letterList = new ArrayList<>();
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
+		
+		for(int i = 0; i < word.toCharArray().length; i++) {
+			letterList.add(word.toCharArray()[i]);
+		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
