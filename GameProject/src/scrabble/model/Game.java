@@ -5,66 +5,58 @@ import scrabble.model.letters.Bag;
 import java.util.ArrayList;
 
 public class Game {
-	
-	//Attributes
-	private ArrayList<Player> listOfPlayers; //Use PlayerList Class
+	private PlayerList playerList;
 	private Board board;
 	private Bag bag;
-	
-	//Constructor
-	public Game(Player p1, Player p2) {
-		listOfPlayers = new ArrayList<>();
-		board = new Board();
-		bag = new Bag();
-	}
-	
-	//Methods
-	
-	/**
-	 * This method creates and adds a human player to the player list
-	 * @param String name
-	 * @ensures listOfPlayers.contains(player)
-	 * @requires listOfPlayers != null && name != null
-	 * @author Maxim 
-	 */
-	public void addHumanPlayer(String name) {
-		if (name == null) {System.out.println("Player must have a name");}
-		else if (listOfPlayers.size() == 4) {System.out.println("There cannot be more than 4 players");}
-		else {
-			Player player = new HumanPlayer(name, bag);
-			listOfPlayers.add(player);
-		}
-	}
-	
-	/**
-	 * This method creates and adds a computer player to the player list
-	 * @param String name
-	 * @ensures listOfPlayers.contains(player)
-	 * @requires listOfPlayers != null && name != null
-	 * @author Maxim 
-	 */
+	boolean continueGame;
+	boolean isGameRunning;
 
-	/**
-	 * There is a DesignPattern called Singleton (PlayerList Class) that provides a universal and static list of players. I had to make these changes, because otherwise it wouldn't compile
-	 * I didnt yet adapt the java doc, because I'm not 100% sure whats the best way to do it, Im just testing things out. I will look into the Design Pattern tmrw probably
-	 */
-	public void addComputerPlayer(Strategy strategy) {
-		//if (name == null) {System.out.println("Player must have a name");}
-		//else
-			if (listOfPlayers.size() == 4) {System.out.println("There cannot be more than 4 players");}
-		else {
-			Player player = new ComputerPlayer(bag, strategy); //The arguments had to be changed. From name, bag to bag, Strategy
-			listOfPlayers.add(player);
-		}
+	public Game(Board board, Bag bag) {
+		this.playerList = PlayerList.getInstance();
+		this.board = board;
+		this.bag = bag;
+		continueGame = false;
+		isGameRunning = true;
 	}
+
+//	/**
+//	 * This method creates and adds a human player to the player list
+//	 * @ensures listOfPlayers.contains(player)
+//	 * @requires listOfPlayers != null && name != null
+//	 * @author Maxim
+//	 */
+//	public void addHumanPlayer(String name) {
+//		if (name == null) {System.out.println("Player must have a name");}
+//		else if (playerList.getPlayers().size() == 4) {System.out.println("There cannot be more than 4 players");}
+//		else {
+//			Player player = new HumanPlayer(name, bag);
+//			playerList.getPlayers().add(player);
+//		}
+//	}
+//
+//	/**
+//	 * This method creates and adds a computer player to the player list
+//	 * @param String name
+//	 * @ensures listOfPlayers.contains(player)
+//	 * @requires listOfPlayers != null && name != null
+//	 * @author Maxim
+//	 */
+//	public void addComputerPlayer(Strategy strategy) {
+//		//if (name == null) {System.out.println("Player must have a name");}
+//		//else
+//			if (playerList.getPlayers().size() == 4) {System.out.println("There cannot be more than 4 players");}
+//		else {
+//			Player player = new ComputerPlayer(bag, strategy); //The arguments had to be changed. From name, bag to bag, Strategy
+//				playerList.getPlayers().add(player);
+//		}
+//	}
 	
 	/**
 	 * This method is executed when a game is set up and is ready to start. This is done manually by the user
 	 * WIP
 	 */
 	public void start() {
-		boolean continueGame = true;
-		while (continueGame){
+		while (isGameRunning){
 			board.reset();
 			play();
 			/**
@@ -83,7 +75,45 @@ public class Game {
 //		}
 	}
 
-	public void play(){
+	public void play(){}
 
+	public PlayerList getPlayerList() {
+		return playerList;
+	}
+
+	public void setPlayerList(PlayerList playerList) {
+		this.playerList = playerList;
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public Bag getBag() {
+		return bag;
+	}
+
+	public void setBag(Bag bag) {
+		this.bag = bag;
+	}
+
+	public boolean isContinueGame() {
+		return continueGame;
+	}
+
+	public void setContinueGame(boolean continueGame) {
+		this.continueGame = continueGame;
+	}
+
+	public boolean isGameRunning() {
+		return isGameRunning;
+	}
+
+	public void setGameRunning(boolean gameRunning) {
+		isGameRunning = gameRunning;
 	}
 }

@@ -1,13 +1,11 @@
 package scrabble.model;
 import java.util.HashSet;
+
 /**
  * Class that represents the board of the game scrabble.
  *
  * The fields are shown to the user in the format Letter|Number and the user uses this format for his/her input
  * The program internally uses the format Number|Number
- *
- * @author Yasin Fahmy
- * @version 11.01.2022
  */
 
 public class Board {
@@ -19,6 +17,7 @@ public class Board {
     protected HashSet<String> doubleWordScore;
     protected HashSet<String> tripleLetterScore;
     protected HashSet<String> doubleLetterScore;
+    private Player currentPlayer;
 
     /**
      * Constructor of the Board Class.
@@ -35,6 +34,7 @@ public class Board {
     /**
      * Empties all fields of this board
      * @ensures all fields are empty
+     * @author Yasin Fahmy
      */
     public void reset(){
         for (int i=0; i<SIZE;i++){
@@ -44,9 +44,6 @@ public class Board {
         }
     }
 
-    /**
-     * Maybe we need such function later
-     */
     public Board deepCopy(){
         return null;
     }
@@ -56,6 +53,7 @@ public class Board {
      * @param tile - char to indicate the tile that shall be placed
      * @param row - int to indicate row
      * @param column - int to indicate column
+     * @author Yasin Fahmy
      */
     public void setTile(char tile, int row, int column) throws IllegalArgumentException {
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
@@ -63,14 +61,97 @@ public class Board {
     }
 
     /**
+     * @param coordinate coordinate in String format
+     * @param direction direction (h: horizontal and v: vertical)
+     * @param word the word that is wished to be placed on the board
+     * @author Yasin Fahmy
+     */
+    public void setWord(String coordinate, String direction, String word){
+        int[] convertedCoordinate = convert(coordinate);
+        int row = convertedCoordinate[0];
+        int column = convertedCoordinate[1];
+
+        if(direction.equalsIgnoreCase("H")){
+            for (int i=0; i<word.length(); i++){
+                setTile(word.charAt(i),row,(column+i));
+            }
+        }
+        else {
+            for (int i=0; i<word.length(); i++){
+                setTile(word.charAt(i),(row+i),column);
+            }
+        }
+    }
+
+    /**
+     * processes input to make a move
+     * @requires the input to be valid
+     * @param input the input that the user wrote
+     * @author Yasin Fahmy
+     */
+    public void processMove(String input){ //Anythin input related should belong to the view section
+        if(!isInputValid(input)){throw new IllegalArgumentException();}
+        String[] parts = input.split(" ");
+
+        if(parts[0].equalsIgnoreCase("word")){
+            setWord(parts[1], parts[2], parts[3]);
+        }
+        else {
+            System.out.println("Swaping not available yet");
+        }
+    }
+
+    /**
+     * @param input from the user
+     * @return true if input is valid
+     * @author Yasin Fahmy
+     */
+    public boolean isInputValid(String input) {
+        String[] parts = input.split(" ");
+
+        if(parts.length == 4){
+            return parts[0].equalsIgnoreCase("word") &&
+                    isFieldValid(parts[1]) &&
+                    parts[2].equalsIgnoreCase("H") || parts[2].equalsIgnoreCase("V");
+            //&& does the word fit?
+            //&& does this player have these tiles
+
+        } else if(parts.length == 2){
+            int count = 0;
+
+            for(int i=0; i< parts[1].length(); i++){
+                if(currentPlayer.getLetterDeck().getLettersInDeck().contains(parts[1].charAt(i))){
+                    count++;
+                }
+            }//&& does this player have these tiles
+
+            return parts[0].equalsIgnoreCase("swap")
+                    && count == parts[1].length();
+
+        } else if(parts.length == 1){
+            return parts[0].equalsIgnoreCase("swap");
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Method that checks if word fits on board
+     */
+    public boolean doesWordFit(){
+        return false;
+    }
+
+    /**
      * @requires (isFieldValid(row, column))
      * @param row - int to indicate row
      * @param column - int to indicate column
      * @return - the tile that is placed on the square
+     * @author Yasin Fahmy
      */
     public char getTile(int row, int column) throws IllegalArgumentException{
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
-        //if(squares[row][column] == ' '){return null;}
         return fields[row][column];
     }
 
@@ -79,6 +160,7 @@ public class Board {
      * @param row - int to indicate row
      * @param column - int to indicate column
      * @return - converted coordinates in the form [Letter|Number]
+     * @author Yasin Fahmy
      */
     public String convert(int row, int column) throws IllegalArgumentException{
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
@@ -90,14 +172,21 @@ public class Board {
      * @requires (isFieldValid(field))
      * @param field - textual representation of the coordinates of a field
      * @return - int array that holds [row,column]
+     * @author Yasin Fahmy
      */
     public int[] convert(String field) throws IllegalArgumentException{
         if(!isFieldValid(field)){throw new IllegalArgumentException();}
-        int number = Character.getNumericValue(field.charAt(1));
+        field = field.toUpperCase();
+        int number;
+        if (field.length() == 2){
+            number = Character.getNumericValue(field.charAt(1));
+        } else{
+            number = Character.getNumericValue(field.charAt(1)+field.charAt(2));
+        }
 
         int[] rowcol = new int[2];
-        rowcol[0] = LETTERS.indexOf(field.charAt(0));
-        rowcol[1] = number-1;
+        rowcol[0] = number-1;
+        rowcol[1] = LETTERS.indexOf(field.charAt(0));
 
         return rowcol;
     }
@@ -107,6 +196,7 @@ public class Board {
      * @param row - int to indicate row
      * @param column - int to indicate column
      * @return - the field type
+     * @author Yasin Fahmy
      */
     public FieldType checkFieldType(int row, int column) throws IllegalArgumentException{
         String field = convert(row,column);
@@ -125,19 +215,29 @@ public class Board {
      * @param row - int to indicate row
      * @param column - int to indicate column
      * @return - boolean value depending on if the indicated field actually exists
+     * @author Yasin Fahmy
      */
     public boolean isFieldValid(int row, int column){
-        return row >= 0 && row < SIZE && column >= 0 && column < SIZE;
+        return row >= 0 &&
+                row < SIZE &&
+                column >= 0 &&
+                column < SIZE;
     }
 
     /**
      * @requires (isFieldValid(row, column))
      * @param field - textual representation of the coordinates of a field
      * @return - boolean value depending on if the indicated field actually exists
+     * @author Yasin Fahmy
      */
     public boolean isFieldValid(String field){
-        String letter = String.valueOf(field.charAt(0));
-        int number = Character.getNumericValue(field.charAt(1));
+        String letter = String.valueOf(field.charAt(0)).toUpperCase();
+        int number;
+        if (field.length() == 2){
+            number = Character.getNumericValue(field.charAt(1));
+        } else{
+            number = Character.getNumericValue(field.charAt(1)+field.charAt(2));
+        }
         return LETTERS.contains(letter) && number >= 1 && number <= 15;
     }
 
@@ -147,6 +247,7 @@ public class Board {
      * @param row - int to indicate row
      * @param column - int to indicate column
      * @return true if field is empty
+     * @author Yasin Fahmy
      */
     public boolean isEmptyField(int row, int column){
         return fields[row][column] == ' ';
@@ -154,6 +255,7 @@ public class Board {
 
     /**
      * Fills all sets with the squares that have a special field type
+     * @author Yasin Fahmy
      */
     public void filSets(){
         tripleWordScore = new HashSet<>();

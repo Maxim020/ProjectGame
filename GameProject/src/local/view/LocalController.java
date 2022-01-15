@@ -6,40 +6,71 @@ import scrabble.model.*;
 import scrabble.model.letters.Bag;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * I find it easier to program the game with everything in the main method
+ * If something works for sure it can be moved and packed into a method
+ */
+
 public class LocalController {
     public static void main(String[] args) {
-
+        /**
+         * Scans user input for the name of all players and if wanted any computer players
+         * Creates universal PlayerList (Singleton Design Pattern)
+         */
         Scanner scanner = new Scanner(System.in);
         System.out.println("> Please type in the name of the players with a space in between (2-4)");
         System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
         String playersNames = scanner.nextLine();
         String[] players = playersNames.split(" ");
-
+        int amountOfPlayers = players.length;
         PlayerList playerList = PlayerList.getInstance();
         playerList.setPlayers(createPlayerArrayList(players));
 
-        System.out.println("\n"+PlayerList.getInstance().getPlayers());
 
-
-
-        Bag bag1 = new Bag();
-        Bag bag2 = new Bag();
-        HumanPlayer humanPlayer = new HumanPlayer("Joe",bag1);
+         //Instantiation
         Board board = new Board();
-        LocalTUI localTUI = new LocalTUI(board, humanPlayer);
+        Bag bag = new Bag();
+        Player currentPlayer;
+        Game game = new Game(board, bag);
+        int count = 0;
+        int playersTurn = count%amountOfPlayers;
 
-        localTUI.updateBoard();
+        while (game.isGameRunning()){
 
-        //setUpGame(player1, player2, bag1, bag2);
+            // Allows for rotation of players turn
+            playersTurn = count%amountOfPlayers;
+            currentPlayer = playerList.getPlayers().get(playersTurn);
 
+            //Creates localTUI and connects it with board and currentPlayer
+            LocalTUI localTUI = new LocalTUI(board, currentPlayer);
+            localTUI.updateBoard();
+
+            //Player makes move
+            String move = scanner.nextLine();
+            if(!board.isInputValid(move)){
+                throw new IllegalArgumentException();
+            }
+            board.processMove(move);
+
+            localTUI.updateBoard();
+
+            count++;
+
+        }
         scanner.close();
 
-
+        //Ask for another game
     }
+
+    /**
+     * @requires the nr. of total players to be at least 2 and max. 4
+     * @param players a String array that holds the name (and type) of all Players
+     * @return a list of all Players
+     * @author Yasin
+     */
     public static List<Player> createPlayerArrayList(String[] players) throws IllegalArgumentException{
         if (players.length < 2 || players.length > 4){
             throw new IllegalArgumentException();
@@ -59,60 +90,5 @@ public class LocalController {
         }
 
         return playerArrayList;
-    }
-
-
-
-    public static void setUpGame(String player1, String player2, Bag bag1, Bag bag2){
-        if(player1.equals("-N")) {
-            Player p1 = new ComputerPlayer(bag1);
-            Player p2 = new HumanPlayer(player2,bag2);
-            Game game = new Game(p1,p2);
-            game.start();
-
-        }
-
-        else if(player2.equals("-N")) {
-            Player p1 = new HumanPlayer(player1,bag1);
-            Player p2 = new ComputerPlayer(bag2);
-            Game game = new Game(p1,p2);
-            game.start();
-        }
-
-        else if(player1.equals("-S")) {
-            Player p1 = new ComputerPlayer(bag1, new SmartStrategy());
-            Player p2 = new HumanPlayer(player2, bag2);
-            Game game = new Game(p1,p2);
-            game.start();
-
-        }
-
-        else if(player2.equals("-S")) {
-            Player p1 = new HumanPlayer(player1, bag1);
-            Player p2 = new ComputerPlayer(bag2, new SmartStrategy());
-            Game game = new Game(p1,p2);
-            game.start();
-        }
-
-        else if(player1.equals("-N") && player2.equals("-S")) {
-            Player p1 = new ComputerPlayer(bag1);
-            Player p2 = new ComputerPlayer(bag2, new SmartStrategy());
-            Game game = new Game(p1,p2);
-            game.start();
-        }
-
-        else if(player2.equals("-N") && player1.equals("-S")) {
-            Player p1 = new ComputerPlayer(bag1, new SmartStrategy());
-            Player p2 = new ComputerPlayer(bag2);
-            Game game = new Game(p1,p2);
-            game.start();
-        }
-
-        else {
-            Player p1 = new HumanPlayer(player1, bag1);
-            Player p2 = new HumanPlayer(player2, bag2);
-            Game game = new Game(p1,p2);
-            game.start();
-        }
     }
 }

@@ -17,8 +17,7 @@ public class PlayerList {
     private static PlayerList instance = null;
     private List<Player> players = new ArrayList<>(); //Currently, not thread-safe!
 
-    //Private to prevent anyone from instantiating
-    private PlayerList(){}
+    private PlayerList(){}//Private to prevent anyone from instantiating
 
     public static PlayerList getInstance() {
         if (instance == null) {
@@ -33,19 +32,5 @@ public class PlayerList {
 
     public void setPlayers(List<Player> players){
         this.players = players;
-    }
-
-
-
-
-    //------------------------------
-
-
-    public void addPlayer(){
-
-    }
-
-    public void removePlayer(){
-
     }
 }

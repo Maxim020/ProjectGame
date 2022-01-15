@@ -2,7 +2,7 @@ package scrabble.view;
 
 public interface UserInterface {
 
-    public boolean isInputValid(String input);
+    //public boolean isInputValid(String input);
 
     public String getInput();
 
