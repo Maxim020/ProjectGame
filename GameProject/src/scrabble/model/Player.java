@@ -1,19 +1,45 @@
 package scrabble.model;
 
+import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
 
-public interface Player {
-	
-	public String getName();
-	
-	public void setName(String name);
-	
-	public LetterDeck getLetterDeck();
-	
-	public int getScore();
-	
-	public void setScore(int score);
+public class Player {
+    private String name;
+    private int score;
+    private LetterDeck letterdeck;
 
-	public String makeMove();
+    public Player(String name, Bag bag){
+        this.name = name;
+        this.letterdeck = new LetterDeck(bag);
+        this.score = 0;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LetterDeck getLetterDeck() {
+        return letterdeck;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String makeMove() {
+        return null;
+    }
+
+    @Override
+    public String toString(){
+        return getName()+" (Score: "+getScore()+")";
+    }
 }

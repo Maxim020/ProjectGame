@@ -31,10 +31,15 @@ public class PlayerList {
         return this.players;
     }
 
-
     public void setPlayers(List<Player> players){
         this.players = players;
     }
+
+
+
+
+    //------------------------------
+
 
     public void addPlayer(){
 

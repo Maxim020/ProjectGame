@@ -55,7 +55,7 @@ public class LocalTUI implements UserInterface {
     }
 
     @Override
-    public String getInput() throws IllegalArgumentException{
+    public String getInput() throws IllegalArgumentException{ //no usage found
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
 

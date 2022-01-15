@@ -1,11 +1,8 @@
 package scrabble.model;
 
-import local.model.ComputerPlayer;
-import local.model.HumanPlayer;
 import scrabble.model.letters.Bag;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Game {
 	
