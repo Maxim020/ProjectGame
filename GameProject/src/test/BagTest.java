@@ -23,15 +23,15 @@ class BagTest {
 	void constructorTest() {
 		assertEquals(100,bag.getLetterList().size());
 		String a = "";
-		//for(int i = 0; i < bag.getLetterList().size(); i++) {a = a + bag.getLetterList().get(i).toString();}
+		for(int i = 0; i < bag.getLetterList().size(); i++) {a = a + bag.getLetterList().get(i).toString();}
 		assertEquals(LETTERS, a);
 	}
 	
 	@Test
 	void shuffleTest() {
-		//ArrayList<Character> a = bag.getLetterList();
+		ArrayList<Character> a = bag.getLetterList();
 		bag.shuffleBag();
-		//assertNotEquals(a.toArray(), bag.getLetterList().toArray());
+		assertNotEquals(a.toArray(), bag.getLetterList().toArray());
 	}
 	
 	@Test

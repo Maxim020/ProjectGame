@@ -9,10 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
-import scrabble.model.words.WordScoreCounter;
 import scrabble.model.Board.FieldType;
 import scrabble.model.PlayerList;
 import scrabble.model.letters.Bag;
+import scrabble.model.words.WordScoreCounter;
 import scrabble.model.Player;
 
 class WordScoreTest {

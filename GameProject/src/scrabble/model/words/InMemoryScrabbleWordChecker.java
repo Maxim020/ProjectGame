@@ -1,23 +1,20 @@
 package scrabble.model.words;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * A Scrabble Word Checker, which stores all words in Memory.
  */
-public class InMemoryScrabbleWordChecker implements ScrabbleWordChecker{
+public class InMemoryScrabbleWordChecker implements  ScrabbleWordChecker{
 
     /**
      * A static variable to store all words in memory
      * The key contains a UPPERCASE {@link String} of the word and the value is a {@link ScrabbleWordChecker.WordResponse} for that word.
      */
     private static final Map<String, WordResponse> words = new HashMap<>();
-
     /**
      * Process the words file when the class is loaded, and fill a static Map
      */
