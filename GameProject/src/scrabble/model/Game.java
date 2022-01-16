@@ -19,38 +19,7 @@ public class Game {
 		isGameRunning = true;
 	}
 
-//	/**
-//	 * This method creates and adds a human player to the player list
-//	 * @ensures listOfPlayers.contains(player)
-//	 * @requires listOfPlayers != null && name != null
-//	 * @author Maxim
-//	 */
-//	public void addHumanPlayer(String name) {
-//		if (name == null) {System.out.println("Player must have a name");}
-//		else if (playerList.getPlayers().size() == 4) {System.out.println("There cannot be more than 4 players");}
-//		else {
-//			Player player = new HumanPlayer(name, bag);
-//			playerList.getPlayers().add(player);
-//		}
-//	}
-//
-//	/**
-//	 * This method creates and adds a computer player to the player list
-//	 * @param String name
-//	 * @ensures listOfPlayers.contains(player)
-//	 * @requires listOfPlayers != null && name != null
-//	 * @author Maxim
-//	 */
-//	public void addComputerPlayer(Strategy strategy) {
-//		//if (name == null) {System.out.println("Player must have a name");}
-//		//else
-//			if (playerList.getPlayers().size() == 4) {System.out.println("There cannot be more than 4 players");}
-//		else {
-//			Player player = new ComputerPlayer(bag, strategy); //The arguments had to be changed. From name, bag to bag, Strategy
-//				playerList.getPlayers().add(player);
-//		}
-//	}
-	
+
 	/**
 	 * This method is executed when a game is set up and is ready to start. This is done manually by the user
 	 * WIP

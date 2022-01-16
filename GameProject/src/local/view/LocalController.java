@@ -40,36 +40,53 @@ public class LocalController {
 
         while (game.isGameRunning()){
 
-            // Allows for rotation of players turn
+            /** Allows for rotation of players turn */
             playersTurn = numberOfTurn%amountOfPlayers;
             playerList.setCurrentPlayer(playersTurn);
 
-            //Creates localTUI and connects it with board and currentPlayer
+            /** Creates localTUI and connects it with board and currentPlayer */
             LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
             localTUI.updateBoard();
 
-            //Player makes move
+            //Timer of Opponent starts --> revert move within timeframe?
+
+            /** Validate input */
             String move = scanner.nextLine();
             if(!localTUI.isInputValid(move)){
                 throw new IllegalArgumentException();
             }
-            processMove(move, board, playerList.getCurrentPlayer(),bag);
 
-            localTUI.updateBoard();
+            // Player makes move
+            processMove(move, board, playerList.getCurrentPlayer(),bag); //Challenge word? //Joker
+
+            /***Announces new Score only if a new word is placed*/
+            if (move.charAt(0) == 'W' || move.charAt(0) == 'w'){localTUI.updateBoard();}
+
+            //CheckWinner()
+                //No more tiles in bag and in one players rack
+                //At least six successive scoreless turns have occurred and either player decides to end the game
+                //Either player uses more than 10 minutes of overtime.
 
             numberOfTurn++;
-
         }
-        scanner.close();
+
+        //When the game ends, each player's score is reduced by the sum of their unused letters;
+        // in addition, if a player has used all of their letters (known as "going out" or "playing out"),
+        // the sum of all other players' unused letters is added to that player's score. In tournament play,
+        // a player who goes out adds twice that sum, and their opponent is not penalized.
+
+        //Print Scoreboard
 
         //Ask for another game
+
+        scanner.close();
     }
 
     /**
      * processes input to make a move
      * @requires the input to be valid
      * @param input the input that the user wrote
-     * @author Yasin Fahmy
+     * @author Yasin
      */
     public static void processMove(String input, Board board, Player currentPlayer, Bag bag){
         String[] parts = input.split(" ");
@@ -77,7 +94,7 @@ public class LocalController {
         if(parts[0].equalsIgnoreCase("word")){
             //WORD A1 H TEST
             board.setWord(parts[1], parts[2], parts[3]);
-            exchangeTiles(parts[3], currentPlayer, bag);
+            exchangeTiles(parts[3], currentPlayer, bag); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
         }
         else {
             if(parts.length == 2){
