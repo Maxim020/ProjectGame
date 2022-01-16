@@ -20,61 +20,76 @@ public class LocalController {
          * Scans user input for the name of all players and if wanted any computer players
          * Creates universal PlayerList (Singleton Design Pattern)
          */
+        boolean continueGame = true;
         Scanner scanner = new Scanner(System.in);
-        System.out.println("> Please type in the name of the players with a space in between (2-4)");
-        System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
-        String playersNames = scanner.nextLine();
-        String[] players = playersNames.split(" ");
-        int amountOfPlayers = players.length;
-        PlayerList playerList = PlayerList.getInstance();
-        playerList.setPlayers(createPlayerArrayList(players));
 
-        Board board = new Board();
-        Bag bag = Bag.getInstance();
-        Game game = new Game(board, bag);
+        while(continueGame) {
+            System.out.println("> Please type in the name of the players with a space in between (2-4)");
+            System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
+            String playersNames = scanner.nextLine();
+            String[] players = playersNames.split(" ");
+            int amountOfPlayers = players.length;
+            PlayerList playerList = PlayerList.getInstance();
+            playerList.setPlayers(createPlayerArrayList(players));
 
-        int numberOfTurn = 0;
-        int playersTurn;
-
-        while (game.isGameRunning()){
-
-            /** Allows for rotation of players turn */
-            playersTurn = numberOfTurn%amountOfPlayers;
-            playerList.setCurrentPlayer(playersTurn);
-
-            /** Creates localTUI and connects it with board and currentPlayer */
-            LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
-            localTUI.updateBoard();
-
-            //Timer of Opponent starts --> revert move within timeframe?
-
-            /** Validate input */
-            String move = scanner.nextLine();
-            localTUI.validateInput(move);
+            Board board = new Board();
+            Bag bag = Bag.getInstance();
+            Game game = new Game(board, bag);
 
 
-            // Player makes move
-            processMove(move, board, playerList.getCurrentPlayer(),bag); //Challenge word?
+            int numberOfTurn = 0;
+            int playersTurn;
 
-            /***Announces new Score only if a new word is placed*/
-            if (move.charAt(0) == 'W' || move.charAt(0) == 'w'){localTUI.updateBoard();}
+            while (game.isGameRunning()) {
 
-            //CheckWinner()
-                //No more tiles in bag and in one players rack
-                //At least six successive scoreless turns have occurred and either player decides to end the game
-                //Either player uses more than 10 minutes of overtime.
+                /** Allows for rotation of players turn */
+                playersTurn = numberOfTurn % amountOfPlayers;
+                playerList.setCurrentPlayer(playersTurn);
 
-            numberOfTurn++;
+                /** Creates localTUI and connects it with board and currentPlayer */
+                LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
+                localTUI.updateBoard();
+
+                //Timer of Opponent starts --> revert move within timeframe?
+
+                /** Validate input */
+                String move = scanner.nextLine();
+                localTUI.validateInput(move);
+
+                // Player makes move
+                processMove(move, board, playerList.getCurrentPlayer(), bag); //If a user plays an invalid word the player gets back his tiles and loses his turn
+
+                /***Announces new Score only if a new word is placed*/
+                if (move.charAt(0) == 'W' || move.charAt(0) == 'w') {
+                    localTUI.updateBoard();
+                }
+
+                //CheckWinner()
+                    //No more tiles in bag and in one players rack
+                    //At least six successive scoreless turns have occurred and either player decides to end the game
+                    //Either player uses more than 10 minutes of overtime.
+                    //No more words possible
+                    //Project description: . The game ends when all letters have been drawn and one player uses his or her last letter; or when all possible plays have been made.
+
+                numberOfTurn++;
+            }
+
+            //Adjust Scores
+                //When the game ends, each player's score is reduced by the sum of their unused letters;
+                // in addition, if a player has used all of their letters (known as "going out" or "playing out"),
+                // the sum of all other players' unused letters is added to that player's score. In tournament play,
+                // a player who goes out adds twice that sum, and their opponent is not penalized.
+
+
+            /** prints out final scoreboard*/
+            new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer()).printFinalScoreBoard();
+
+            /** Ask for another game */
+            System.out.println("Do you want to play another Game? (y/n)");
+            String decision = scanner.nextLine();
+            continueGame = decision.equals("y");
+
         }
-
-        //When the game ends, each player's score is reduced by the sum of their unused letters;
-        // in addition, if a player has used all of their letters (known as "going out" or "playing out"),
-        // the sum of all other players' unused letters is added to that player's score. In tournament play,
-        // a player who goes out adds twice that sum, and their opponent is not penalized.
-
-        //Print Scoreboard
-
-        //Ask for another game
 
         scanner.close();
     }

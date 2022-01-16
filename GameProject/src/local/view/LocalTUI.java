@@ -2,9 +2,13 @@ package local.view;
 
 import scrabble.model.Board;
 import scrabble.model.Player;
+import scrabble.model.PlayerList;
+import scrabble.model.words.FileStreamScrabbleWordChecker;
 import scrabble.view.UserInterface;
 import scrabble.view.utils.TextBoardRepresentation;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LocalTUI implements UserInterface {
     private Board board;
@@ -12,6 +16,7 @@ public class LocalTUI implements UserInterface {
     private Player currentPlayer;
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
+    private FileStreamScrabbleWordChecker wordChecker = new FileStreamScrabbleWordChecker();
 
     public LocalTUI(Board board, Player currentPlayer){
         this.board = board;
@@ -75,9 +80,13 @@ public class LocalTUI implements UserInterface {
             if(word.length() > 7){
                 throw new IllegalArgumentException("A Player has up to 7 tiles");
             }
-
-            //Wort an wort !!
-            //Is word
+//            if(!wordChecker.isValidWord(word)){
+//                throw new IllegalArgumentException("Word is not a valid word");
+//            }
+//            if(wordChecker.isValidWord(word)){
+//                //Algorithm to check if all new composed words are valid
+//            }
+            //Does the new word connect on another word
         }
 
         //Swap tiles
@@ -125,6 +134,28 @@ public class LocalTUI implements UserInterface {
     }
 
     /**
+     * prints Scoreboard after match ends
+     */
+    public void printFinalScoreBoard(){
+        PlayerList playerList = PlayerList.getInstance();
+        List<Player> players = playerList.getPlayers();
+        String scoreboard = "";
+        Collections.sort(players);
+        Collections.reverse(players);
+
+        for (int i=0; i<players.size(); i++){
+            scoreboard += "\n"+i+1+") "+players.get(i);
+        }
+
+        System.out.println ("*******************************"+
+                            "WINNER WINNER CHICKEN DINNER!\n"+
+                            players.get(0)+"has won the game"+
+                            scoreboard+"\n"+
+                            "*******************************"
+                            );
+    }
+
+    /**
      * Updates Board with instructions, Board representation and Rack of current Player
      * @author Yasin
      */
@@ -158,7 +189,7 @@ public class LocalTUI implements UserInterface {
                  "1) Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
                 +"2) Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
                 +"3) Skip turn:         'SWAP'\n"
-                +"4) Challenge word:    'Challenge' 'Start coordinate' 'Direction (H/V)' 'Word\n"
+                //+"4) Challenge word:    'Challenge' 'Start coordinate' 'Direction (H/V)' 'Word\n"
                 +ANSI_RESET
         );
     }

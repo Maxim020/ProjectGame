@@ -3,7 +3,7 @@ package scrabble.model;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
 
-public class Player {
+public class Player implements Comparable<Player>{
     private String name;
     private int score;
     private LetterDeck letterdeck;
@@ -37,7 +37,12 @@ public class Player {
     public void addToScore(int score){this.score += score;}
 
     @Override
-    public String toString(){
-        return getName()+" (Score: "+getScore()+")";
+    public int compareTo(Player anotherPlayer) {
+        return Integer.compare(this.getScore(), anotherPlayer.getScore());
+    }
+
+    @Override
+    public String toString() {
+        return getName() + ": " + getScore();
     }
 }
