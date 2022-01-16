@@ -41,6 +41,16 @@ public class LetterDeck {
 			lettersInDeck.add(bag.pull());
 		}
 	}
+
+	public int numberOfBlankTiles(){
+		int count = 0;
+		for (int i=0; i < lettersInDeck.size(); i++){
+			if(lettersInDeck.get(i).equals('*')){
+				count++;
+			}
+		}
+		return count;
+	}
 	
 	/**
 	 * This method is called when a LetterDeck object is constructed. Pulls 7 random letters from a bag object to fill initial deck

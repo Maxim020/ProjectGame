@@ -10,7 +10,7 @@ public class Bag {
 	private final static String LETTERS = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGHHIIIIIIIIJJKKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ**";
 
 	private static Bag instance = null;
-	
+
 	/**
 	 * Constructor of the Bag class
 	 * When Bag object is initialized, the attribute letterList is filled with letters contained in the "letters" String
@@ -32,7 +32,7 @@ public class Bag {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Using the Collections.shuffle method, shuffles (randomizes) the list of letters. Note: I don't know how useful this is, because it could be done with Math.random when player from Player class is first pulling from the bag, but it is a nice touch
 	 * @ensures letterList != (old)letterList;
@@ -41,7 +41,7 @@ public class Bag {
 	public void shuffleBag() {
 		Collections.shuffle(letterList);
 	}
-	
+
 	/**
 	 * Removes a letter from the bag. This should be used everytime a letter is pulled from the bag
 	 * @param letter
@@ -56,7 +56,7 @@ public class Bag {
 			letterList.remove(letter);
 		}
 	}
-	
+
 	/**
 	 * Method for pulling a random letter from the bag. Should have additional protection in case of return 0.
 	 * @requires letterList != null;
@@ -66,24 +66,14 @@ public class Bag {
 	 */
 	public char pull() {
 		if(letterList.isEmpty()){System.out.println("The bag is already empty");}
-		else if(letterList.size() == 1) {
-			char letter = letterList.get(0);
-			letterList.remove(0);
-			return letter;
-		}
-		else {
-			int range = letterList.size()-1; //-1 I think makes it logical ...
-			char letter = letterList.get( (int) (Math.random()*range));
-			letterList.remove(letter);
-			return letter;
-		}
-		return 0;
+		shuffleBag();
+		return letterList.get(0);
 	}
 
 	public void add(char tile){
 		letterList.add(tile);
 	}
-	
+
 	public ArrayList<Character> getLetterList(){
 		return letterList;
 	}

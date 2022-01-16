@@ -29,8 +29,6 @@ public class LocalController {
         PlayerList playerList = PlayerList.getInstance();
         playerList.setPlayers(createPlayerArrayList(players));
 
-
-        //Instantiation
         Board board = new Board();
         Bag bag = Bag.getInstance();
         Game game = new Game(board, bag);
@@ -52,9 +50,8 @@ public class LocalController {
 
             /** Validate input */
             String move = scanner.nextLine();
-            if(!localTUI.isInputValid(move)){
-                throw new IllegalArgumentException();
-            }
+            localTUI.validateInput(move);
+
 
             // Player makes move
             processMove(move, board, playerList.getCurrentPlayer(),bag); //Challenge word? //Joker
@@ -114,7 +111,12 @@ public class LocalController {
     public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag){
 
         for (int i=0; i<tiles.length(); i++) {
-            currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //remove old tiles from deck
+            if(Character.isLowerCase(tiles.charAt(i))){
+                currentPlayer.getLetterDeck().removeFromDeck('*'); //removes blank tile if a letter is lowercase
+            }
+            else {
+                currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //removes old tiles from deck
+            }
         }
 
         bag.shuffleBag();

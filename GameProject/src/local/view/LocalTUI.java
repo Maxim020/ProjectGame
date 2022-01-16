@@ -34,68 +34,94 @@ public class LocalTUI implements UserInterface {
     }
 
     /**
+     * Throws IllegalArgumentException provided the input is not valid
      * @param input from the user
      * @return true if input is valid
      * @author Yasin Fahmy
      */
-    public boolean isInputValid(String input) {
+    public void validateInput(String input) throws IllegalArgumentException{
         String[] parts = input.split(" ");
 
         //Set word
         if(parts.length == 4){
-            String command = parts[0]; String startCoordinate = parts[1];
-            String direction = parts[2]; String word = parts[3];
+            String command = parts[0]; String startCoordinate = parts[1]; String direction = parts[2]; String word = parts[3];
 
             if(board.isBoardEmpty() && board.fieldsCovered(startCoordinate, direction, word).contains("H8")) {
                 board.setCenterCovered(true);
             }
+            if(!command.equalsIgnoreCase("word")){
+                throw new IllegalArgumentException("Unknown command");
+            }
+            if (!board.isFieldValid(startCoordinate)){
+                throw new IllegalArgumentException("Start-Coordinate is not a valid field");
+            }
+            if(!(direction.equalsIgnoreCase("H") || direction.equalsIgnoreCase("V"))){
+                throw new IllegalArgumentException("Unknown direction");
+            }
+            if(!board.isCenterCovered()){
+                throw new IllegalArgumentException("The first word placed on the board has to cover the center");
+            }
+            if(!board.doesWordFit(startCoordinate, direction, word)){
+                throw new IllegalArgumentException("Word does not fit on the board");
+            }
+            if(tilesNotOwned(currentPlayer,word) != 0){
+                int lowercase = tilesNotOwned(currentPlayer,word);
+                int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
 
-            return command.equalsIgnoreCase("word") &&
-                    board.isFieldValid(startCoordinate) && //checks if start coordinate is valid
-                    (direction.equalsIgnoreCase("H") || direction.equalsIgnoreCase("V")) && //checks if direction is valid
-                    board.isCenterCovered() && //checks if center is covered in the beginning of the game
-                    board.doesWordFit(startCoordinate, direction, word) && //does word fit on board
-                    doesPlayerOwnTheseTiles(currentPlayer,word);
-                    //Wort an wort !!
-                    //Is word
+                if(blankTiles != lowercase){
+                    throw new IllegalArgumentException("Player does not own all tiles or does not have enough blank tiles");
+                }
+            }
+            if(word.length() > 7){
+                throw new IllegalArgumentException("A Player has up to 7 tiles");
+            }
+
+            //Wort an wort !!
+            //Is word
         }
 
         //Swap tiles
         else if(parts.length == 2){
             String command = parts[0]; String tiles = parts[1];
 
-            return command.equalsIgnoreCase("swap") &&
-                    doesPlayerOwnTheseTiles(currentPlayer, tiles) &&
-                    tiles.length() <= 7;
+            if(!command.equalsIgnoreCase("swap")){
+                throw new IllegalArgumentException("Unknown command");
+            }
+            if(tilesNotOwned(currentPlayer,tiles) != 0){
+                throw new IllegalArgumentException("Player does not own all tiles");
+            }
+            if(tiles.length() > 7){
+                throw new IllegalArgumentException("A Player has up to 7 tiles");
+            }
         }
 
         //Skip turn
         else if(parts.length == 1) {
             String command = parts[0];
-            return command.equalsIgnoreCase("swap");
 
+            if(!command.equalsIgnoreCase("swap")){
+                throw new IllegalArgumentException("Unknown command");
+            }
         }
-
-        return false;
     }
 
     /**
      * @param currentPlayer - The Player whose turn it is
      * @param tiles - The tiles the Player wants to place on board or swap
-     * @return true if Player owns all tiles
+     * @return amount of tiles that are not in a players letter deck
      * @author Yasin
      */
-    public boolean doesPlayerOwnTheseTiles(Player currentPlayer, String tiles){
+    public int tilesNotOwned(Player currentPlayer, String tiles){
         ArrayList<Character> letterDeck = currentPlayer.getLetterDeck().getLettersInDeck();
         int count = 0;
 
         for(int i=0; i<tiles.length(); i++){
-            if(letterDeck.contains(tiles.charAt(i))){
+            if(!letterDeck.contains(tiles.charAt(i))){
                 count++;
             }
         }
 
-        return count == tiles.length();
+        return count;
     }
 
     /**
