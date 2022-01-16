@@ -16,6 +16,7 @@ import java.util.List;
 public class PlayerList {
     private static PlayerList instance = null;
     private List<Player> players = new ArrayList<>(); //Currently, not thread-safe!
+    private Player currentPlayer;
 
     private PlayerList(){}//Private to prevent anyone from instantiating
 
@@ -32,5 +33,13 @@ public class PlayerList {
 
     public void setPlayers(List<Player> players){
         this.players = players;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(int turn) {
+        this.currentPlayer = players.get(turn);
     }
 }

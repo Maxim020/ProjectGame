@@ -1,5 +1,6 @@
 package scrabble.model;
 import local.view.LocalTUI;
+import scrabble.model.words.WordScoreCounter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,11 +21,10 @@ public class Board {
     protected HashSet<String> doubleWordScore;
     protected HashSet<String> tripleLetterScore;
     protected HashSet<String> doubleLetterScore;
-    private Player currentPlayer;
     boolean isBoardEmpty;
     boolean isCenterCovered;
-    private LocalTUI localTUI;
-
+    WordScoreCounter wordScoreCounter;
+    PlayerList playerList;
 
     /**
      * Constructor of the Board Class.
@@ -38,6 +38,8 @@ public class Board {
         filSets();
         isBoardEmpty = true;
         isCenterCovered = false;
+        wordScoreCounter = new WordScoreCounter(this);
+        playerList = PlayerList.getInstance();
     }
 
     /**
@@ -84,32 +86,17 @@ public class Board {
             for (int i=0; i<word.length(); i++){
                 setTile(word.charAt(i),row,(column+i));
             }
+            playerList.getCurrentPlayer().addToScore(wordScoreCounter.getTotalWordScoreHorizontal(word,row,column));
         }
         else {
             for (int i=0; i<word.length(); i++){
                 setTile(word.charAt(i),(row+i),column);
             }
+            playerList.getCurrentPlayer().addToScore(wordScoreCounter.getTotalWordScoreVertical(word,row,column));
         }
     }
 
-    /**
-     * processes input to make a move
-     * @requires the input to be valid
-     * @param input the input that the user wrote
-     * @author Yasin Fahmy
-     */
-    public void processMove(String input){
-        //Validation required (currently in LocalController)
-        String[] parts = input.split(" ");
 
-        if(parts[0].equalsIgnoreCase("word")){
-            setWord(parts[1], parts[2], parts[3]);
-        }
-        else {
-            System.out.println("Swaping not available yet");
-        }
-        isBoardEmpty = false;
-    }
 
     /**
      * @param startCoordinate - the field of the first letter of a word
@@ -293,11 +280,31 @@ public class Board {
         return isBoardEmpty;
     }
 
+    public void setBoardEmpty(boolean boardEmpty) {
+        isBoardEmpty = boardEmpty;
+    }
+
     public void setCenterCovered(boolean centerCovered) {
         isCenterCovered = centerCovered;
     }
 
     public boolean isCenterCovered() {
         return isCenterCovered;
+    }
+
+    public HashSet<String> getTripleWordScore() {
+        return tripleWordScore;
+    }
+
+    public HashSet<String> getDoubleWordScore() {
+        return doubleWordScore;
+    }
+
+    public HashSet<String> getTripleLetterScore() {
+        return tripleLetterScore;
+    }
+
+    public HashSet<String> getDoubleLetterScore() {
+        return doubleLetterScore;
     }
 }

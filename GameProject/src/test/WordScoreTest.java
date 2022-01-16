@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
-import scrabble.model.WordScoreCounter;
+import scrabble.model.words.WordScoreCounter;
 import scrabble.model.Board.FieldType;
 
 class WordScoreTest {
@@ -38,7 +38,7 @@ class WordScoreTest {
 		assertEquals(17, scoreCounter.getTotalWordScoreHorizontal("hello", 8, 8));
 		
 		board.processMove("word H13 v olleh");
-		assertEquals(16, scoreCounter.getTotalWordScoreVerticalDown("olleh", 13, 8));
+		assertEquals(16, scoreCounter.getTotalWordScoreVertical("olleh", 13, 8));
 	}
 	
 	

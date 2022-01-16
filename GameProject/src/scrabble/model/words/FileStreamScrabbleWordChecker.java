@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * A Scrabble Word Checker, which walks through the words file on every check.
  * This this uses less memory, but more IO
  */
-public class FileStreamScrabbleWordChecker implements  ScrabbleWordChecker{
+public class FileStreamScrabbleWordChecker implements ScrabbleWordChecker{
 
     @Override
     public WordResponse isValidWord(String word) {

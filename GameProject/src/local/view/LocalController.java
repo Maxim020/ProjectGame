@@ -32,20 +32,20 @@ public class LocalController {
 
         //Instantiation
         Board board = new Board();
-        Bag bag = new Bag();
-        Player currentPlayer;
+        Bag bag = Bag.getInstance();
         Game game = new Game(board, bag);
-        int count = 0;
+
+        int numberOfTurn = 0;
         int playersTurn;
 
         while (game.isGameRunning()){
 
             // Allows for rotation of players turn
-            playersTurn = count%amountOfPlayers;
-            currentPlayer = playerList.getPlayers().get(playersTurn);
+            playersTurn = numberOfTurn%amountOfPlayers;
+            playerList.setCurrentPlayer(playersTurn);
 
             //Creates localTUI and connects it with board and currentPlayer
-            LocalTUI localTUI = new LocalTUI(board, currentPlayer);
+            LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
             localTUI.updateBoard();
 
             //Player makes move
@@ -53,17 +53,37 @@ public class LocalController {
             if(!localTUI.isInputValid(move)){
                 throw new IllegalArgumentException();
             }
-            board.processMove(move); //Next: Having a universal bag of letters and
+            processMove(move, board); //Next: Having a universal bag of letters and
 
             localTUI.updateBoard();
 
-            count++;
+            numberOfTurn++;
 
         }
         scanner.close();
 
         //Ask for another game
     }
+
+    /**
+     * processes input to make a move
+     * @requires the input to be valid
+     * @param input the input that the user wrote
+     * @author Yasin Fahmy
+     */
+    public static void processMove(String input, Board board){
+        //Validation required (currently in LocalController)
+        String[] parts = input.split(" ");
+
+        if(parts[0].equalsIgnoreCase("word")){
+            board.setWord(parts[1], parts[2], parts[3]);
+        }
+        else {
+            System.out.println("Swaping not available yet");
+        }
+        board.setBoardEmpty(false);
+    }
+
 
     /**
      * @requires the nr. of total players to be at least 2 and max. 4
@@ -79,13 +99,12 @@ public class LocalController {
         List<Player> playerArrayList = new ArrayList<>();
 
         for (int i=0; i<players.length; i++){
-            Bag bag = new Bag();
             if (players[i].equals("-N")){
-                playerArrayList.add(new ComputerPlayer(bag));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance()));
             } else if (players[i].equals("-S")){
-                playerArrayList.add(new ComputerPlayer(bag, new SmartStrategy()));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy()));
             } else {
-                playerArrayList.add(new HumanPlayer(players[i], bag));
+                playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
             }
         }
 

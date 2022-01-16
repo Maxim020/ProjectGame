@@ -15,7 +15,7 @@ class LetterDeckTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		bag = new Bag();
+		bag = Bag.getInstance();
 		letterdeck = new LetterDeck(bag);
 	}
 

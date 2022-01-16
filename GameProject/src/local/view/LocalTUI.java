@@ -56,6 +56,8 @@ public class LocalTUI implements UserInterface {
                     board.isCenterCovered() && //checks if center is covered in the beginning of the game
                     board.doesWordFit(startCoordinate, direction, word) && //does word fit on board
                     doesPlayerOwnTheseTiles(currentPlayer,word);
+                    //Wort an wort !!
+                    //Is word
         }
 
         //Swap tiles

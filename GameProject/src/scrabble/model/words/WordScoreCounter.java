@@ -1,5 +1,6 @@
-package scrabble.model;
+package scrabble.model.words;
 
+import scrabble.model.Board;
 import scrabble.model.letters.LetterScoreChecker;
 import scrabble.model.letters.TileMultiplierChecker;
 
@@ -15,7 +16,7 @@ public class WordScoreCounter {
 	//Constructor
 	/**
 	 * WordScoreCounter is constructed using the board as its argument
-	 * @param Board board
+	 * @param board
 	 * @author Maxim
 	 */
 	public WordScoreCounter(Board board) {
@@ -32,9 +33,9 @@ public class WordScoreCounter {
 	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
 	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
 	 * Again in this cycle, all word multiplier tiles are removed and switched to normal tiles.
-	 * @param ArrayList<Character> letterList
-	 * @param int row
-	 * @param int columnOfFirstLetter
+	 * @param word
+	 * @param row
+	 * @param columnOfFirstLetter
 	 * @return int score for entire word
 	 * @requires both checkers and board to be initialized
 	 * @ensures return of proper score and removal of used multiplier tiles
@@ -53,12 +54,12 @@ public class WordScoreCounter {
 		for(int i = 0; i < letterList.size(); i++) {
 			
 			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
-			
-			if(board.doubleLetterScore.contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.doubleLetterScore.remove(board.convert(row, columnOfFirstLetter + i));
+
+			if(board.getDoubleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
+				board.getDoubleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
-			if(board.tripleLetterScore.contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.tripleLetterScore.remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getTripleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
+				board.getTripleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
 		}
 		
@@ -67,11 +68,11 @@ public class WordScoreCounter {
 			if(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)) > 1) {
 			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
 			
-			if(board.doubleWordScore.contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.doubleWordScore.remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getDoubleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
+				board.getDoubleWordScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
-			if(board.tripleWordScore.contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.tripleWordScore.remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getTripleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
+				board.getTripleWordScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
 			
 //			if(board.center.contains(board.convert(row, columnOfFirstLetter + i))) {
@@ -96,15 +97,15 @@ public class WordScoreCounter {
 	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
 	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
 	 * Again in this cycle, all word multiplier tiles are removed and switched to normal tiles.
-	 * @param ArrayList<Character> letterList
-	 * @param int rowOfFirstLetter
-	 * @param int column
+	 * @param word
+	 * @param rowOfFirstLetter
+	 * @param column
 	 * @return int score for entire word
 	 * @requires both checkers and board to be initialized
 	 * @ensures return of proper score and removal of used multiplier tiles
 	 * @author Maxim
 	 */
-	public int getTotalWordScoreVerticalDown(String word, int rowOfFirstLetter, int column){
+	public int getTotalWordScoreVertical(String word, int rowOfFirstLetter, int column){
 		int score = 0;
 		int finalWordMultiplier = 1;
 		ArrayList<Character> letterList = new ArrayList<>();
@@ -118,12 +119,12 @@ public class WordScoreCounter {
 			
 			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
 			
-			if(board.doubleLetterScore.contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.doubleLetterScore.remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getDoubleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {
+				board.getDoubleLetterScore().remove(board.convert(rowOfFirstLetter + i, column));
 			}
 			
-			if(board.tripleLetterScore.contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.tripleLetterScore.remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getTripleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {
+				board.getTripleLetterScore().remove(board.convert(rowOfFirstLetter + i, column));
 			}
 		}
 		
@@ -133,11 +134,11 @@ public class WordScoreCounter {
 			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
 			}
 			
-			if(board.doubleWordScore.contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.doubleWordScore.remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getDoubleWordScore().contains(board.convert(rowOfFirstLetter + i, column))) {
+				board.getDoubleWordScore().remove(board.convert(rowOfFirstLetter + i, column));
 			}
-			if(board.tripleWordScore.contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.tripleWordScore.remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getTripleWordScore().contains(board.convert(rowOfFirstLetter + i, column))) {
+				board.getTripleWordScore().remove(board.convert(rowOfFirstLetter + i, column));
 			}
 			
 //			if(board.center.contains(board.convert(rowOfFirstLetter + i, column))) {

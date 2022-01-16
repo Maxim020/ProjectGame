@@ -34,6 +34,8 @@ public class Player {
         this.score = score;
     }
 
+    public void addToScore(int score){this.score += score;}
+
     @Override
     public String toString(){
         return getName()+" (Score: "+getScore()+")";

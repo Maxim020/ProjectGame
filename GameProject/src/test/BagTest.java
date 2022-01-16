@@ -16,7 +16,7 @@ class BagTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		bag = new Bag();
+		bag = Bag.getInstance();
 	}
 
 	@Test
