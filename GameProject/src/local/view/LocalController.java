@@ -54,7 +54,7 @@ public class LocalController {
 
 
             // Player makes move
-            processMove(move, board, playerList.getCurrentPlayer(),bag); //Challenge word? //Joker
+            processMove(move, board, playerList.getCurrentPlayer(),bag); //Challenge word?
 
             /***Announces new Score only if a new word is placed*/
             if (move.charAt(0) == 'W' || move.charAt(0) == 'w'){localTUI.updateBoard();}

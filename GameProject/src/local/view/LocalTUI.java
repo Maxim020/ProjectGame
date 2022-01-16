@@ -155,9 +155,11 @@ public class LocalTUI implements UserInterface {
     @Override
     public void printInstructions() {
         System.out.println("\n"+ANSI_GREEN+
-                "1) Place a word:  'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
-                +"2) Swap tiles:    'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
-                +"3) Skip turn:     'SWAP'\n"+ANSI_RESET
+                 "1) Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
+                +"2) Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
+                +"3) Skip turn:         'SWAP'\n"
+                +"4) Challenge word:    'Challenge' 'Start coordinate' 'Direction (H/V)' 'Word\n"
+                +ANSI_RESET
         );
     }
 }
