@@ -67,7 +67,9 @@ public class Bag {
 	public char pull() { //Should an Exception be thrown?
 		if(letterList.isEmpty()){System.out.println("The bag is already empty");}
 		shuffleBag();
-		return letterList.get(0);
+		char letter = letterList.get(0);
+		letterList.remove(0);
+		return letter;
 	}
 
 	public void add(char tile){

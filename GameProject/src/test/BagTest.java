@@ -45,7 +45,6 @@ class BagTest {
 		bag.getLetterList().clear();
 		bag.getLetterList().add('X');
 		assertEquals(bag.pull(), 'X');
-		bag.pull();
 		assertTrue(bag.getLetterList().isEmpty());
 		
 	}
