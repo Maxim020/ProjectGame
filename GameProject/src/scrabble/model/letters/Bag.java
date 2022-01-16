@@ -58,13 +58,13 @@ public class Bag {
 	}
 
 	/**
-	 * Method for pulling a random letter from the bag. Should have additional protection in case of return 0.
+	 * Method for pulling a random letter from the bag.
 	 * @requires letterList != null;
 	 * @ensures Error message || return of random letter
 	 * @return char letter
-	 * @author Maxim
+	 * @author Maxim & Yasin
 	 */
-	public char pull() {
+	public char pull() { //Should an Exception be thrown?
 		if(letterList.isEmpty()){System.out.println("The bag is already empty");}
 		shuffleBag();
 		return letterList.get(0);
