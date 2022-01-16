@@ -65,7 +65,8 @@ public class LocalTUI implements UserInterface {
             String command = parts[0]; String tiles = parts[1];
 
             return command.equalsIgnoreCase("swap") &&
-                    doesPlayerOwnTheseTiles(currentPlayer, tiles);
+                    doesPlayerOwnTheseTiles(currentPlayer, tiles) &&
+                    tiles.length() <= 7;
         }
 
         //Skip turn

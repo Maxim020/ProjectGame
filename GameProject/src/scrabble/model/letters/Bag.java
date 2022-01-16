@@ -29,8 +29,6 @@ public class Bag {
 			for(int i = 0; i < LETTERS.split("").length; i++) {
 				letterList.add(LETTERS.toCharArray()[i]);
 			}
-
-			shuffleBag();
 		}
 		return instance;
 	}
@@ -40,7 +38,7 @@ public class Bag {
 	 * @ensures letterList != (old)letterList;
 	 * @author Maxim
 	 */
-	public static void shuffleBag() {
+	public void shuffleBag() {
 		Collections.shuffle(letterList);
 	}
 	
@@ -74,12 +72,16 @@ public class Bag {
 			return letter;
 		}
 		else {
-			int range = letterList.size();
+			int range = letterList.size()-1; //-1 I think makes it logical ...
 			char letter = letterList.get( (int) (Math.random()*range));
 			letterList.remove(letter);
 			return letter;
 		}
 		return 0;
+	}
+
+	public void add(char tile){
+		letterList.add(tile);
 	}
 	
 	public ArrayList<Character> getLetterList(){

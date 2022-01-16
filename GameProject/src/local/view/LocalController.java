@@ -53,7 +53,7 @@ public class LocalController {
             if(!localTUI.isInputValid(move)){
                 throw new IllegalArgumentException();
             }
-            processMove(move, board); //Next: Having a universal bag of letters and
+            processMove(move, board, playerList.getCurrentPlayer(),bag);
 
             localTUI.updateBoard();
 
@@ -71,17 +71,37 @@ public class LocalController {
      * @param input the input that the user wrote
      * @author Yasin Fahmy
      */
-    public static void processMove(String input, Board board){
-        //Validation required (currently in LocalController)
+    public static void processMove(String input, Board board, Player currentPlayer, Bag bag){
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
+            //WORD A1 H TEST
             board.setWord(parts[1], parts[2], parts[3]);
+            exchangeTiles(parts[3], currentPlayer, bag);
         }
         else {
-            System.out.println("Swaping not available yet");
+            if(parts.length == 2){
+                //SWAP TEST
+                exchangeTiles(parts[1], currentPlayer, bag);
+            }
+            //SWAP
         }
         board.setBoardEmpty(false);
+    }
+
+    /**
+     * @param tiles that need to be exchanged
+     * @param currentPlayer - The player who is currently making the move
+     * @param bag - a universal bag of letters
+     */
+    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag){
+
+        for (int i=0; i<tiles.length(); i++) {
+            currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //remove old tiles from deck
+        }
+
+        bag.shuffleBag();
+        currentPlayer.getLetterDeck().addToDeck(tiles.length()); //Add new Tiles to deck
     }
 
 
