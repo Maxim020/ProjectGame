@@ -1,6 +1,7 @@
 package scrabble.model.words;
 
 import scrabble.model.Board;
+import scrabble.model.Board.FieldType;
 import scrabble.model.letters.LetterScoreChecker;
 import scrabble.model.letters.TileMultiplierChecker;
 
@@ -48,13 +49,17 @@ public class WordScoreCounter {
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
 		
 		for(int i = 0; i < word.toCharArray().length; i++) {
-			letterList.add(word.toCharArray()[i]);
+			letterList.add(word.toUpperCase().toCharArray()[i]);
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
-
+			score = score + letterChecker.scoreChecker(letterList.get(i));
+			
+			if(board.checkFieldType(row, columnOfFirstLetter + i) == FieldType.DOUBLE_LETTER_SCORE || board.checkFieldType(row, columnOfFirstLetter + i) == FieldType.TRIPLE_LETTER_SCORE) {
+				score = score * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i));
+			}
+			
 			if(board.getDoubleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
 				board.getDoubleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
@@ -65,7 +70,8 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)) > 1) {
+			if(board.checkFieldType(row, columnOfFirstLetter + i) == FieldType.DOUBLE_WORD_SCORE || board.checkFieldType(row, columnOfFirstLetter + i) == FieldType.TRIPLE_WORD_SCORE) {
+				
 			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
 			
 			if(board.getDoubleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
@@ -74,10 +80,6 @@ public class WordScoreCounter {
 			if(board.getTripleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
 				board.getTripleWordScore().remove(board.convert(row, columnOfFirstLetter + i));
 			}
-			
-//			if(board.center.contains(board.convert(row, columnOfFirstLetter + i))) {
-//				board.center.remove(board.convert(row, columnOfFirstLetter + i));
-//			}
 			
 			}
 		}
@@ -112,12 +114,16 @@ public class WordScoreCounter {
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
 		
 		for(int i = 0; i < word.toCharArray().length; i++) {
-			letterList.add(word.toCharArray()[i]);
+			letterList.add(word.toUpperCase().toCharArray()[i]);
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
+			score = score + letterChecker.scoreChecker(letterList.get(i));
+			
+			if(board.checkFieldType(rowOfFirstLetter + i, column) == FieldType.DOUBLE_LETTER_SCORE || board.checkFieldType(rowOfFirstLetter + i, column) == FieldType.TRIPLE_LETTER_SCORE) {
+				score = score * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column));
+			}
 			
 			if(board.getDoubleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {
 				board.getDoubleLetterScore().remove(board.convert(rowOfFirstLetter + i, column));
@@ -130,7 +136,7 @@ public class WordScoreCounter {
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)) > 1) {
+			if(board.checkFieldType(rowOfFirstLetter + i, column) == FieldType.DOUBLE_WORD_SCORE || board.checkFieldType(rowOfFirstLetter + i, column) == FieldType.TRIPLE_WORD_SCORE) {
 			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
 			}
 			
@@ -141,9 +147,6 @@ public class WordScoreCounter {
 				board.getTripleWordScore().remove(board.convert(rowOfFirstLetter + i, column));
 			}
 			
-//			if(board.center.contains(board.convert(rowOfFirstLetter + i, column))) {
-//				board.center.remove(board.convert(rowOfFirstLetter + i, column));
-//			}
 		}
 		
 		for(int i = 0; i < listOfWordMultipliers.size(); i++) {

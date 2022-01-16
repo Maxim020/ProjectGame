@@ -20,11 +20,8 @@ public class TileMultiplierChecker {
 		letterMultiplierMap = new HashMap<>();
 		wordMultiplierMap = new HashMap<>();
 		
-		letterMultiplierMap.put(FieldType.NORMAL, 1);
 		letterMultiplierMap.put(FieldType.TRIPLE_LETTER_SCORE, 3);
 		letterMultiplierMap.put(FieldType.DOUBLE_LETTER_SCORE, 2);
-		//wordMultiplierMap.put(FieldType.CENTER, 2);
-		wordMultiplierMap.put(FieldType.NORMAL, 1);
 		wordMultiplierMap.put(FieldType.TRIPLE_WORD_SCORE, 3);
 		wordMultiplierMap.put(FieldType.DOUBLE_WORD_SCORE, 2);
 	}
@@ -47,7 +44,7 @@ public class TileMultiplierChecker {
 	 * @author Maxim
 	 */
 	public int wordMultiplierChecker(FieldType ft) {
-		return letterMultiplierMap.get(ft);
+		return wordMultiplierMap.get(ft);
 	}
 
 }
