@@ -89,10 +89,10 @@ public class LocalTUI implements UserInterface {
             }
             
             if(wordChecker.isValidWord(word) == null) {
-            	throw new WordDoesNotFit();
+            	throw new WordDoesNotFit(); //better: WordIsNotValid
             }
             
-            if(word.length() > 7){
+            if(word.length() > 7){ //There can be words that have a length > 7 if it connects with other words
                 throw new DeckFull();
             }
 //            if(!wordChecker.isValidWord(word)){
@@ -151,20 +151,22 @@ public class LocalTUI implements UserInterface {
     /**
      * prints Scoreboard after match ends
      */
-    public void printFinalScoreBoard(){
+    public void printFinalScoreBoard(Player winner){
         PlayerList playerList = PlayerList.getInstance();
         List<Player> players = playerList.getPlayers();
         String scoreboard = "";
-        Collections.sort(players);
-        Collections.reverse(players);
+
+        scoreboard += "\n"+winner+1+") ";
 
         for (int i=0; i<players.size(); i++){
-            scoreboard += "\n"+i+1+") "+players.get(i);
+            if(!players.get(i).equals(winner)) {
+                scoreboard += "\n" + i + 2 + ") " + players.get(i);
+            }
         }
 
         System.out.println ("*******************************"+
                             "WINNER WINNER CHICKEN DINNER!\n"+
-                            players.get(0)+"has won the game"+
+                            winner+"has won the game"+
                             scoreboard+"\n"+
                             "*******************************"
                             );
@@ -204,7 +206,6 @@ public class LocalTUI implements UserInterface {
                  "1) Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
                 +"2) Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
                 +"3) Skip turn:         'SWAP'\n"
-                //+"4) Challenge word:    'Challenge' 'Start coordinate' 'Direction (H/V)' 'Word\n"
                 +ANSI_RESET
         );
     }

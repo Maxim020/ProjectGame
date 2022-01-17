@@ -4,8 +4,10 @@ import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
 import scrabble.model.letters.Bag;
+import scrabble.model.letters.LetterScoreChecker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -57,32 +59,26 @@ public class LocalController {
                 localTUI.validateInput(move);
 
                 // Player makes move
-                processMove(move, board, playerList.getCurrentPlayer(), bag); //If a user plays an invalid word the player gets back his tiles and loses his turn
+                processMove(move, board, playerList.getCurrentPlayer(), bag); //Controlflow for computerplayers
+                //If a user plays an invalid word the player gets back his tiles and loses his turn
 
-                /***Announces new Score only if a new word is placed*/
+                /** Announces new Score only if a new word is placed*/
                 if (move.charAt(0) == 'W' || move.charAt(0) == 'w') {
                     localTUI.updateBoard();
                 }
 
-                //CheckWinner()
-                    //No more tiles in bag and in one players rack
-                    //At least six successive scoreless turns have occurred and either player decides to end the game
-                    //Either player uses more than 10 minutes of overtime.
-                    //No more words possible
-                    //Project description: . The game ends when all letters have been drawn and one player uses his or her last letter; or when all possible plays have been made.
+                /** breakes out of second while loop proivded the game ended */
+                if(checkEndOfGame(bag, playerList.getCurrentPlayer())){
+                    break;
+                }
 
                 numberOfTurn++;
             }
 
-            //Adjust Scores
-                //When the game ends, each player's score is reduced by the sum of their unused letters;
-                // in addition, if a player has used all of their letters (known as "going out" or "playing out"),
-                // the sum of all other players' unused letters is added to that player's score. In tournament play,
-                // a player who goes out adds twice that sum, and their opponent is not penalized.
-
-
-            /** prints out final scoreboard*/
-            new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer()).printFinalScoreBoard();
+            /** Adjusts scores and prints out final scoreboard*/
+            new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer())
+                    .printFinalScoreBoard(
+                            announceWinner(bag, PlayerList.getInstance().getCurrentPlayer()));
 
             /** Ask for another game */
             System.out.println("Do you want to play another Game? (y/n)");
@@ -92,6 +88,70 @@ public class LocalController {
         }
 
         scanner.close();
+    }
+
+    /**
+     * @param bag - a universal bag of letters
+     * @param currentPlayer - The player who has just made a move
+     * @return - winner of the game and adjusts Scores
+     * @author Yasin
+     */
+    public static Player announceWinner(Bag bag, Player currentPlayer){
+        LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
+        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
+        int sumOfUnplacedTiles = 0;
+        Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+
+        //Each player's score is reduced by the sum of his or her unplaced letters.
+        for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+            ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+            for (int j=0; j<letterDeck.size(); i++){
+                sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
+                PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
+            }
+        }
+
+        //In addition, if a player has used all of his or her letters, the sum of the other players' unplaced letters is added to that player's score.
+        if(goingOut){
+            for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+                ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+                if(letterDeck.isEmpty()){
+                    PlayerList.getInstance().getPlayers().get(i).addToScore(sumOfUnplacedTiles);
+                }
+            }
+        }
+
+        //Sort PlayerList in descending order
+        Collections.sort(PlayerList.getInstance().getPlayers());
+        Collections.reverse(PlayerList.getInstance().getPlayers());
+        Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+
+        //The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
+        if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
+            return winnerBeforeAdjustment;
+        } else {
+            return winnerAfterAdjustment;
+        }
+    }
+
+    /**
+     * Game ends if:
+     * 1) Either player uses more than 10 minutes of overtime.
+     * 2) The game ends when all letters have been drawn and one player uses his or her last letter (known as "going out")
+     * 3) When all possible plays have been made
+     * @param bag - a universal bag of letters
+     * @param currentPlayer - The player who has just made a move
+     * @return - return true if game ended
+     * @author Yasin
+     */
+    public static boolean checkEndOfGame(Bag bag, Player currentPlayer){
+        //Either player uses more than 10 minutes of overtime.
+
+        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
+
+        //boolean deadEnd = ???
+
+        return goingOut; //|| deadEnd;
     }
 
     /**
@@ -122,6 +182,7 @@ public class LocalController {
      * @param tiles that need to be exchanged
      * @param currentPlayer - The player who is currently making the move
      * @param bag - a universal bag of letters
+     * @author Yasin
      */
     public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag){
 

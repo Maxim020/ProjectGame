@@ -64,8 +64,11 @@ public class Bag {
 	 * @return char letter
 	 * @author Maxim & Yasin
 	 */
-	public char pull() { //Should an Exception be thrown?
-		if(letterList.isEmpty()){System.out.println("The bag is already empty");}
+	public char pull() throws Exception{ //Should an Exception be thrown?
+		if(letterList.isEmpty()) {
+			throw new Exception("The bag is already empty");
+		}
+
 		shuffleBag();
 		char letter = letterList.get(0);
 		letterList.remove(0);

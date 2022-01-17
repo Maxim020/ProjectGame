@@ -36,6 +36,8 @@ public class Player implements Comparable<Player>{
 
     public void addToScore(int score){this.score += score;}
 
+    public void subtractScore(int score){this.score -= score;}
+
     @Override
     public int compareTo(Player anotherPlayer) {
         return Integer.compare(this.getScore(), anotherPlayer.getScore());
