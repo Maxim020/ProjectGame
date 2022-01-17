@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 
 public class LocalController {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         /**
          * Scans user input for the name of all players and if wanted any computer players
          * Creates universal PlayerList (Singleton Design Pattern)
@@ -159,8 +159,9 @@ public class LocalController {
      * @requires the input to be valid
      * @param input the input that the user wrote
      * @author Yasin
+     * @throws Exception 
      */
-    public static void processMove(String input, Board board, Player currentPlayer, Bag bag){
+    public static void processMove(String input, Board board, Player currentPlayer, Bag bag) throws Exception{
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
@@ -183,8 +184,9 @@ public class LocalController {
      * @param currentPlayer - The player who is currently making the move
      * @param bag - a universal bag of letters
      * @author Yasin
+     * @throws Exception 
      */
-    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag){
+    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag) throws Exception{
 
         for (int i=0; i<tiles.length(); i++) {
             if(Character.isLowerCase(tiles.charAt(i))){
@@ -205,8 +207,9 @@ public class LocalController {
      * @param players a String array that holds the name (and type) of all Players
      * @return a list of all Players
      * @author Yasin
+     * @throws Exception 
      */
-    public static List<Player> createPlayerArrayList(String[] players) throws IllegalArgumentException{
+    public static List<Player> createPlayerArrayList(String[] players) throws Exception{
         if (players.length < 2 || players.length > 4){
             throw new IllegalArgumentException();
         }

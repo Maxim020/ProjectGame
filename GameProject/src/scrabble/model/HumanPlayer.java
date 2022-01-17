@@ -9,7 +9,7 @@ public class HumanPlayer extends Player {
 	private int score;
 	private LetterDeck letterdeck;
 	
-	public HumanPlayer(String name, Bag bag) {
+	public HumanPlayer(String name, Bag bag) throws Exception {
 		super(name, bag);
 	}
 

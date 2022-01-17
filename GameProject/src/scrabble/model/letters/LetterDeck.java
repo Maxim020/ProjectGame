@@ -9,7 +9,7 @@ public class LetterDeck {
 	private Bag bag;
 	
 	//Constructor
-	public LetterDeck(Bag bag) {
+	public LetterDeck(Bag bag) throws Exception {
 		this.lettersInDeck = new ArrayList<>();
 		this.initializeDeck(bag);
 		this.bag = Bag.getInstance();
@@ -35,8 +35,9 @@ public class LetterDeck {
 	/**
 	 * @param amount of new Letters wished to be in the deck randomly pulled from the Bag
 	 * @author Yasin
+	 * @throws Exception 
 	 */
-	public void addToDeck(int amount){
+	public void addToDeck(int amount) throws Exception{
 		for (int i=0; i<amount; i++) {
 			lettersInDeck.add(bag.pull());
 		}
@@ -58,8 +59,9 @@ public class LetterDeck {
 	 * @ensures lettersInDeck.size() == 7
 	 * @param bag
 	 * @author Maxim
+	 * @throws Exception 
 	 */
-	public void initializeDeck(Bag bag) {
+	public void initializeDeck(Bag bag) throws Exception {
 		int i = 0;
 		while(i != 7) {
 			lettersInDeck.add(bag.pull());

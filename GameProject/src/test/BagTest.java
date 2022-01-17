@@ -41,7 +41,7 @@ class BagTest {
 		assertNotEquals(bag.getLetterList(), bag.getLetterList().add('A'));
 	}
 	
-	@Test void pullTest() {
+	@Test void pullTest() throws Exception {
 		bag.getLetterList().clear();
 		bag.getLetterList().add('X');
 		assertEquals(bag.pull(), 'X');
