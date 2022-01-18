@@ -2,7 +2,6 @@ package scrabble.model;
 
 import java.util.ArrayList;
 
-import scrabble.model.ComputerPlayer;
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.ScrabbleWordChecker;
 
@@ -83,9 +82,73 @@ public class NaiveStrategy implements Strategy{
     	
     	listOfAllPermutations = determineWord(formString(letterDeck));
     	
+    	/**Cycle through generated list of words*/
     	for(String word : listOfAllPermutations) {
+    		/**Suitable word found*/
     		if(checker.isValidWord(word) != null) {
-    			move = move + " " + word.toUpperCase();
+    			/**If first turn play from center*/
+    			if(board.getPlayedWords().isEmpty()) {
+    				move = move + "WORD H8 H " + word;
+    			}
+    			/**Word was not already played*/
+    			else if(!board.getPlayedWords().contains(word)) {
+    				/**Cycle though words already on board*/
+    				for(String playedWord : board.getPlayedWords()) {
+    					/**Check if word is substring of a word already on board*/
+    							if(playedWord.contains(word)) {
+    								/**If the played word is horizontal*/
+    								if(board.getWordDirectionMap().get(playedWord) == "H") {
+    									/**If the last letter of the word is the first letter of the played word*/
+    									if(word.charAt(word.length()-1) == playedWord.charAt(0)) {
+    										/**If the new word can fit*/
+    										if(board.convert(board.getWordCoordinateMap().get(playedWord))[1] > word.length()) {
+    				
+    										move = move + "WORD " + board.convert(board.convert(board.getWordCoordinateMap().get(playedWord))[0], board.convert(board.getWordCoordinateMap().get(playedWord))[1] - word.length() + 1) + " H " + word.toUpperCase();
+    										}
+    									}
+    									/**If the first letter of the word is the last letter of the played word*/
+    									else if(word.charAt(0) == playedWord.charAt(playedWord.length() - 1)) {
+    										/**If the new word can fit*/
+    										if(board.convert(board.getWordCoordinateMap().get(playedWord))[1] + word.length() <= 15) {
+    					    				
+    										move = move + "WORD " + board.convert(board.convert(board.getWordCoordinateMap().get(playedWord))[0], board.convert(board.getWordCoordinateMap().get(playedWord))[1] + word.length() - 1) + " H " + word.toUpperCase();
+        									}
+    									}
+    									
+    									/**Stores Matching letters*/
+    									char matchingLetter = ' ';
+    									
+    									/**Finds matching letters*/
+    									for(char wordLetters : word.toCharArray()) {
+    										for(char letters : playedWord.toCharArray()) {
+    											if(wordLetters == letters) {matchingLetter = letters;}
+    										}
+    									}
+    									
+    									/**If matching letter is not empty*/
+    									if (matchingLetter != ' ') {
+    										/**Get index of matching letter in playedWord*/
+    										int indexMatchingLetterPlayedWord = playedWord.indexOf(matchingLetter);
+    										/**Get index of matching letter in word*/
+    										int indexMatchingLetterWord = word.indexOf(matchingLetter);
+    										/**Get start coordinates of played word*/
+    										int[] playedWordStartCoords = board.convert(board.getWordCoordinateMap().get(playedWord));
+    										/**Get coordinates of matching letter inside of playedWord*/
+    										String coordsOfMatchingLetter = board.convert(playedWordStartCoords[0], indexMatchingLetterPlayedWord);
+    										
+    										move = move + "WORD" + board.convert(board.convert(coordsOfMatchingLetter)[0] - indexMatchingLetterWord, indexMatchingLetterPlayedWord);
+    									}
+    								}
+    									
+    							
+    								
+    						
+    							else {
+    							
+    							}
+    					}
+    				}
+    			}
     		}
     	}
     	return move;

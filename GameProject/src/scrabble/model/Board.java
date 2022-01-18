@@ -3,6 +3,7 @@ import local.view.LocalTUI;
 import scrabble.model.words.WordScoreCounter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -25,6 +26,9 @@ public class Board {
     boolean isCenterCovered;
     WordScoreCounter wordScoreCounter;
     PlayerList playerList;
+    ArrayList<String> playedWords = new ArrayList<>();
+    HashMap<String, String> wordCoordinateMap = new HashMap<>();
+    HashMap<String, String> wordDirectionMap = new HashMap<>();
 
     /**
      * Constructor of the Board Class.
@@ -307,4 +311,24 @@ public class Board {
     public HashSet<String> getDoubleLetterScore() {
         return doubleLetterScore;
     }
+    
+    /** Added by Maxim, might be shit */
+    public void addPlayedWords(String word, String coordinate, String direction) {
+    	playedWords.add(word);
+    	wordCoordinateMap.put(word, coordinate);
+    	wordDirectionMap.put(word, direction);
+    }
+    
+    public ArrayList<String> getPlayedWords(){
+    	return playedWords;
+    }
+    
+    public HashMap<String, String> getWordCoordinateMap(){
+    	return wordCoordinateMap;
+    }
+    
+    public HashMap<String, String> getWordDirectionMap(){
+    	return wordDirectionMap;
+    }
+    
 }
