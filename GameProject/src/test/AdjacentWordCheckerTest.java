@@ -40,7 +40,8 @@ class AdjacentWordCheckerTest {
 		board.setWord("H8", "h", "hello");
 		board.setWord("J8", "v", "loan");
 		
-		assertTrue(board.isFieldEmpty(9, 10));
+		System.out.println(board.getTile(7, 9));
+		assertTrue(board.isFieldEmpty(9, 9));
 		
 		checker.checkHorizontalWordAdjacency("hello", 8, 8);
 		
