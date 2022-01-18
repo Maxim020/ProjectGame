@@ -99,6 +99,7 @@ public class LocalController {
                     }
                     if(isWordValid) {
                         updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                        
                     }
 
                 } else {
