@@ -27,11 +27,23 @@ public class LocalController {
         Scanner scanner = new Scanner(System.in);
 
         while(continueGame) {
-            System.out.println("> Please type in the name of the players with a space in between (2-4)");
-            System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
-            String playersNames = scanner.nextLine();
-            String[] players = playersNames.split(" ");
-            int amountOfPlayers = players.length;
+            String[] players;
+            int amountOfPlayers;
+
+            while (true) {
+                System.out.println("> Please type in the name of the players with a space in between (2-4)");
+                System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
+                String playersNames = scanner.nextLine();
+                players = playersNames.split(" ");
+                amountOfPlayers = players.length;
+
+                if (amountOfPlayers < 2 || amountOfPlayers > 4){
+                    System.out.println("\nScrabble needs at least 2 and maximum 4 Players");
+                } else {
+                    break;
+                }
+            }
+
             PlayerList playerList = PlayerList.getInstance();
             playerList.setPlayers(createPlayerArrayList(players));
 
@@ -65,8 +77,9 @@ public class LocalController {
                     while (true) {
                         try {
                             localTUI.validateInput(move);
+                            break;
 
-                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException |
+                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
                                 UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException e) {
 
                             e.printStackTrace();
@@ -78,9 +91,9 @@ public class LocalController {
                             System.out.println(PlayerList.getInstance().getCurrentPlayer().getName() + " lost his turn");
                             break;
                         }
-                        updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
                     }
-                    //updateTUI = false;
+
+                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
 
                 } else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();

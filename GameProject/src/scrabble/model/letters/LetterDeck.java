@@ -31,7 +31,7 @@ public class LetterDeck {
 	 */
 	public void removeFromDeck(char letter) {
 		System.out.println(letter);
-		lettersInDeck.remove(lettersInDeck.indexOf(letter));
+		lettersInDeck.remove(letter); //.remove(lettersInDeck.indexOf(letter));
 		bag.add(letter);
 	}
 

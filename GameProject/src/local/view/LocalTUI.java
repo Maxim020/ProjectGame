@@ -74,14 +74,15 @@ public class LocalTUI implements UserInterface {
             if(!board.doesWordFit(startCoordinate, direction, word)){
                 throw new WordDoesNotFitException();
             }
-            if(tilesNotOwned(currentPlayer,word) != 0){
-                int lowercase = tilesNotOwned(currentPlayer,word);
-                System.out.println("int lowercase: "+lowercase);
+
+            //Clean Up
+            int lowercase = tilesNotOwned(currentPlayer,word);
+            System.out.println(lowercase);
+            if(lowercase != 0){
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
-                System.out.println("int blankTiles: "+blankTiles);
 
                 if(blankTiles != lowercase){
-                    throw new IllegalSwapException();
+                    throw new NotEnoughBlankTilesException();
                 }
             }
 
@@ -133,14 +134,11 @@ public class LocalTUI implements UserInterface {
         int count = 0;
 
         int length = tiles.length();
+
         for(int i=0; i<length; i++){
-            System.out.println(tiles.length());
-            ;
             if(!letterDeck.contains(tiles.charAt(i))){
-                System.out.println(tiles.charAt(i));
                 count++;
             }
-            System.out.println("-----------"+i+". Iteration) -----------");
         }
 
         return count;
