@@ -21,8 +21,14 @@ public class AdjacentWordChecker {
 	/**
 	 * Takes a word, it's start coordinates, and checks if there are letters above and below it.
 	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
-	 * If the method does not throw an exception, all vertically adjacent words are correct.
-	 * @return
+	 * If the method does not return false, all vertically adjacent words are correct.
+	 * @param String word
+	 * @param int row
+	 * @param int column
+	 * @requires word != null && 0 > row < 15 && 0 > column < 15
+	 * @ensures true or false return
+	 * @return true || false
+	 * @author Maxim
 	 */
 	public boolean checkHorizontalWordAdjacency(String word, int row, int column) {
 		
@@ -52,9 +58,6 @@ public class AdjacentWordChecker {
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
-				
-				System.out.println(adjacentWord + 1);
-				System.out.println(firstLetter + board.getTile(row, column + i) + 1);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
@@ -92,15 +95,10 @@ public class AdjacentWordChecker {
 					adjacentWordReversed = adjacentWordReversed + charList.get(l);
 				}
 				
-				System.out.println(adjacentWordReversed + 2);
-				
 				for(int f = 0; f < adjacentWordReversed.length(); f++) {
 					char ch = adjacentWordReversed.charAt(f);
 					adjacentWord = ch + adjacentWord;
 				}
-				
-				System.out.println(adjacentWord + 2);
-				System.out.println(firstLetter + board.getTile(row, column + i) + 2);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
@@ -120,7 +118,20 @@ public class AdjacentWordChecker {
 		return flag;
 	}
 	
-public boolean checkVerticalWordAdjacency(String word, int row, int column) {
+	/**
+	 * Takes a word, it's start coordinates, and checks if there are letters right and left of it.
+	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
+	 * If the method does not return false, all vertically adjacent words are correct.
+	 * @param String word
+	 * @param int row
+	 * @param int column
+	 * @requires word != null && 0 > row < 15 && 0 > column < 15
+	 * @ensures true or false return
+	 * @return true || false
+	 * @author Maxim
+	 */
+	
+	public boolean checkVerticalWordAdjacency(String word, int row, int column) {
 		
 		int i = 0;
 		boolean flag = true;
@@ -147,9 +158,6 @@ public boolean checkVerticalWordAdjacency(String word, int row, int column) {
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
-				
-				System.out.println(adjacentWord + 1);
-				System.out.println(firstLetter + board.getTile(row + i, column) + 1);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;
@@ -187,15 +195,10 @@ public boolean checkVerticalWordAdjacency(String word, int row, int column) {
 					adjacentWordReversed = adjacentWordReversed + charList.get(l);
 				}
 				
-				System.out.println(adjacentWordReversed + 2);
-				
 				for(int f = 0; f < adjacentWordReversed.length(); f++) {
 					char ch = adjacentWordReversed.charAt(f);
 					adjacentWord = ch + adjacentWord;
 				}
-				
-				System.out.println(adjacentWord + 2);
-				System.out.println(firstLetter + board.getTile(row + i, column) + 2);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;
@@ -214,6 +217,17 @@ public boolean checkVerticalWordAdjacency(String word, int row, int column) {
 		return flag;
 	}
 	
+	/**
+	 * Adapted method for (coordinate, direction, word) format.
+	 * Combines Horizontal and Vertical adjacent word checkers.
+	 * Calls one or the other depending on direction.
+	 * @param String coordinate
+	 * @param String direction
+	 * @param String word
+	 * @requires coordinate == {A-O + 1-15} && direction == "h"||"v" && word != null
+	 * @ensures return of true or false
+	 * @return true || false
+	 */
 	public boolean areAdjacentWordsValid(String coordinate, String direction, String word) {
 		
 		int [] coords = board.convert(coordinate);

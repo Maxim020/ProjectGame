@@ -7,6 +7,7 @@ import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
+import scrabble.model.words.IsAdjacentChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.UserInterface;
 import scrabble.view.utils.TextBoardRepresentation;
@@ -20,11 +21,13 @@ public class LocalTUI implements UserInterface {
     private Bag bag;
     private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
     private AdjacentWordChecker adjacentWordChecker;
+    private IsAdjacentChecker isAdjacentChecker;
 
     public LocalTUI(Board board, Player currentPlayer){
         this.board = board;
         this.representation = new TextBoardRepresentation(board);
         this.adjacentWordChecker = new AdjacentWordChecker(board);
+        this.isAdjacentChecker = new IsAdjacentChecker(board);
         this.currentPlayer = currentPlayer;
         this.bag = Bag.getInstance();
     }
@@ -88,16 +91,20 @@ public class LocalTUI implements UserInterface {
                 }
             }
 
-            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word)
+            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word) - ADDED
+            if(direction != "H8") {
+            	if(isAdjacentChecker.isAdjacent(startCoordinate, direction, word) == false) {
+            		throw new WordIsNotAdjacentException();
+            	}
+            }
 
-            if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words
+            if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words BTW this works in a way that if word is valid it gives a description so if there is no description given the word is invalid
             	throw new InvalidWordException();
             } else {
+            	//If one of the new composed words is invalid: throw new InvalidWordException - ADDED 
             	if(adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word) == false) {
             		throw new InvalidWordException();
             	}
-                //If one of the new composed words is invalid: throw new InvalidWordException
-            	
             }
         }
 
