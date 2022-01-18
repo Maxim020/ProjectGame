@@ -140,7 +140,7 @@ public class LocalTUI implements UserInterface {
                 System.out.println(tiles.charAt(i));
                 count++;
             }
-            System.out.println(i+". Iteration) -----------");
+            System.out.println("-----------"+i+". Iteration) -----------");
         }
 
         return count;
