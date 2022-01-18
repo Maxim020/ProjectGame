@@ -31,19 +31,58 @@ class AdjacentWordCheckerTest {
 	}
 
 	@Test
-	void testHorizontalWordAdjacency() throws Exception {
+	void testAreAdjacentWordsValidHorizontal() throws Exception {
 		bag = Bag.getInstance();
-		//players.add(new Player("Richard", bag));
+		players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
 		board.setWord("H8", "h", "hello");
 		board.setWord("J8", "v", "loan");
 		
-		System.out.println(board.getTile(7, 9));
-		assertTrue(board.isFieldEmpty(9, 9));
+		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
 		
-		checker.checkHorizontalWordAdjacency("hello", 8, 8);
+	}
+	
+	@Test
+	void testAreAdjacentWordsValidVertical() throws Exception {
+		bag = Bag.getInstance();
+		players.add(new Player("Richard", bag));
+		playerlist.setPlayers(players);
+		playerlist.setCurrentPlayer(0);
+		
+		board.setWord("H8", "v", "hello");
+		board.setWord("H10", "h", "loan");
+		
+		assertTrue(checker.areAdjacentWordsValid("H8", "V", "HELLO"));
+		
+	}
+	
+	@Test
+	void testInvalidWordHorizontal() throws Exception {
+		bag = Bag.getInstance();
+		players.add(new Player("Richard", bag));
+		playerlist.setPlayers(players);
+		playerlist.setCurrentPlayer(0);
+		
+		board.setWord("H8", "h", "hello");
+		board.setWord("J8", "v", "lkju");
+		
+		assertFalse(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
+		
+	}
+	
+	@Test
+	void testInvalidWordVertical() throws Exception {
+		bag = Bag.getInstance();
+		players.add(new Player("Richard", bag));
+		playerlist.setPlayers(players);
+		playerlist.setCurrentPlayer(0);
+		
+		board.setWord("H8", "v", "hello");
+		board.setWord("H10", "h", "lujada");
+		
+		assertFalse(checker.areAdjacentWordsValid("H8", "V", "HELLO"));
 		
 	}
 

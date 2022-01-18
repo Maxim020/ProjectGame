@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import scrabble.model.Board;
-import scrabble.model.exceptions.InvalidWordException;
-import scrabble.model.exceptions.WordIsNotAdjacentException;
 
 public class AdjacentWordChecker {
 	
@@ -122,9 +120,10 @@ public class AdjacentWordChecker {
 		return flag;
 	}
 	
-public void checkVerticalWordAdjacency(String word, int row, int column) {
+public boolean checkVerticalWordAdjacency(String word, int row, int column) {
 		
 		int i = 0;
+		boolean flag = true;
 		
 		while(i != word.toCharArray().length) {
 			
@@ -132,7 +131,7 @@ public void checkVerticalWordAdjacency(String word, int row, int column) {
 			String adjacentWord = "";
 			String firstLetter = "";
 			ArrayList<Character> charList = new ArrayList<>();
-			boolean flag = false;
+			boolean flag2 = false;
 			int j = 1;
 			int k = 1;
 			
@@ -153,22 +152,17 @@ public void checkVerticalWordAdjacency(String word, int row, int column) {
 				System.out.println(firstLetter + board.getTile(row + i, column) + 1);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
-					flag = true;
+					flag2 = true;
 				}
 				
-				if(flag == false) {
+				if(flag2 == false) {
 					if(wordChecker.isValidWord(adjacentWord) == null) {
-						throw new WordIsNotAdjacentException();
+						flag = false;
 					}
 				}
 				
 			}
 			
-			if(flag == false) {
-				if(wordChecker.isValidWord(adjacentWord) == null) {
-					throw new InvalidWordException();
-				}
-			}
 			else {
 				
 				while(board.getTile(row + i, column + j) != ' ') {
@@ -204,12 +198,12 @@ public void checkVerticalWordAdjacency(String word, int row, int column) {
 				System.out.println(firstLetter + board.getTile(row + i, column) + 2);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
-					flag = true;
+					flag2 = true;
 				}
 				
-				if(flag == false) {
+				if(flag2 == false) {
 					if(wordChecker.isValidWord(adjacentWord) == null) {
-						throw new WordIsNotAdjacentException();
+						flag = false;
 					}
 				}
 				
@@ -217,19 +211,19 @@ public void checkVerticalWordAdjacency(String word, int row, int column) {
 			
 			i = i + 1;
 		}
-		
+		return flag;
 	}
 	
-	public static void main(String[] args) {
+	public boolean areAdjacentWordsValid(String coordinate, String direction, String word) {
 		
-		Board board = new Board();
-		AdjacentWordChecker checker = new AdjacentWordChecker(board);
+		int [] coords = board.convert(coordinate);
 		
-		board.setTile('h', 8, 8); board.setTile('e', 8, 9); board.setTile('l', 8, 10); board.setTile('l', 8, 11); board.setTile('o', 8, 12);
-		board.setTile('o', 7, 10); board.setTile('a', 6, 10); board.setTile('n', 5, 10); board.setTile('r', 9, 10); board.setTile('e', 10, 10);
-		board.setTile('i', 9, 8);
-		
-		System.out.println(checker.checkHorizontalWordAdjacency("hello", 8, 8));
+		if(direction.equalsIgnoreCase("H")) {
+			return checkHorizontalWordAdjacency(word, coords[0], coords[1]);
+		}
+		else {
+			return checkVerticalWordAdjacency(word, coords[0], coords[1]);
+		}
 		
 	}
 	

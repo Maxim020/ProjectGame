@@ -5,6 +5,7 @@ import scrabble.model.Player;
 import scrabble.model.PlayerList;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
+import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.UserInterface;
@@ -18,10 +19,12 @@ public class LocalTUI implements UserInterface {
     private Player currentPlayer;
     private Bag bag;
     private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
+    private AdjacentWordChecker adjacentWordChecker;
 
     public LocalTUI(Board board, Player currentPlayer){
         this.board = board;
         this.representation = new TextBoardRepresentation(board);
+        this.adjacentWordChecker = new AdjacentWordChecker(board);
         this.currentPlayer = currentPlayer;
         this.bag = Bag.getInstance();
     }
@@ -90,7 +93,11 @@ public class LocalTUI implements UserInterface {
             if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words
             	throw new InvalidWordException();
             } else {
+            	if(adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word) == false) {
+            		throw new InvalidWordException();
+            	}
                 //If one of the new composed words is invalid: throw new InvalidWordException
+            	
             }
         }
 
