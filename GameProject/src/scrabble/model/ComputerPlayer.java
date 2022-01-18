@@ -2,6 +2,8 @@ package scrabble.model;
 
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
+import scrabble.model.words.InMemoryScrabbleWordChecker;
+import scrabble.model.words.ScrabbleWordChecker;
 
 public class ComputerPlayer extends Player {
 	
@@ -9,10 +11,12 @@ public class ComputerPlayer extends Player {
 	private int score;
 	private LetterDeck letterdeck;
 	private Strategy strategy;
+	private ScrabbleWordChecker checker;
 	
 	public ComputerPlayer(Bag bag, Strategy strategy) {
 		super("Smart Computer", bag);
 		this.strategy = strategy;
+		this.checker = new InMemoryScrabbleWordChecker();
 	}
 
 	public ComputerPlayer(Bag bag) {
@@ -21,6 +25,6 @@ public class ComputerPlayer extends Player {
 	}
 
 	public String determineMove(Board board) {
-		return strategy.determineMove(board);
+		return strategy.determineMove(board, letterdeck, checker);
 	}
 }

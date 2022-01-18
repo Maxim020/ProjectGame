@@ -1,7 +1,9 @@
 package scrabble.model;
 
-public interface Strategy {
-    public String getName();
+import scrabble.model.letters.LetterDeck;
+import scrabble.model.words.ScrabbleWordChecker;
 
-    public String determineMove(Board board);
+public interface Strategy {
+
+    public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker);
 }
