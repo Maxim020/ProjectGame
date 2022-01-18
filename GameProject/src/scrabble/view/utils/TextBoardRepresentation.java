@@ -15,6 +15,7 @@ public class TextBoardRepresentation {
     public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
+    public static final String ANSI_GREEN = "\u001B[32m";
     private Board board;
     private PlayerList playerList;
 
@@ -76,16 +77,16 @@ public class TextBoardRepresentation {
      * @author Yasin Fahmy
      */
     public String addFieldTypes(int i){
-        if(i == 2) {
+        if(i == 0) {
             return "        "+ANSI_RED_BACKGROUND+"Triple Word Score"+ANSI_RESET;
         }
-        else if(i == 3) {
+        else if(i == 1) {
             return "        "+ANSI_PURPLE_BACKGROUND+"Double Word Score"+ANSI_RESET;
         }
-        else if(i == 4) {
+        else if(i == 2) {
             return "        "+ANSI_BLUE_BACKGROUND+"Triple Letter Score"+ANSI_RESET;
         }
-        else if(i == 5) {
+        else if(i == 3) {
             return "        "+ANSI_CYAN_BACKGROUND+"Double Letter Score"+ANSI_RESET;
         }
         else {
@@ -99,20 +100,20 @@ public class TextBoardRepresentation {
      * @author Yasin Fahmy
      */
     public String addScores(int i){
-        if(i == 8) {
+        if(i == 5) {
             return "        "+playerList.getPlayers().get(0).getName()+": "+playerList.getPlayers().get(0).getScore();
         }
-        else if(i == 9) {
-            return "       "+playerList.getPlayers().get(1).getName()+": "+playerList.getPlayers().get(1).getScore();
+        else if(i == 6) {
+            return "        "+playerList.getPlayers().get(1).getName()+": "+playerList.getPlayers().get(1).getScore();
         }
-        else if(i == 10) {
+        else if(i == 7) {
             if(playerList.getPlayers().size() > 2) {
-                return "       "+playerList.getPlayers().get(2).getName()+": "+playerList.getPlayers().get(2).getScore();
+                return "        "+playerList.getPlayers().get(2).getName()+": "+playerList.getPlayers().get(2).getScore();
             }
         }
-        else if(i == 11) {
+        else if(i == 8) {
             if(playerList.getPlayers().size() > 3){
-                return "       "+playerList.getPlayers().get(3).getName()+": "+playerList.getPlayers().get(3).getScore();
+                return "        "+playerList.getPlayers().get(3).getName()+": "+playerList.getPlayers().get(3).getScore();
             }
         }
         return "";
@@ -122,7 +123,25 @@ public class TextBoardRepresentation {
      * TESTING
      */
     public String addBag(){
-        return "\n"+bag.getLetterList().toString();
+        return bag.getLetterList().toString();
+    }
+
+    /**
+     * @param i - index for the rows
+     * @return instructions
+     * @author Yasin
+     */
+    public String addInstructions(int i){
+        if(i == 11){
+            return ANSI_GREEN+"       Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]"+ANSI_RESET;
+        }
+        if(i == 12){
+            return ANSI_GREEN+"       Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]"+ANSI_RESET;
+        }
+        if(i == 13){
+            return ANSI_GREEN+"       Skip turn:         'SWAP'"+ANSI_RESET;
+        }
+        return "";
     }
 
     /**
@@ -133,7 +152,7 @@ public class TextBoardRepresentation {
         String result = "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n";
         for (int i=0; i<15; i++){
             result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
-            result +=printLine(i+1)+addFieldTypes(i)+addScores(i)+"\n";
+            result +=printLine(i+1)+addFieldTypes(i)+addScores(i)+addInstructions(i)+"\n";
         }
         result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
                  "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n" + addBag();

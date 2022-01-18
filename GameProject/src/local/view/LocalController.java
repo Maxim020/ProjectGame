@@ -56,7 +56,7 @@ public class LocalController {
                 //Timer of Opponent starts --> revert move within timeframe?
 
                 /** DetermineMove() and Validates input */
-                boolean updateTUI;
+                boolean updateTUI = false;
 
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
                     String move = scanner.nextLine();
@@ -65,9 +65,8 @@ public class LocalController {
                     while (true) {
                         try {
                             localTUI.validateInput(move);
-                            break;
 
-                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException |
+                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException |
                                 UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException e) {
 
                             e.printStackTrace();
@@ -79,9 +78,9 @@ public class LocalController {
                             System.out.println(PlayerList.getInstance().getCurrentPlayer().getName() + " lost his turn");
                             break;
                         }
+                        updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
                     }
-
-                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                    //updateTUI = false;
 
                 } else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();

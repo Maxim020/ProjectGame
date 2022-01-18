@@ -1,5 +1,7 @@
 package scrabble.model.letters;
 
+import scrabble.model.exceptions.NotEnougTilesException;
+
 import java.util.ArrayList;
 
 public class LetterDeck {
@@ -28,6 +30,7 @@ public class LetterDeck {
 	 * @author Maxim & Yasin
 	 */
 	public void removeFromDeck(char letter) {
+		System.out.println(letter);
 		lettersInDeck.remove(lettersInDeck.indexOf(letter));
 		bag.add(letter);
 	}
@@ -38,11 +41,23 @@ public class LetterDeck {
 	 * @throws Exception 
 	 */
 	public void addToDeck(int amount) throws Exception{
-		for (int i=0; i<amount; i++) {
-			lettersInDeck.add(bag.pull());
+
+		if (amount <= bag.getLetterList().size()){
+			for (int i=0; i<amount; i++) {
+				lettersInDeck.add(bag.pull());
+			}
+		} else {
+			int size = bag.getLetterList().size();
+			for (int i=0; i<size; i++){
+				lettersInDeck.add(bag.pull());
+			}
 		}
 	}
 
+	/**
+	 * @return number of blank tiles that are in one deck
+	 * @author Yasin
+	 */
 	public int numberOfBlankTiles(){
 		int count = 0;
 		for (int i=0; i < lettersInDeck.size(); i++){

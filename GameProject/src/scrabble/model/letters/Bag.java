@@ -8,6 +8,7 @@ import java.util.Collections;
 public class Bag {
 	private static ArrayList<Character> letterList;
 	private final static String LETTERS = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGHHIIIIIIIIJJKKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ**";
+	//Shorter String for testing purposes: "AAAAABCDDDDEQWFPRGOEEFFGHHIIJJK**";
 
 	private static Bag instance = null;
 

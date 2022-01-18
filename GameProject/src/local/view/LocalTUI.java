@@ -4,6 +4,7 @@ import scrabble.model.Board;
 import scrabble.model.Player;
 import scrabble.model.PlayerList;
 import scrabble.model.exceptions.*;
+import scrabble.model.letters.Bag;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.UserInterface;
@@ -15,14 +16,14 @@ public class LocalTUI implements UserInterface {
     private Board board;
     private TextBoardRepresentation representation;
     private Player currentPlayer;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_GREEN = "\u001B[32m";
+    private Bag bag;
     private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
 
     public LocalTUI(Board board, Player currentPlayer){
         this.board = board;
         this.representation = new TextBoardRepresentation(board);
         this.currentPlayer = currentPlayer;
+        this.bag = Bag.getInstance();
     }
 
     @Override
@@ -46,6 +47,10 @@ public class LocalTUI implements UserInterface {
      */
     public void validateInput(String input) throws IllegalArgumentException{
         String[] parts = input.split(" ");
+
+        if(!(parts.length == 4 | parts.length == 2 | parts.length == 1)){
+            throw new UnknownCommandException();
+        }
 
         //Set word
         if(parts.length == 4){
@@ -71,7 +76,9 @@ public class LocalTUI implements UserInterface {
             }
             if(tilesNotOwned(currentPlayer,word) != 0){
                 int lowercase = tilesNotOwned(currentPlayer,word);
+                System.out.println("int lowercase: "+lowercase);
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
+                System.out.println("int blankTiles: "+blankTiles);
 
                 if(blankTiles != lowercase){
                     throw new IllegalSwapException();
@@ -80,7 +87,7 @@ public class LocalTUI implements UserInterface {
 
             //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word)
 
-            if(wordChecker.isValidWord(word) == null) {
+            if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words
             	throw new InvalidWordException();
             } else {
                 //If one of the new composed words is invalid: throw new InvalidWordException
@@ -99,6 +106,9 @@ public class LocalTUI implements UserInterface {
             }
             if(tiles.length() > 7){
                 throw new IllegalSwapException();
+            }
+            if(tiles.length() > bag.getLetterList().size()){
+                throw new NotEnougTilesException();
             }
         }
 
@@ -122,10 +132,15 @@ public class LocalTUI implements UserInterface {
         ArrayList<Character> letterDeck = currentPlayer.getLetterDeck().getLettersInDeck();
         int count = 0;
 
-        for(int i=0; i<tiles.length(); i++){
+        int length = tiles.length();
+        for(int i=0; i<length; i++){
+            System.out.println(tiles.length());
+            ;
             if(!letterDeck.contains(tiles.charAt(i))){
+                System.out.println(tiles.charAt(i));
                 count++;
             }
+            System.out.println(i+". Iteration) -----------");
         }
 
         return count;
@@ -139,18 +154,16 @@ public class LocalTUI implements UserInterface {
         List<Player> players = playerList.getPlayers();
         String scoreboard = "";
 
-        scoreboard += "\n"+winner+1+") ";
-
         for (int i=0; i<players.size(); i++){
             if(!players.get(i).equals(winner)) {
-                scoreboard += "\n" + i + 2 + ") " + players.get(i);
+                scoreboard += "\n" + (i + 1) + ") " + players.get(i);
             }
         }
 
-        System.out.println ("*******************************"+
-                            "WINNER WINNER CHICKEN DINNER!\n"+
-                            winner+"has won the game"+
-                            scoreboard+"\n"+
+        System.out.println ("*******************************\n"+
+                            "WINNER WINNER CHICKEN DINNER!\n\n"+
+                            winner.getName()+" has won the game!"+
+                            scoreboard+"\n\n"+
                             "*******************************"
                             );
     }
@@ -161,8 +174,7 @@ public class LocalTUI implements UserInterface {
      */
     @Override
     public void updateBoard() {
-        printInstructions();
-        System.out.println(representation);
+        System.out.println("\n\n"+representation);
         showRack();
     }
 
@@ -177,19 +189,5 @@ public class LocalTUI implements UserInterface {
             tiles += " "+currentPlayer.getLetterDeck().getLettersInDeck().get(i);
         }
         System.out.println(tiles);
-    }
-
-    /**
-     * prints out instructions
-     * @author Yasin
-     */
-    @Override
-    public void printInstructions() {
-        System.out.println("\n"+ANSI_GREEN+
-                 "1) Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]\n"
-                +"2) Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]\n"
-                +"3) Skip turn:         'SWAP'\n"
-                +ANSI_RESET
-        );
     }
 }

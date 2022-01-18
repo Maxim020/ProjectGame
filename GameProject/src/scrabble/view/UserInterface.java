@@ -9,6 +9,4 @@ public interface UserInterface {
     public void updateBoard();
 
     public void showRack();
-
-    public void printInstructions();
 }
