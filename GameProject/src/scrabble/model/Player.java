@@ -8,7 +8,7 @@ public class Player implements Comparable<Player>{
     private int score;
     private LetterDeck letterdeck;
 
-    public Player(String name, Bag bag) throws Exception{
+    public Player(String name, Bag bag){
         this.name = name;
         this.letterdeck = new LetterDeck(bag);
         this.score = 0;

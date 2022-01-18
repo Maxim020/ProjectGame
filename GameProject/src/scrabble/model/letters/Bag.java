@@ -47,15 +47,14 @@ public class Bag {
 	 * Removes a letter from the bag. This should be used everytime a letter is pulled from the bag
 	 * @param letter
 	 * @requires letter instanceOf char && letterList.contains(letter)
-	 * @exception IllegalArgumentException
 	 * @ensures letterList.size() - 1
 	 * @author Maxim
 	 */
 	public void removeFromBag(char letter) {
-		if(!letterList.contains(letter)) {throw new IllegalArgumentException("Letter is already not present in the bag");}
-		else {
+//		if(!letterList.contains(letter)) {throw new IllegalArgumentException("Letter is already not present in the bag");}
+//		else {
 			letterList.remove((Character) letter);
-		}
+		//}
 	}
 
 	/**
@@ -65,11 +64,7 @@ public class Bag {
 	 * @return char letter
 	 * @author Maxim & Yasin
 	 */
-	public char pull() throws Exception{ //Should an Exception be thrown?
-		if(letterList.isEmpty()) {
-			throw new Exception("The bag is already empty");
-		}
-
+	public char pull(){
 		shuffleBag();
 		char letter = letterList.get(0);
 		letterList.remove(0);

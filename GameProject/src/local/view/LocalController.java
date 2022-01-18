@@ -18,7 +18,7 @@ import java.util.Scanner;
  */
 
 public class LocalController {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         /**
          * Scans user input for the name of all players and if wanted any computer players
          * Creates universal PlayerList (Singleton Design Pattern)
@@ -27,6 +27,8 @@ public class LocalController {
         Scanner scanner = new Scanner(System.in);
 
         while(continueGame) {
+
+            /** Scans user input for the name of all players and if wanted any computer players */
             String[] players;
             int amountOfPlayers;
 
@@ -44,13 +46,12 @@ public class LocalController {
                 }
             }
 
+            /** Instantiates universal PlayerList, Bag and other important objects */
             PlayerList playerList = PlayerList.getInstance();
             playerList.setPlayers(createPlayerArrayList(players));
-
             Board board = new Board();
             Bag bag = Bag.getInstance();
             Game game = new Game(board, bag);
-
 
             int numberOfTurn = 0;
             int playersTurn;
@@ -74,9 +75,12 @@ public class LocalController {
                     String move = scanner.nextLine();
 
                     //Program keeps asking user for input except if it's an InvalidWordException. Then the user loses his/her turn
+                    boolean isWordValid; //Zusammenspiel von updateTUI updateTUI
+
                     while (true) {
                         try {
                             localTUI.validateInput(move);
+                            isWordValid = true;
                             break;
 
                         } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
@@ -89,11 +93,13 @@ public class LocalController {
                         } catch (InvalidWordException e) {
                             e.printStackTrace();
                             System.out.println(PlayerList.getInstance().getCurrentPlayer().getName() + " lost his turn");
+                            isWordValid = false;
                             break;
                         }
                     }
-
-                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                    if(isWordValid) {
+                        updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                    }
 
                 } else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
@@ -202,9 +208,8 @@ public class LocalController {
      * @param input the input that the user wrote
      * @author Yasin
      * @return true if the move was placing a word on the board
-     * @throws Exception
      */
-    public static boolean processMove(String input, Board board, Player currentPlayer, Bag bag) throws Exception{
+    public static boolean processMove(String input, Board board, Player currentPlayer, Bag bag) {
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
@@ -229,9 +234,8 @@ public class LocalController {
      * @param currentPlayer - The player who is currently making the move
      * @param bag - a universal bag of letters
      * @author Yasin
-     * @throws Exception 
      */
-    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag) throws Exception{
+    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag) {
 
         for (int i=0; i<tiles.length(); i++) {
             if(Character.isLowerCase(tiles.charAt(i))){
@@ -254,9 +258,8 @@ public class LocalController {
      * @param players a String array that holds the name (and type) of all Players
      * @return a list of all Players
      * @author Yasin
-     * @throws Exception 
      */
-    public static List<Player> createPlayerArrayList(String[] players) throws Exception{
+    public static List<Player> createPlayerArrayList(String[] players){
         if (players.length < 2 || players.length > 4){
             throw new IllegalArgumentException();
         }

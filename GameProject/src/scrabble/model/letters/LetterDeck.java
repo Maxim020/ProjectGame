@@ -11,7 +11,7 @@ public class LetterDeck {
 	private Bag bag;
 	
 	//Constructor
-	public LetterDeck(Bag bag) throws Exception {
+	public LetterDeck(Bag bag) {
 		this.lettersInDeck = new ArrayList<>();
 		this.initializeDeck(bag);
 		this.bag = Bag.getInstance();
@@ -31,16 +31,15 @@ public class LetterDeck {
 	 */
 	public void removeFromDeck(char letter) {
 		System.out.println(letter);
-		lettersInDeck.remove(letter); //.remove(lettersInDeck.indexOf(letter));
+		lettersInDeck.remove((Character) letter); //.remove(lettersInDeck.indexOf(letter));
 		bag.add(letter);
 	}
 
 	/**
 	 * @param amount of new Letters wished to be in the deck randomly pulled from the Bag
 	 * @author Yasin
-	 * @throws Exception 
 	 */
-	public void addToDeck(int amount) throws Exception{
+	public void addToDeck(int amount) {
 
 		if (amount <= bag.getLetterList().size()){
 			for (int i=0; i<amount; i++) {
@@ -74,9 +73,8 @@ public class LetterDeck {
 	 * @ensures lettersInDeck.size() == 7
 	 * @param bag
 	 * @author Maxim
-	 * @throws Exception 
 	 */
-	public void initializeDeck(Bag bag) throws Exception {
+	public void initializeDeck(Bag bag) {
 		int i = 0;
 		while(i != 7) {
 			lettersInDeck.add(bag.pull());

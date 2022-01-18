@@ -77,7 +77,6 @@ public class LocalTUI implements UserInterface {
 
             //Clean Up
             int lowercase = tilesNotOwned(currentPlayer,word);
-            System.out.println(lowercase);
             if(lowercase != 0){
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
 

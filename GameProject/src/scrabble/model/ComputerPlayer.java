@@ -10,11 +10,12 @@ public class ComputerPlayer extends Player {
 	private LetterDeck letterdeck;
 	private Strategy strategy;
 	
-	public ComputerPlayer(Bag bag, Strategy strategy) throws Exception {
+	public ComputerPlayer(Bag bag, Strategy strategy) {
 		super("Smart Computer", bag);
 		this.strategy = strategy;
 	}
-	public ComputerPlayer(Bag bag) throws Exception {
+
+	public ComputerPlayer(Bag bag) {
 		super("Naive Computer", bag);
 		this.strategy = new NaiveStrategy();
 	}
