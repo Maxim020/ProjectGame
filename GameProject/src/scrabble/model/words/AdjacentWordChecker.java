@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import scrabble.model.Board;
-import scrabble.model.exceptions.WordDoesNotExist;
+import scrabble.model.exceptions.InvalidWordException;
 
 public class AdjacentWordChecker {
 	
@@ -61,7 +61,7 @@ public class AdjacentWordChecker {
 				
 				if(flag == false) {
 					if(wordChecker.isValidWord(adjacentWord) == null) {
-						throw new WordDoesNotExist();
+						throw new InvalidWordException();
 					}
 				}
 				
@@ -107,7 +107,7 @@ public class AdjacentWordChecker {
 				
 				if(flag == false) {
 					if(wordChecker.isValidWord(adjacentWord) == null) {
-						throw new WordDoesNotExist();
+						throw new InvalidWordException();
 					}
 				}
 				
@@ -154,7 +154,7 @@ public void checkVerticalWordAdjacency(String word, int row, int column) {
 			
 			if(flag == false) {
 				if(wordChecker.isValidWord(adjacentWord) == null) {
-					throw new WordDoesNotExist();
+					throw new InvalidWordException();
 				}
 			}
 			

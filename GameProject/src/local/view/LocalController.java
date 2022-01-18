@@ -3,6 +3,7 @@ package local.view;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
+import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterScoreChecker;
 
@@ -54,16 +55,45 @@ public class LocalController {
 
                 //Timer of Opponent starts --> revert move within timeframe?
 
-                /** Validate input */
-                String move = scanner.nextLine();
-                localTUI.validateInput(move);
+                /** DetermineMove() and Validates input */
+                boolean updateTUI;
 
-                // Player makes move
-                processMove(move, board, playerList.getCurrentPlayer(), bag); //Controlflow for computerplayers
-                //If a user plays an invalid word the player gets back his tiles and loses his turn
+                if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
+                    String move = scanner.nextLine();
+
+                    //Program keeps asking user for input except if it's an InvalidWordException. Then the user loses his/her turn
+                    while (true) {
+                        try {
+                            localTUI.validateInput(move);
+                            break;
+
+                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException |
+                                UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException e) {
+
+                            e.printStackTrace();
+                            System.out.println("Please type in a valid move");
+                            move = scanner.nextLine();
+
+                        } catch (InvalidWordException e) {
+                            e.printStackTrace();
+                            System.out.println(PlayerList.getInstance().getCurrentPlayer().getName() + " lost his turn");
+                            break;
+                        }
+                    }
+
+                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+
+                } else {
+                    ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
+                    String move = computerPlayer.determineMove(board);
+                    localTUI.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
+
+                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                }
+
 
                 /** Announces new Score only if a new word is placed*/
-                if (move.charAt(0) == 'W' || move.charAt(0) == 'w') {
+                if (updateTUI) {
                     localTUI.updateBoard();
                 }
 
@@ -78,7 +108,7 @@ public class LocalController {
             /** Adjusts scores and prints out final scoreboard*/
             new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer())
                     .printFinalScoreBoard(
-                            announceWinner(bag, PlayerList.getInstance().getCurrentPlayer()));
+                            announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
 
             /** Ask for another game */
             System.out.println("Do you want to play another Game? (y/n)");
@@ -105,7 +135,7 @@ public class LocalController {
         //Each player's score is reduced by the sum of his or her unplaced letters.
         for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
             ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-            for (int j=0; j<letterDeck.size(); i++){
+            for (int j=0; j<letterDeck.size(); j++){
                 sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
                 PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
             }
@@ -155,19 +185,22 @@ public class LocalController {
     }
 
     /**
-     * processes input to make a move
+     * processes input to make a move and return
      * @requires the input to be valid
      * @param input the input that the user wrote
      * @author Yasin
-     * @throws Exception 
+     * @return true if the move was placing a word on the board
+     * @throws Exception
      */
-    public static void processMove(String input, Board board, Player currentPlayer, Bag bag) throws Exception{
+    public static boolean processMove(String input, Board board, Player currentPlayer, Bag bag) throws Exception{
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
             //WORD A1 H TEST
             board.setWord(parts[1], parts[2], parts[3]);
             exchangeTiles(parts[3], currentPlayer, bag); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
+            board.setBoardEmpty(false);
+            return true;
         }
         else {
             if(parts.length == 2){
@@ -175,8 +208,8 @@ public class LocalController {
                 exchangeTiles(parts[1], currentPlayer, bag);
             }
             //SWAP
+            return false;
         }
-        board.setBoardEmpty(false);
     }
 
     /**
@@ -191,9 +224,11 @@ public class LocalController {
         for (int i=0; i<tiles.length(); i++) {
             if(Character.isLowerCase(tiles.charAt(i))){
                 currentPlayer.getLetterDeck().removeFromDeck('*'); //removes blank tile if a letter is lowercase
+                bag.removeFromBag('*');
             }
             else {
                 currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //removes old tiles from deck
+                bag.removeFromBag(tiles.charAt(i));
             }
         }
 

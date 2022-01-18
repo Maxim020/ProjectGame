@@ -53,7 +53,7 @@ public class Bag {
 	public void removeFromBag(char letter) {
 		if(!letterList.contains(letter)) {throw new IllegalArgumentException("Letter is already not present in the bag");}
 		else {
-			letterList.remove(letter);
+			letterList.remove((Character) letter);
 		}
 	}
 
@@ -75,8 +75,8 @@ public class Bag {
 		return letter;
 	}
 
-	public void add(char tile){
-		letterList.add(tile);
+	public void add(char letter){
+		letterList.add(letter);
 	}
 
 	public ArrayList<Character> getLetterList(){

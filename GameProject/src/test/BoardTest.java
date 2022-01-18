@@ -35,7 +35,7 @@ class BoardTest {
 	@Test
 	void testMoveHorizontal() throws Exception {
 		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
+		//players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
@@ -47,7 +47,7 @@ class BoardTest {
 	@Test
 	void testMoveVertical() throws Exception {
 		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
+		//players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
@@ -59,7 +59,7 @@ class BoardTest {
 	@Test
 	void testMultipleMoves() throws Exception {
 		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
+		//players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
@@ -86,7 +86,7 @@ class BoardTest {
 	@Test
 	void testExpectedException() throws Exception {
 		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
+		//players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		

@@ -33,7 +33,7 @@ class AdjacentWordCheckerTest {
 	@Test
 	void testHorizontalWordAdjacency() throws Exception {
 		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
+		//players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		

@@ -1,6 +1,6 @@
 package scrabble.model.exceptions;
 
-public class UnknownDirection extends IllegalArgumentException{
+public class UnknownDirectionException extends IllegalArgumentException{
 	
 	private String error = "Unknown direction";
 	

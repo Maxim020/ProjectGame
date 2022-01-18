@@ -1,6 +1,6 @@
 package scrabble.model.exceptions;
 
-public class UnknownCommand extends IllegalArgumentException{
+public class UnknownCommandException extends IllegalArgumentException{
 	
 	private String error = "Unknown command";
 	

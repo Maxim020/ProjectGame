@@ -1,6 +1,6 @@
 package scrabble.model.exceptions;
 
-public class DeckFull extends IllegalArgumentException{
+public class DeckFullException extends IllegalArgumentException{
 	
 	private String error = "Deck is already full";
 	

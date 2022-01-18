@@ -7,7 +7,7 @@ public class SmartStrategy implements Strategy{
     }
 
     @Override
-    public int makeMove() {
-        return 0;
+    public String determineMove(Board board) {
+        return null;
     }
 }

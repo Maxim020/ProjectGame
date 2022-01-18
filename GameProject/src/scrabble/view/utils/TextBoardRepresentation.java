@@ -1,6 +1,7 @@
 package scrabble.view.utils;
 import scrabble.model.Board;
 import scrabble.model.PlayerList;
+import scrabble.model.letters.Bag;
 
 /**
  * Class for TUI. It enables the display of the game.
@@ -17,9 +18,13 @@ public class TextBoardRepresentation {
     private Board board;
     private PlayerList playerList;
 
+    //For testing purposes
+    private Bag bag;
+
     public TextBoardRepresentation(Board board){
         this.board = board;
         playerList = PlayerList.getInstance();
+        bag = Bag.getInstance();
     }
 
     /**
@@ -114,6 +119,13 @@ public class TextBoardRepresentation {
     }
 
     /**
+     * TESTING
+     */
+    public String addBag(){
+        return "\n"+bag.getLetterList().toString();
+    }
+
+    /**
      * @return - displays the whole with letters and numbers on the sides board
      * @author Yasin Fahmy
      */
@@ -124,7 +136,7 @@ public class TextBoardRepresentation {
             result +=printLine(i+1)+addFieldTypes(i)+addScores(i)+"\n";
         }
         result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                 "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O";
+                 "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n" + addBag();
         return result;
     }
 }

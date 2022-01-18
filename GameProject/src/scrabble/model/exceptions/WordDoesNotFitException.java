@@ -1,6 +1,6 @@
 package scrabble.model.exceptions;
 
-public class WordDoesNotFit extends IllegalArgumentException{
+public class WordDoesNotFitException extends IllegalArgumentException{
 	
 	private String error = "Word does not fit on the board";
 	

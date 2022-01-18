@@ -18,4 +18,8 @@ public class ComputerPlayer extends Player {
 		super("Naive Computer", bag);
 		this.strategy = new NaiveStrategy();
 	}
+
+	public String determineMove(Board board) {
+		return strategy.determineMove(board);
+	}
 }

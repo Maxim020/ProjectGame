@@ -3,20 +3,12 @@ package local.view;
 import scrabble.model.Board;
 import scrabble.model.Player;
 import scrabble.model.PlayerList;
-import scrabble.model.exceptions.CenterIsNotCovered;
-import scrabble.model.exceptions.DeckFull;
-import scrabble.model.exceptions.FieldDoesNotExist;
-import scrabble.model.exceptions.PlayerDoesNotOwnTiles;
-import scrabble.model.exceptions.UnknownCommand;
-import scrabble.model.exceptions.UnknownDirection;
-import scrabble.model.exceptions.WordDoesNotFit;
-import scrabble.model.words.FileStreamScrabbleWordChecker;
+import scrabble.model.exceptions.*;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.UserInterface;
 import scrabble.view.utils.TextBoardRepresentation;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class LocalTUI implements UserInterface {
@@ -50,9 +42,7 @@ public class LocalTUI implements UserInterface {
     /**
      * Throws IllegalArgumentException provided the input is not valid
      * @param input from the user
-     * @return true if input is valid
      * @author Yasin Fahmy
-     * @throws UnknownCommand 
      */
     public void validateInput(String input) throws IllegalArgumentException{
         String[] parts = input.split(" ");
@@ -65,43 +55,36 @@ public class LocalTUI implements UserInterface {
                 board.setCenterCovered(true);
             }
             if(!command.equalsIgnoreCase("word")){
-                throw new UnknownCommand();
+                throw new UnknownCommandException();
             }
             if (!board.isFieldValid(startCoordinate)){
-                throw new FieldDoesNotExist();
+                throw new FieldDoesNotExistException();
             }
             if(!(direction.equalsIgnoreCase("H") || direction.equalsIgnoreCase("V"))){
-                throw new UnknownDirection();
+                throw new UnknownDirectionException();
             }
             if(!board.isCenterCovered()){
-                throw new CenterIsNotCovered();
+                throw new CenterIsNotCoveredException();
             }
             if(!board.doesWordFit(startCoordinate, direction, word)){
-                throw new WordDoesNotFit();
+                throw new WordDoesNotFitException();
             }
             if(tilesNotOwned(currentPlayer,word) != 0){
                 int lowercase = tilesNotOwned(currentPlayer,word);
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
 
                 if(blankTiles != lowercase){
-                    throw new PlayerDoesNotOwnTiles();
+                    throw new IllegalSwapException();
                 }
             }
-            
+
+            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word)
+
             if(wordChecker.isValidWord(word) == null) {
-            	throw new WordDoesNotFit(); //better: WordIsNotValid
+            	throw new InvalidWordException();
+            } else {
+                //If one of the new composed words is invalid: throw new InvalidWordException
             }
-            
-            if(word.length() > 7){ //There can be words that have a length > 7 if it connects with other words
-                throw new DeckFull();
-            }
-//            if(!wordChecker.isValidWord(word)){
-//                throw new IllegalArgumentException("Word is not a valid word");
-//            }
-//            if(wordChecker.isValidWord(word)){
-//                //Algorithm to check if all new composed words are valid
-//            }
-            //Does the new word connect on another word
         }
 
         //Swap tiles
@@ -109,13 +92,13 @@ public class LocalTUI implements UserInterface {
             String command = parts[0]; String tiles = parts[1];
 
             if(!command.equalsIgnoreCase("swap")){
-                throw new UnknownCommand();
+                throw new UnknownCommandException();
             }
             if(tilesNotOwned(currentPlayer,tiles) != 0){
-                throw new PlayerDoesNotOwnTiles();
+                throw new IllegalSwapException();
             }
             if(tiles.length() > 7){
-                throw new DeckFull();
+                throw new IllegalSwapException();
             }
         }
 
@@ -124,7 +107,7 @@ public class LocalTUI implements UserInterface {
             String command = parts[0];
 
             if(!command.equalsIgnoreCase("swap")){
-                throw new UnknownCommand();
+                throw new UnknownCommandException();
             }
         }
     }
