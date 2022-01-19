@@ -3,6 +3,7 @@ package scrabble.model;
 import java.util.ArrayList;
 
 import scrabble.model.letters.LetterDeck;
+import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 
 public class NaiveStrategy implements Strategy {
@@ -71,7 +72,8 @@ public class NaiveStrategy implements Strategy {
 	 * @return String move
 	 * @author Maxim
 	 */
-	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker) {
+	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker,
+			AdjacentWordChecker adjacentChecker) {
 
 		String move = "";
 
@@ -90,34 +92,50 @@ public class NaiveStrategy implements Strategy {
 		// FROM THE WORD STRING INDEX WE KNOW HOW MUCH TO SUBTRACT TO GET THE CORRECT
 		// ROW SO THE MATCHING LETTERS OVERLAP
 		// CREATES A RESPONSE IN FORM "WORD + COORDINATE + DIRECTION + GENERATEDWORD"
-		
-		//!!PROBLEM!! IF * IS PART OF THE STRING, CANT CREATE STRING
+
+		// WORKS WITH BLANK LETTERS NOW
 
 		// TO BE ADDED APPENDING WORDS FROM START OR FINISH, RIGHT NOW IT ONLY PLAYS
 		// VERTICAL WORDS ON HORIZONTALLY PLAYED WORDS AND VICE VERSA
 
 		// TO BE ADDED SWAPPING (HOWEVER PRETTY UNLIKELY THAT A COMPUTER WONT BE ABLE TO
-		// FIND A WORD TO CREATE) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
+		// FIND A WORD TO CREATE {After many attempts, seems like it's actually very
+		// likely}) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
 		// THIS METHOD WOULD RETURN AN EMPTY STRING
 
 		// THIS IS A STUPID STRATEGY, DOES NOT LOOK FOR WORDS WITH HIGHEST SCORES, IT
 		// ALWAYS TAKES FIRST WORD IT FINDS THAT ACTUALLY CAN BE PLACED
 
-		/** Word to be played */
+		/** List of all permutations */
 		ArrayList<String> listOfAllPermutations = new ArrayList<>();
-
+		/** If '*' is present in String, list with all word possibilities */
+		ArrayList<String> listWithBlanksReplaced = new ArrayList<>();
+		/** Calls method to get initial list of permuated Strings */
 		listOfAllPermutations = determineWord(formString(letterDeck));
 
 		String s = "";
-
+		/**
+		 * Calls method to permuate a String again but with size of the initial string
+		 * decreased until the word is of length 1
+		 */
 		for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
 			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
 			listOfAllPermutations.addAll(determineWord(s));
 		}
 
-		//for (int i = 0; i < listOfAllPermutations.size(); i++) {
-			//System.out.println(listOfAllPermutations.get(i));
-		//}
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+		/** Blank replacer */
+		for (int i = 0; i < listOfAllPermutations.size(); i++) {
+			for (int j = 0; j < alphabet.toCharArray().length; j++) {
+				if (containsBlank(listOfAllPermutations.get(i))) {
+					String blankReplaced = listOfAllPermutations.get(i).replace('*', alphabet.toCharArray()[j]);
+					listWithBlanksReplaced.add(blankReplaced);
+				}
+			}
+		}
+
+		listOfAllPermutations.addAll(listWithBlanksReplaced);
 
 		/** Cycle through generated list of words */
 		for (String word : listOfAllPermutations) {
@@ -127,7 +145,9 @@ public class NaiveStrategy implements Strategy {
 				System.out.println(word);
 				if (board.getPlayedWords().isEmpty()) {
 					System.out.println("First Word");
-					/**We dont have to check if the word will fit here because it will always fit*/
+					/**
+					 * We dont have to check if the word will fit here because it will always fit
+					 */
 					move = move + "WORD H8 H " + word;
 					return move;
 				}
@@ -151,28 +171,7 @@ public class NaiveStrategy implements Strategy {
 									System.out.println(letter);
 									/** If the played word is horizontal */
 									if (board.getWordDirectionMap().get(playedWord) == "H") {
-
-										/*
-										 * //If the last letter of the word is the first letter of the played word
-										 * if(word.charAt(word.length()-1) == playedWord.charAt(0)) { //If the new word
-										 * can fit if(board.convert(board.getWordCoordinateMap().get(playedWord))[1] >
-										 * word.length()) {
-										 * 
-										 * move = move + "WORD " +
-										 * board.convert(board.convert(board.getWordCoordinateMap().get(playedWord))[0],
-										 * board.convert(board.getWordCoordinateMap().get(playedWord))[1] -
-										 * word.length() + 1) + " H " + word.toUpperCase(); } } //If the first letter of
-										 * the word is the last letter of the played word else if(word.charAt(0) ==
-										 * playedWord.charAt(playedWord.length() - 1)) { //If the new word can fit
-										 * if(board.convert(board.getWordCoordinateMap().get(playedWord))[1] +
-										 * playedWord.length() - 1 + word.length() - 1 <= 15) {
-										 * 
-										 * move = move + "WORD " +
-										 * board.convert(board.convert(board.getWordCoordinateMap().get(playedWord))[0],
-										 * board.convert(board.getWordCoordinateMap().get(playedWord))[1] +
-										 * word.length() - 1) + " H " + word.toUpperCase(); } }
-										 */
-
+										System.out.println("Here6");
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
 											/** Get index of matching letter in playedWord */
@@ -185,14 +184,61 @@ public class NaiveStrategy implements Strategy {
 											/** Get coordinates of matching letter inside of playedWord */
 											String coordsOfMatchingLetter = board.convert(playedWordStartCoords[0],
 													playedWordStartCoords[1] + indexMatchingLetterPlayedWord);
-
-											move = move + "WORD "
-													+ board.convert(
-															board.convert(coordsOfMatchingLetter)[0]
-																	- indexMatchingLetterWord,
-															board.convert(coordsOfMatchingLetter)[1])
-													+ " V " + word;
-											return move;
+											/**
+											 * Flag to tell if fields are not empty or invalid or adjacent words would
+											 * not be correct
+											 */
+											boolean flag = true;
+											/** Create Starting coordinate of new word */
+											String startCoordinateOfNewWord = board.convert(
+													board.convert(coordsOfMatchingLetter)[0] - indexMatchingLetterWord,
+													board.convert(coordsOfMatchingLetter)[1]);
+											/** How far up does the word go above the matching letter */
+											int up = 0 + indexMatchingLetterWord;
+											/** How far down does the word go under the matching letter */
+											int down = word.length() - 1 - indexMatchingLetterWord;
+											/** Converted coordinates of matching letter */
+											int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
+											/** Check if fields below are empty and valid */
+											for (int j = down; j >= 1; j--) {
+												if (!board.isFieldValid(checkedCoordinate[0] + j, checkedCoordinate[1])
+														|| !board.isFieldEmpty(checkedCoordinate[0] + j,
+																checkedCoordinate[1])) {
+													flag = false;
+													System.out.println(flag + "1");
+												}
+											}
+											/** Check if field above are empty and valid */
+											for (int j = 1; j <= up; j++) {
+												if (!board.isFieldValid(checkedCoordinate[0] - j, checkedCoordinate[1])
+														|| !board.isFieldEmpty(checkedCoordinate[0] - j,
+																checkedCoordinate[1])) {
+													flag = false;
+													System.out.println(flag + "2");
+												}
+											}
+											/**
+											 * Check if the newly created letter would be compatible with adjacent words
+											 */
+											System.out.println(startCoordinateOfNewWord + "SCOORDS");
+											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "V",
+													word)) {
+												flag = false;
+												System.out.println(flag + "3");
+											}
+											/**
+											 * If none of the conditions above changed the flag to false, return a word
+											 * to be placed with starting coordinate and direction
+											 */
+											if (flag == true) {
+												move = move + "WORD "
+														+ board.convert(
+																board.convert(coordsOfMatchingLetter)[0]
+																		- indexMatchingLetterWord,
+																board.convert(coordsOfMatchingLetter)[1])
+														+ " V " + word;
+												return move;
+											}
 										}
 									}
 
@@ -220,13 +266,57 @@ public class NaiveStrategy implements Strategy {
 											String coordsOfMatchingLetter = board.convert(
 													playedWordStartCoords[0] + indexMatchingLetterPlayedWord,
 													playedWordStartCoords[1]);
-
-											move = move + "WORD " + board.convert(
+											/**
+											 * Flag to tell if fields are not empty or invalid or adjacent words would
+											 * not be correct
+											 */
+											boolean flag = true;
+											/** Create Starting coordinate of new word */
+											String startCoordinateOfNewWord = board.convert(
 													board.convert(coordsOfMatchingLetter)[0],
-													board.convert(coordsOfMatchingLetter)[1] - indexMatchingLetterWord)
-													+ " H " + word;
-											return move;
-
+													board.convert(coordsOfMatchingLetter)[1] - indexMatchingLetterWord);
+											/** How far left does the word go left from the matching letter */
+											int left = 0 + indexMatchingLetterWord;
+											/** How far right does the word go right from the matching letter */
+											int right = word.length() - 1 - indexMatchingLetterWord;
+											/** Converted coordinates of matching letter */
+											int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
+											/** Check if fields below are empty and valid */
+											for (int j = right; j >= 0; j--) {
+												if (!board.isFieldValid(checkedCoordinate[0], checkedCoordinate[1] + j)
+														|| !board.isFieldEmpty(checkedCoordinate[0],
+																checkedCoordinate[1] + j)) {
+													flag = false;
+												}
+											}
+											/** Check if field above are emtpy and valid */
+											for (int j = 0; j < left; j++) {
+												if (!board.isFieldValid(checkedCoordinate[0], checkedCoordinate[1] - j)
+														|| !board.isFieldEmpty(checkedCoordinate[0],
+																checkedCoordinate[1] - j)) {
+													flag = false;
+												}
+											}
+											/**
+											 * Check if the newly created letter would be compatible with adjacent words
+											 */
+											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "H",
+													word)) {
+												flag = false;
+											}
+											/**
+											 * If none of the conditions above changed the flag to false, return a word
+											 * to be placed with starting coordinate and direction
+											 */
+											if (flag == true) {
+												move = move
+														+ "WORD " + board
+																.convert(board.convert(coordsOfMatchingLetter)[0],
+																		board.convert(coordsOfMatchingLetter)[1]
+																				- indexMatchingLetterWord)
+														+ " H " + word;
+												return move;
+											}
 										}
 									}
 								}
@@ -240,6 +330,21 @@ public class NaiveStrategy implements Strategy {
 		}
 
 		return move;
+	}
+
+	/**
+	 * Returns true if a String contains a blank tile 
+	 * @param String str
+	 * @return true||false
+	 * @author Maxim
+	 */
+	public boolean containsBlank(String str) {
+		for (char c : str.toCharArray()) {
+			if (c == '*') {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

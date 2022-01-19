@@ -14,6 +14,7 @@ import scrabble.model.Player;
 import scrabble.model.PlayerList;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
+import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 
@@ -26,12 +27,14 @@ class TestNaiveStrategy {
 	Bag bag;
 	PlayerList playerlist;
 	List<Player> players;
+	AdjacentWordChecker adjacentChecker;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		naive = new NaiveStrategy();
 		checker = new InMemoryScrabbleWordChecker();
 		board = new Board();
+		adjacentChecker = new AdjacentWordChecker(board);
 		playerlist = PlayerList.getInstance();
 		players = new ArrayList<>();
 	}
@@ -46,7 +49,7 @@ class TestNaiveStrategy {
 		playerlist.setCurrentPlayer(0);
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = naive.determineMove(board, deck, checker);
+		String s = naive.determineMove(board, deck, checker, adjacentChecker);
 		String[] splt = s.split(" ");
 		System.out.println(splt[1]);
 		System.out.println(splt[2]);
@@ -64,7 +67,7 @@ class TestNaiveStrategy {
 	
 	
 	@Test
-	void testNaiveStrategySecondTrunOnBoard() {
+	void testNaiveStrategySecondTurnOnBoard() {
 		
 		bag = Bag.getInstance();
 		deck = new LetterDeck(bag);
@@ -76,13 +79,14 @@ class TestNaiveStrategy {
 		board.addPlayedWords("H8", "H", "ADVANCE");
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = naive.determineMove(board, deck, checker);
+		String s = naive.determineMove(board, deck, checker, adjacentChecker);
 		String[] splt = s.split(" ");
 		System.out.println(splt[1]);
 		System.out.println(splt[2]);
 		System.out.println(splt[3]);
 		board.setWord(splt[1], splt[2], splt[3]);
 		ArrayList<String> coveredTiles = board.fieldsCovered(splt[1], splt[2], splt[3]);
+		System.out.print(">");
 		for(String str : coveredTiles) {
 			System.out.print(" " + str);
 			assertTrue(board.isFieldValid(str));
