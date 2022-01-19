@@ -313,7 +313,7 @@ public class Board {
     }
     
     /** Added by Maxim, might be shit */
-    public void addPlayedWords(String word, String coordinate, String direction) {
+    public void addPlayedWords(String coordinate, String direction, String word) {
     	playedWords.add(word);
     	wordCoordinateMap.put(word, coordinate);
     	wordDirectionMap.put(word, direction);
