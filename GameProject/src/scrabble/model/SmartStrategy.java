@@ -1,10 +1,15 @@
 package scrabble.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.Map.Entry;
 
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.words.WordScoreCounter;
 
 public class SmartStrategy implements Strategy {
 
@@ -73,9 +78,11 @@ public class SmartStrategy implements Strategy {
 	 * @author Maxim
 	 */
 	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker,
-			AdjacentWordChecker adjacentChecker) {
+			AdjacentWordChecker adjacentChecker, WordScoreCounter scoreCounter) {
 
 		String move = "";
+
+		ArrayList<String> listOfMoves = new ArrayList<>();
 
 		// WHAT THIS DOES AT THIS POINT:
 		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
@@ -149,7 +156,8 @@ public class SmartStrategy implements Strategy {
 					 * We dont have to check if the word will fit here because it will always fit
 					 */
 					move = move + "WORD H8 H " + word;
-					return move;
+					listOfMoves.add(move);
+					move = "";
 				}
 				/** If word was not already played */
 				else if (!board.getPlayedWords().contains(word)) {
@@ -237,7 +245,8 @@ public class SmartStrategy implements Strategy {
 																		- indexMatchingLetterWord,
 																board.convert(coordsOfMatchingLetter)[1])
 														+ " V " + word;
-												return move;
+												listOfMoves.add(move);
+												move = "";
 											}
 										}
 									}
@@ -315,25 +324,67 @@ public class SmartStrategy implements Strategy {
 																		board.convert(coordsOfMatchingLetter)[1]
 																				- indexMatchingLetterWord)
 														+ " H " + word;
-												return move;
+												listOfMoves.add(move);
+												move = "";
 											}
 										}
 									}
 								}
 							}
-
 						}
 					}
 				}
 			}
 
 		}
+		
+		System.out.println(listOfMoves);
 
-		return move;
+		if (listOfMoves.isEmpty()) {
+			return "";
+		}
+
+		else {
+
+			HashMap<String, Integer> scoreMap = new HashMap<>();
+
+			for (int i = 0; i < listOfMoves.size(); i++) {
+				if (listOfMoves.get(i).split(" ")[2] == "H") {
+					scoreMap.put(listOfMoves.get(i),
+							scoreCounter.getTotalWordScoreHorizontal(listOfMoves.get(i).split(" ")[3],
+									board.convert(listOfMoves.get(i).split(" ")[1])[0],
+									board.convert(listOfMoves.get(i).split(" ")[1])[1]));
+				}
+				else {
+					scoreMap.put(listOfMoves.get(i),
+							scoreCounter.getTotalWordScoreVertical(listOfMoves.get(i).split(" ")[3],
+									board.convert(listOfMoves.get(i).split(" ")[1])[0],
+									board.convert(listOfMoves.get(i).split(" ")[1])[1]));
+				}
+				
+			}
+			
+			System.out.println(scoreMap);
+			
+			int max = Collections.max(scoreMap.values());
+			
+			System.out.println(max);
+			
+			for(Entry<String, Integer> entry : scoreMap.entrySet()) {
+				if(Objects.equals(max, entry.getValue())) {
+					System.out.println(entry.getKey());
+					return entry.getKey();
+				}
+			}
+		}
+		
+		return "";
+		
 	}
 
 	/**
-	 * Returns true if a String contains a blank tile 
+	 * Returns true if a String contains a blank tile
+	 * 
 	 * @param String str
 	 * @return true||false
 	 * @author Maxim
@@ -346,12 +397,12 @@ public class SmartStrategy implements Strategy {
 		}
 		return false;
 	}
-	
-	public String swapHand(LetterDeck letterDeck){
-		
+
+	public String swapHand(LetterDeck letterDeck) {
+
 		String lettersInHand = "";
-		
-		for(char letter : letterDeck.getLettersInDeck()) {
+
+		for (char letter : letterDeck.getLettersInDeck()) {
 			lettersInHand = lettersInHand + letter;
 		}
 		return lettersInHand;

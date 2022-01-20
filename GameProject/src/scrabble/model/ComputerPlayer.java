@@ -5,6 +5,7 @@ import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.words.WordScoreCounter;
 
 public class ComputerPlayer extends Player {
 	
@@ -14,6 +15,7 @@ public class ComputerPlayer extends Player {
 	private Strategy strategy;
 	private ScrabbleWordChecker checker;
 	private AdjacentWordChecker checkerAdjacency;
+	private WordScoreCounter scoreCounter;
 	private Board board;
 	
 	public ComputerPlayer(Bag bag, Strategy strategy, Board board) {
@@ -31,11 +33,11 @@ public class ComputerPlayer extends Player {
 	}
 
 	public String determineMove(Board board) {
-		if(strategy.determineMove(board, letterdeck, checker, checkerAdjacency) != "") {
-			return strategy.determineMove(board, letterdeck, checker, checkerAdjacency);
+		if(strategy.determineMove(board, letterdeck, checker, checkerAdjacency, scoreCounter) != "") {
+			return strategy.determineMove(board, letterdeck, checker, checkerAdjacency, scoreCounter);
 		}
 		else {
-			return "SWAP " +strategy.swapHand(letterdeck);
+			return "SWAP " + strategy.swapHand(letterdeck);
 		}
 	}
 }

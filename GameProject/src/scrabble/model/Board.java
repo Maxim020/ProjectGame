@@ -157,7 +157,7 @@ public class Board {
     public String convert(int row, int column) throws IllegalArgumentException{
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
         char[] letters = "ABCDEFGHIJKLMNO".toCharArray();
-        return Character.toString(letters[column])+(row+1);
+        return Character.toString(letters[column - 1])+(row);
     }
 
     /**
@@ -192,7 +192,6 @@ public class Board {
      */
     public FieldType checkFieldType(int row, int column) throws IllegalArgumentException{
         String field = convert(row,column);
-
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
 
         if (tripleWordScore.contains(field)){return FieldType.TRIPLE_WORD_SCORE;}
@@ -274,6 +273,7 @@ public class Board {
         doubleLetterScore.add("G3");doubleLetterScore.add("I3");
         doubleLetterScore.add("A4");doubleLetterScore.add("H4");doubleLetterScore.add("O4");
         doubleLetterScore.add("C7");doubleLetterScore.add("G7");doubleLetterScore.add("I7");doubleLetterScore.add("M7");
+        doubleLetterScore.add("D8");doubleLetterScore.add("L8");
         doubleLetterScore.add("C9");doubleLetterScore.add("G9");doubleLetterScore.add("I9");doubleLetterScore.add("M9");
         doubleLetterScore.add("A12");doubleLetterScore.add("H12");doubleLetterScore.add("O12");
         doubleLetterScore.add("G13");doubleLetterScore.add("I13");

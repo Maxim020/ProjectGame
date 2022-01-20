@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.words.WordScoreCounter;
 
 public class NaiveStrategy implements Strategy {
 
@@ -73,7 +74,7 @@ public class NaiveStrategy implements Strategy {
 	 * @author Maxim
 	 */
 	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker,
-			AdjacentWordChecker adjacentChecker) {
+			AdjacentWordChecker adjacentChecker, WordScoreCounter scoreCounter) {
 
 		String move = "";
 
@@ -101,7 +102,7 @@ public class NaiveStrategy implements Strategy {
 		// TO BE ADDED SWAPPING (HOWEVER PRETTY UNLIKELY THAT A COMPUTER WONT BE ABLE TO
 		// FIND A WORD TO CREATE {After many attempts, seems like it's actually very
 		// likely}) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
-		// THIS METHOD WOULD RETURN AN EMPTY STRING
+		// THIS METHOD WOULD RETURN AN EMPTY STRING - ADDED
 
 		// THIS IS A STUPID STRATEGY, DOES NOT LOOK FOR WORDS WITH HIGHEST SCORES, IT
 		// ALWAYS TAKES FIRST WORD IT FINDS THAT ACTUALLY CAN BE PLACED
