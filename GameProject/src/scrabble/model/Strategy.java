@@ -7,4 +7,6 @@ import scrabble.model.words.ScrabbleWordChecker;
 public interface Strategy {
 
     public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker, AdjacentWordChecker adjacentChecker);
+    
+    public String swapHand(LetterDeck letterDeck);
 }

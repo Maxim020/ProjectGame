@@ -92,7 +92,7 @@ public class LocalTUI implements UserInterface {
             }
 
             //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word) - ADDED
-            if(direction != "H8") {
+            if(!startCoordinate.equals("H8")) {
             	if(isAdjacentChecker.isAdjacent(startCoordinate, direction, word) == false) {
             		throw new WordIsNotAdjacentException();
             	}

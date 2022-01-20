@@ -289,7 +289,7 @@ public class NaiveStrategy implements Strategy {
 													flag = false;
 												}
 											}
-											/** Check if field above are emtpy and valid */
+											/** Check if field above are empty and valid */
 											for (int j = 0; j < left; j++) {
 												if (!board.isFieldValid(checkedCoordinate[0], checkedCoordinate[1] - j)
 														|| !board.isFieldEmpty(checkedCoordinate[0],
@@ -345,6 +345,16 @@ public class NaiveStrategy implements Strategy {
 			}
 		}
 		return false;
+	}
+	
+	public String swapHand(LetterDeck letterDeck){
+		
+		String lettersInHand = "";
+		
+		for(char letter : letterDeck.getLettersInDeck()) {
+			lettersInHand = lettersInHand + letter;
+		}
+		return lettersInHand;
 	}
 
 }
