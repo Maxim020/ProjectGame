@@ -46,7 +46,7 @@ class SmartStrategyTest {
 	}
 
 	@Test
-	void testNaiveStrategyFirstTurnOnBoard() {
+	void testSmartStrategyFirstTurnOnBoard() {
 		
 		bag = Bag.getInstance();
 		deck = new LetterDeck(bag);
@@ -74,7 +74,7 @@ class SmartStrategyTest {
 	}
 	
 	@Test
-	void testNaiveStrategySecondTurnOnBoard() {
+	void testSmartStrategySecondTurnOnBoard() {
 		
 		bag = Bag.getInstance();
 		deck = new LetterDeck(bag);

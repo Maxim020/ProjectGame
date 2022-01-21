@@ -157,7 +157,7 @@ public class Board {
     public String convert(int row, int column) throws IllegalArgumentException{
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
         char[] letters = "ABCDEFGHIJKLMNO".toCharArray();
-        return Character.toString(letters[column - 1])+(row);
+        return Character.toString(letters[column])+(row + 1);
     }
 
     /**
