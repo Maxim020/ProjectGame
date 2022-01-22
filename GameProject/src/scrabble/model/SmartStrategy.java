@@ -84,6 +84,10 @@ public class SmartStrategy implements Strategy {
 
 		ArrayList<String> listOfMoves = new ArrayList<>();
 
+		ArrayList<String> listOfExtendingMoves = new ArrayList<>();
+
+		HashMap<String, Integer> scoreMap = new HashMap<>();
+
 		// WHAT THIS DOES AT THIS POINT:
 		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
 		// FROM THESE METHODS WE GET A LIST FOR THIS METHOD
@@ -103,15 +107,17 @@ public class SmartStrategy implements Strategy {
 		// WORKS WITH BLANK LETTERS NOW
 
 		// TO BE ADDED APPENDING WORDS FROM START OR FINISH, RIGHT NOW IT ONLY PLAYS
-		// VERTICAL WORDS ON HORIZONTALLY PLAYED WORDS AND VICE VERSA
+		// VERTICAL WORDS ON HORIZONTALLY PLAYED WORDS AND VICE VERSA - ADDED
 
 		// TO BE ADDED SWAPPING (HOWEVER PRETTY UNLIKELY THAT A COMPUTER WONT BE ABLE TO
 		// FIND A WORD TO CREATE {After many attempts, seems like it's actually very
 		// likely}) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
 		// THIS METHOD WOULD RETURN AN EMPTY STRING - ADDED
 
-		// THIS IS A STUPID STRATEGY, DOES NOT LOOK FOR WORDS WITH HIGHEST SCORES, IT
-		// ALWAYS TAKES FIRST WORD IT FINDS THAT ACTUALLY CAN BE PLACED
+		// THIS IS A SMART STRATEGY. CAN MAKE WORDS PERPENDICULAR AS WELL AS APPEND
+		// ALREADY EXISTING WORDS.
+		// COLLECTS ALL POSSIBLE WORDS, GETS THEIR SCORES AND PICKS THE WORD THAT NETS
+		// THE HIGHEST SCORE
 
 		/** List of all permutations */
 		ArrayList<String> listOfAllPermutations = new ArrayList<>();
@@ -121,15 +127,18 @@ public class SmartStrategy implements Strategy {
 		listOfAllPermutations = determineWord(formString(letterDeck));
 
 		String s = "";
+
+		 
 		/**
 		 * Calls method to permuate a String again but with size of the initial string
 		 * decreased until the word is of length 1
 		 */
+		
 		for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
+			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i));
 			listOfAllPermutations.addAll(determineWord(s));
 		}
-
+	
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		/** Blank replacer */
@@ -143,93 +152,227 @@ public class SmartStrategy implements Strategy {
 		}
 
 		listOfAllPermutations.addAll(listWithBlanksReplaced);
-		
-		/** Extending letters*/
-		for(String word : board.getPlayedWords()) {
-			if(letterDeck.getLettersInDeck().contains(word.charAt(0))) {
-				
+
+		/** Extending letters */
+		for (String word : board.getPlayedWords()) {
+			/** Extending from first letter */
+			if (letterDeck.getLettersInDeck().contains(word.charAt(0))) {
+
 				int[] playedWordStartCoords = board.convert(board.getWordCoordinateMap().get(word));
-				
+
 				letterDeck.removeFromDeck(word.charAt(0));
 				ArrayList<String> permutationsWithoutFirstLetter = determineWord(formString(letterDeck));
 				String v = "";
-				
+
 				for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
 					v = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
 					permutationsWithoutFirstLetter.addAll(determineWord(v));
 				}
-				
+
 				for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
 					for (int j = 0; j < alphabet.toCharArray().length; j++) {
 						if (containsBlank(listOfAllPermutations.get(i))) {
-							String blankReplaced = permutationsWithoutFirstLetter.get(i).replace('*', alphabet.toCharArray()[j]);
+							String blankReplaced = permutationsWithoutFirstLetter.get(i).replace('*',
+									alphabet.toCharArray()[j]);
 							permutationsWithoutFirstLetter.add(blankReplaced);
 						}
 					}
 				}
-				/** Horizontal*/
+				/** Horizontal from left */
 				if (board.getWordDirectionMap().get(word) == "H") {
-					for(int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
+					for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
 
 						boolean flag = true;
-						
+
 						String generatedWord = permutationsWithoutFirstLetter.get(i);
-						
+
 						String newWord = generatedWord + word;
-						
+
+						System.out.println(newWord + " NEWWORD");
+
 						for (int j = 0; j < generatedWord.length(); j++) {
-							if(board.isFieldValid(playedWordStartCoords[0], playedWordStartCoords[1] - 1 - j) == false || board.isFieldEmpty(playedWordStartCoords[0], playedWordStartCoords[1] - 1 - j) == false) {
+							if (board.isFieldValid(playedWordStartCoords[0], playedWordStartCoords[1] - 1 - j) == false
+									|| board.isFieldEmpty(playedWordStartCoords[0],
+											playedWordStartCoords[1] - 1 - j) == false) {
 								flag = false;
 							}
 						}
-						if(flag != false) {
-							System.out.println("Tu");
-							if(checker.isValidWord(newWord) == null) {
+						if (flag != false) {
+							if (checker.isValidWord(newWord) == null) {
 								flag = false;
 							}
-						
-							if(adjacentChecker.areAdjacentWordsValid(board.convert(playedWordStartCoords[0], playedWordStartCoords[1] - 1 - generatedWord.length()), "H", newWord)) {
+
+							if (adjacentChecker.areAdjacentWordsValid(board.convert(playedWordStartCoords[0],
+									playedWordStartCoords[1] - 1 - generatedWord.length()), "H", newWord)) {
 								flag = false;
 							}
 						}
-						
-						if(flag == true) {
-						move = move + "WORD " + board.convert(playedWordStartCoords[0], playedWordStartCoords[1] - 1 - generatedWord.length()) + " H " + generatedWord;
-						listOfMoves.add(move);
-						move = "";
+
+						if (flag == true) {
+							move = move + "WORD "
+									+ board.convert(playedWordStartCoords[0],
+											playedWordStartCoords[1] - 1 - generatedWord.length())
+									+ " H " + generatedWord;
+							listOfExtendingMoves.add(move);
+							scoreMap.put(move, scoreCounter.getTotalWordScoreHorizontal(newWord,
+									playedWordStartCoords[0], playedWordStartCoords[1] - 1 - generatedWord.length()));
+							move = "";
 						}
 					}
 				}
-				
+				/** Vertical from top */
 				else {
-					for(int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
+					for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
 
 						boolean flag = true;
-						
+
 						String generatedWord = permutationsWithoutFirstLetter.get(i);
-						
-						String newWord = word + generatedWord;
-						
+
+						String newWord = generatedWord + word;
+
 						for (int j = 0; j < generatedWord.length(); j++) {
-							if(board.isFieldValid(playedWordStartCoords[0], playedWordStartCoords[1] + generatedWord.length() + j) == false || board.isFieldEmpty(playedWordStartCoords[0], playedWordStartCoords[1] + generatedWord.length() + j) == false) {
+							if (board.isFieldValid(playedWordStartCoords[0] - 1 - j, playedWordStartCoords[1]) == false
+									|| board.isFieldEmpty(playedWordStartCoords[0] - 1 - j,
+											playedWordStartCoords[1]) == false) {
 								flag = false;
 							}
 						}
-						if(flag != false) {
-							System.out.println("Tu");
-							if(checker.isValidWord(newWord) == null) {
+						if (flag != false) {
+							if (checker.isValidWord(newWord) == null) {
 								flag = false;
 							}
-						
-							if(adjacentChecker.areAdjacentWordsValid(board.convert(playedWordStartCoords[0], playedWordStartCoords[1]), "H", newWord)) {
+
+							if (adjacentChecker.areAdjacentWordsValid(
+									board.convert(playedWordStartCoords[0] - 1 - generatedWord.length(),
+											playedWordStartCoords[1]),
+									"V", newWord)) {
 								flag = false;
 							}
 						}
-						
-						if(flag == true) {
-						move = move + "WORD " + board.convert(playedWordStartCoords[0], playedWordStartCoords[1] + word.length()) + " H " + generatedWord;
-						listOfMoves.add(move);
-						move = "";
+
+						if (flag == true) {
+							move = move + "WORD " + board.convert(playedWordStartCoords[0] - 1 - generatedWord.length(),
+									playedWordStartCoords[1]) + " V " + generatedWord;
+							listOfExtendingMoves.add(move);
+							scoreMap.put(move, scoreCounter.getTotalWordScoreHorizontal(newWord,
+									playedWordStartCoords[0] - 1 - generatedWord.length(), playedWordStartCoords[1]));
+							move = "";
+						}
+					}
+				}
+			}
+			/** Extending from last letter */
+			else if (letterDeck.getLettersInDeck().contains(word.charAt(word.length() - 1))) {
+				int[] playedWordStartCoords = board.convert(board.getWordCoordinateMap().get(word));
+
+				letterDeck.removeFromDeck(word.charAt(word.length() - 1));
+				ArrayList<String> permutationsWithoutLastLetter = determineWord(formString(letterDeck));
+				String v = "";
+
+				for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
+					v = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
+					permutationsWithoutLastLetter.addAll(determineWord(v));
+				}
+
+				for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
+					for (int j = 0; j < alphabet.toCharArray().length; j++) {
+						if (containsBlank(listOfAllPermutations.get(i))) {
+							String blankReplaced = permutationsWithoutLastLetter.get(i).replace('*',
+									alphabet.toCharArray()[j]);
+							permutationsWithoutLastLetter.add(blankReplaced);
+						}
+					}
+				}
+				/** Horizontal from right */
+				if (board.getWordDirectionMap().get(word) == "H") {
+					for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
+
+						boolean flag = true;
+
+						int[] coordsOfLastLetterOfPlayedWord = new int[2];
+
+						coordsOfLastLetterOfPlayedWord[0] = playedWordStartCoords[0];
+
+						coordsOfLastLetterOfPlayedWord[1] = playedWordStartCoords[1] + word.length() - 1;
+
+						String generatedWord = permutationsWithoutLastLetter.get(i);
+
+						String newWord = word + generatedWord;
+
+						System.out.println(newWord + " NEWWORD");
+
+						for (int j = 0; j < generatedWord.length(); j++) {
+							if (board.isFieldValid(coordsOfLastLetterOfPlayedWord[0],
+									coordsOfLastLetterOfPlayedWord[1] + 1 + j) == false
+									|| board.isFieldEmpty(coordsOfLastLetterOfPlayedWord[0],
+											coordsOfLastLetterOfPlayedWord[1] + 1 + j) == false) {
+								flag = false;
+							}
+						}
+						if (flag != false) {
+							if (checker.isValidWord(newWord) == null) {
+								flag = false;
+							}
+
+							if (adjacentChecker.areAdjacentWordsValid(
+									board.convert(playedWordStartCoords[0], playedWordStartCoords[1]), "H", newWord)) {
+								flag = false;
+							}
+						}
+
+						if (flag == true) {
+							move = move + "WORD "
+									+ board.convert(playedWordStartCoords[0], playedWordStartCoords[1] + word.length())
+									+ " H " + generatedWord;
+							listOfExtendingMoves.add(move);
+							scoreMap.put(move, scoreCounter.getTotalWordScoreHorizontal(newWord,
+									playedWordStartCoords[0], playedWordStartCoords[1]));
+							move = "";
+						}
+					}
+				}
+				/** Vertical from bottom */
+				else {
+					for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
+
+						boolean flag = true;
+
+						int[] coordsOfLastLetterOfPlayedWord = new int[2];
+
+						coordsOfLastLetterOfPlayedWord[0] = playedWordStartCoords[0] + word.length() - 1;
+
+						coordsOfLastLetterOfPlayedWord[1] = playedWordStartCoords[1];
+
+						String generatedWord = permutationsWithoutLastLetter.get(i);
+
+						String newWord = word + generatedWord;
+
+						for (int j = 0; j < generatedWord.length(); j++) {
+							if (board.isFieldValid(coordsOfLastLetterOfPlayedWord[0] + 1 + j,
+									coordsOfLastLetterOfPlayedWord[1]) == false
+									|| board.isFieldEmpty(coordsOfLastLetterOfPlayedWord[0] + 1 + j,
+											coordsOfLastLetterOfPlayedWord[1]) == false) {
+								flag = false;
+							}
+						}
+						if (flag != false) {
+							if (checker.isValidWord(newWord) == null) {
+								flag = false;
+							}
+
+							if (adjacentChecker.areAdjacentWordsValid(
+									board.convert(playedWordStartCoords[0], playedWordStartCoords[1]), "V", newWord)) {
+								flag = false;
+							}
+						}
+
+						if (flag == true) {
+							move = move + "WORD " + board.convert(playedWordStartCoords[0] + generatedWord.length(),
+									playedWordStartCoords[1]) + " V " + generatedWord;
+							listOfExtendingMoves.add(move);
+							scoreMap.put(move, scoreCounter.getTotalWordScoreHorizontal(newWord,
+									playedWordStartCoords[0], playedWordStartCoords[1]));
+							move = "";
 						}
 					}
 				}
@@ -241,9 +384,7 @@ public class SmartStrategy implements Strategy {
 			/** Suitable word found */
 			if (checker.isValidWord(word) != null) {
 				/** If first turn play from center */
-				System.out.println(word);
 				if (board.getPlayedWords().isEmpty()) {
-					System.out.println("First Word");
 					/**
 					 * We dont have to check if the word will fit here because it will always fit
 					 */
@@ -254,24 +395,17 @@ public class SmartStrategy implements Strategy {
 				/** If word was not already played */
 				else if (!board.getPlayedWords().contains(word)) {
 					/** Cycle though words already on board */
-					System.out.println("Here1");
 					for (String playedWord : board.getPlayedWords()) {
 						/** Cycle through letters in played word */
-						System.out.println("Here2 " + playedWord);
 						for (char playedWordLetter : playedWord.toCharArray()) {
 							/** Cycle through letters in generated word */
-							System.out.println("Here3 " + playedWordLetter);
 							for (char letter : word.toCharArray()) {
 								/** Find matching letter */
-								System.out.println("Here4 " + letter);
 								if (playedWordLetter == letter) {
 									/** Stores Matching letters */
-									System.out.println("Here5");
 									char matchingLetter = letter;
-									System.out.println(letter);
 									/** If the played word is horizontal */
 									if (board.getWordDirectionMap().get(playedWord) == "H") {
-										System.out.println("Here6");
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
 											/** Get index of matching letter in playedWord */
@@ -305,7 +439,6 @@ public class SmartStrategy implements Strategy {
 														|| !board.isFieldEmpty(checkedCoordinate[0] + j,
 																checkedCoordinate[1])) {
 													flag = false;
-													System.out.println(flag + "1");
 												}
 											}
 											/** Check if field above are empty and valid */
@@ -314,17 +447,14 @@ public class SmartStrategy implements Strategy {
 														|| !board.isFieldEmpty(checkedCoordinate[0] - j,
 																checkedCoordinate[1])) {
 													flag = false;
-													System.out.println(flag + "2");
 												}
 											}
 											/**
 											 * Check if the newly created letter would be compatible with adjacent words
 											 */
-											System.out.println(startCoordinateOfNewWord + "SCOORDS");
 											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "V",
 													word)) {
 												flag = false;
-												System.out.println(flag + "3");
 											}
 											/**
 											 * If none of the conditions above changed the flag to false, return a word
@@ -429,7 +559,7 @@ public class SmartStrategy implements Strategy {
 			}
 
 		}
-		
+
 		System.out.println(listOfMoves);
 
 		if (listOfMoves.isEmpty()) {
@@ -438,40 +568,37 @@ public class SmartStrategy implements Strategy {
 
 		else {
 
-			HashMap<String, Integer> scoreMap = new HashMap<>();
-
 			for (int i = 0; i < listOfMoves.size(); i++) {
 				if (listOfMoves.get(i).split(" ")[2] == "H") {
 					scoreMap.put(listOfMoves.get(i),
 							scoreCounter.getTotalWordScoreHorizontal(listOfMoves.get(i).split(" ")[3],
 									board.convert(listOfMoves.get(i).split(" ")[1])[0],
 									board.convert(listOfMoves.get(i).split(" ")[1])[1]));
-				}
-				else {
+				} else {
 					scoreMap.put(listOfMoves.get(i),
 							scoreCounter.getTotalWordScoreVertical(listOfMoves.get(i).split(" ")[3],
 									board.convert(listOfMoves.get(i).split(" ")[1])[0],
 									board.convert(listOfMoves.get(i).split(" ")[1])[1]));
 				}
-				
+
 			}
-			
+
 			System.out.println(scoreMap);
-			
+
 			int max = Collections.max(scoreMap.values());
-			
+
 			System.out.println(max);
-			
-			for(Entry<String, Integer> entry : scoreMap.entrySet()) {
-				if(Objects.equals(max, entry.getValue())) {
+
+			for (Entry<String, Integer> entry : scoreMap.entrySet()) {
+				if (Objects.equals(max, entry.getValue())) {
 					System.out.println(entry.getKey());
 					return entry.getKey();
 				}
 			}
 		}
-		
+
 		return "";
-		
+
 	}
 
 	/**

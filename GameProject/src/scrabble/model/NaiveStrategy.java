@@ -120,7 +120,7 @@ public class NaiveStrategy implements Strategy {
 		 * decreased until the word is of length 1
 		 */
 		for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
+			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i));
 			listOfAllPermutations.addAll(determineWord(s));
 		}
 
