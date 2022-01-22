@@ -32,7 +32,7 @@ class WordScoreTest {
 		scoreCounter = new WordScoreCounter(board);
 		playerlist = PlayerList.getInstance();
 		players = new ArrayList<>();
-		//players.add(new Player("Richard", bag));
+		players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
@@ -46,7 +46,8 @@ class WordScoreTest {
 		assertEquals(FieldType.NORMAL,board.checkFieldType(8, 13));
 		
 	}
-	
+
+	@Test
 	void testScoreResult() {
 		
 		board.setWord("H8", "h", "hello");

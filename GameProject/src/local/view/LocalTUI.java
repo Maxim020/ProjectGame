@@ -62,6 +62,12 @@ public class LocalTUI implements UserInterface {
         if(parts.length == 4){
             String command = parts[0]; String startCoordinate = parts[1]; String direction = parts[2]; String word = parts[3];
 
+            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word) - ADDED
+            if(board.isCenterCovered()) {
+                if(!isAdjacentChecker.isAdjacent(startCoordinate, direction, word)) {
+                    throw new WordIsNotAdjacentException();
+                }
+            }
             if(board.isBoardEmpty() && board.fieldsCovered(startCoordinate, direction, word).contains("H8")) {
                 board.setCenterCovered(true);
             }
@@ -91,18 +97,11 @@ public class LocalTUI implements UserInterface {
                 }
             }
 
-            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word) - ADDED
-            if(direction != "H8") {
-            	if(isAdjacentChecker.isAdjacent(startCoordinate, direction, word) == false) {
-            		throw new WordIsNotAdjacentException();
-            	}
-            }
-
             if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words BTW this works in a way that if word is valid it gives a description so if there is no description given the word is invalid
             	throw new InvalidWordException();
             } else {
             	//If one of the new composed words is invalid: throw new InvalidWordException - ADDED 
-            	if(adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word) == false) {
+            	if(!adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word)) {
             		throw new InvalidWordException();
             	}
             }

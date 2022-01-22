@@ -1,11 +1,13 @@
-package local.view;
+package local;
 
+import local.view.LocalTUI;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterScoreChecker;
+import scrabble.view.utils.Countdown;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,13 +68,24 @@ public class LocalController {
                 LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
                 localTUI.updateBoard();
 
-                //Timer of Opponent starts --> revert move within timeframe?
-
                 /** DetermineMove() and Validates input */
                 boolean updateTUI = false;
 
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
+                    /** Timer starts
+                    //Timer of Opponent starts --> revert move within timeframe?
+                    int counter = 60;
+
+                    Countdown countdown = new Countdown();
+                    System.out.println("\nYou have one minute to decide!");
+                    countdown.counter(counter);
+                    */
+
+
                     String move = scanner.nextLine();
+
+
+
 
                     //Program keeps asking user for input except if it's an InvalidWordException. Then the user loses his/her turn
                     boolean isWordValid; //Zusammenspiel von updateTUI updateTUI
