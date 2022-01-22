@@ -30,7 +30,6 @@ public class LetterDeck {
 	 * @author Maxim & Yasin
 	 */
 	public void removeFromDeck(char letter) {
-		System.out.println(letter);
 		lettersInDeck.remove((Character) letter); //.remove(lettersInDeck.indexOf(letter));
 		bag.add(letter);
 	}

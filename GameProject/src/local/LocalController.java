@@ -69,8 +69,6 @@ public class LocalController {
                 localTUI.updateBoard();
 
                 /** DetermineMove() and Validates input */
-                boolean updateTUI = false;
-
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
                     /** Timer starts
                     //Timer of Opponent starts --> revert move within timeframe?
@@ -109,7 +107,7 @@ public class LocalController {
                         }
                     }
                     if(isWordValid) {
-                        updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                        processMove(move, board, playerList.getCurrentPlayer(), bag);
                         //board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]); does not work
                     }
 
@@ -118,13 +116,7 @@ public class LocalController {
                     String move = computerPlayer.determineMove(board);
                     localTUI.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
 
-                    updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
-                }
-
-
-                /** Announces new Score only if a new word is placed*/
-                if (updateTUI) {
-                    localTUI.updateBoard();
+                    processMove(move, board, playerList.getCurrentPlayer(), bag);
                 }
 
                 /** breakes out of second while loop proivded the game ended */
@@ -220,49 +212,95 @@ public class LocalController {
      * @requires the input to be valid
      * @param input the input that the user wrote
      * @author Yasin
-     * @return true if the move was placing a word on the board
      */
-    public static boolean processMove(String input, Board board, Player currentPlayer, Bag bag) {
+    public static void processMove(String input, Board board, Player currentPlayer, Bag bag) {
         String[] parts = input.split(" ");
 
         if(parts[0].equalsIgnoreCase("word")){
             //WORD A1 H TEST
+            exchangeTiles(parts, currentPlayer, bag, board, true); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
             board.setWord(parts[1], parts[2], parts[3]);
-            exchangeTiles(parts[3], currentPlayer, bag); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
             board.setBoardEmpty(false);
-            return true;
         }
         else {
             if(parts.length == 2){
                 //SWAP TEST
-                exchangeTiles(parts[1], currentPlayer, bag);
+                exchangeTiles(parts, currentPlayer, bag, board, false);
             }
             //SWAP
-            return false;
+            //Do nothing
         }
     }
 
     /**
-     * @param tiles that need to be exchanged
-     * @param currentPlayer - The player who is currently making the move
+     * The process of exchanging tiles after placing a word and swapping is different, because
+     * for after placing a word you need to regard already placed tiles on a board and the correct exchange of blank tiles
+     * @param parts - String array with the parts of the command/input
+     * @param currentPlayer - currentPlayer that needs tiles to be exchanged
+     * @param bag - a universal bag of letters
+     * @param board - the board that the game is played on
+     * @param word - true if tiles need to be exchanged after placing a word and false if the player just want to swap
+     * @author Yasin
+     */
+    public static void exchangeTiles(String[] parts, Player currentPlayer, Bag bag, Board board, boolean word) {
+        if(word){
+            //Declaring String variables out of the parts of the input
+            String coordinate = parts[1];
+            String direction = parts[2];
+            String tiles = parts[3];
+            int[] rowcol = board.convert(coordinate);
+
+            //Loops over length of word
+            for (int i = 0; i < tiles.length(); i++) {
+                if(direction.equalsIgnoreCase("h")) {
+                    //Only exchange tiles if a square is not already occupied by a tile
+                    if(board.isFieldEmpty(rowcol[0],(rowcol[1]+i))){
+                        processExchangeTile(tiles, i, currentPlayer, bag);
+                    }
+                }
+                else {
+                    //Only exchange tiles if a square is not already occupied by a tile
+                    System.out.println("board.isFieldEmpty((rowcol[0]+i),rowcol[1]): "+board.isFieldEmpty((rowcol[0]+i),rowcol[1]));
+                    if(board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
+                        processExchangeTile(tiles, i, currentPlayer, bag);
+                    }
+                }
+            }
+        }
+        else {
+            //Declaring String variables out of the parts of the input
+            String tiles = parts[1];
+
+            for (int i = 0; i < tiles.length(); i++) {
+                processExchangeTile(tiles, i, currentPlayer, bag); //Was passiert, wenn ich lower case swappen will?
+//                currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i));
+//                bag.removeFromBag(tiles.charAt(i));
+//                bag.shuffleBag();
+//                currentPlayer.getLetterDeck().addToDeck(1);
+            }
+        }
+    }
+
+    /**
+     * Process for exchanging tiles specific for after placing a word
+     * @param tiles - that need to be exchanged
+     * @param i - for Iteration of for loop
+     * @param currentPlayer - currentPlayer that needs tiles to be exchanged
      * @param bag - a universal bag of letters
      * @author Yasin
      */
-    public static void exchangeTiles(String tiles, Player currentPlayer, Bag bag) {
-
-        for (int i=0; i<tiles.length(); i++) {
-            if(Character.isLowerCase(tiles.charAt(i))){
-                currentPlayer.getLetterDeck().removeFromDeck('*'); //removes blank tile if a letter is lowercase
-                bag.removeFromBag('*');
-            }
-            else {
-                currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //removes old tiles from deck
-                bag.removeFromBag(tiles.charAt(i));
-            }
+    public static void processExchangeTile(String tiles, int i, Player currentPlayer, Bag bag){
+        if (Character.isLowerCase(tiles.charAt(i))) {
+            currentPlayer.getLetterDeck().removeFromDeck('*'); //removes old tiles from deck
+            bag.removeFromBag('*'); //removes old tile from bag --> ist das hier richtig von der logik?
         }
-
+        else {
+            System.out.println("currentPlayer.getLetterDeck().removeFromDeck: "+tiles.charAt(i));
+            currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //shuffle bag
+            bag.removeFromBag(tiles.charAt(i)); //Add new Tiles to deck
+        }
         bag.shuffleBag();
-        currentPlayer.getLetterDeck().addToDeck(tiles.length()); //Add new Tiles to deck
+        currentPlayer.getLetterDeck().addToDeck(1);
     }
 
 
