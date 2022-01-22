@@ -85,8 +85,6 @@ public class LocalController {
                     String move = scanner.nextLine();
 
 
-
-
                     //Program keeps asking user for input except if it's an InvalidWordException. Then the user loses his/her turn
                     boolean isWordValid; //Zusammenspiel von updateTUI updateTUI
 
@@ -112,7 +110,7 @@ public class LocalController {
                     }
                     if(isWordValid) {
                         updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
-                        board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]);
+                        //board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]); does not work
                     }
 
                 } else {
@@ -131,6 +129,7 @@ public class LocalController {
 
                 /** breakes out of second while loop proivded the game ended */
                 if(checkEndOfGame(bag, playerList.getCurrentPlayer())){
+                    System.out.println("Either a player played all tiles left or there are no more possibilities");
                     break;
                 }
 

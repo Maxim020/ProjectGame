@@ -61,33 +61,19 @@ public class LocalTUI implements UserInterface {
         //Set word
         if(parts.length == 4){
             String command = parts[0]; String startCoordinate = parts[1]; String direction = parts[2]; String word = parts[3];
+            /**
+             * The order of these checker is important. Do not change, unless it would solve a new bug
+             */
 
-            //If word is not adjacent: Throw new WordIsNotAdjacentException (not for the first word) - ADDED
-            if(board.isCenterCovered()) {
-                if(!isAdjacentChecker.isAdjacent(startCoordinate, direction, word)) {
-                    throw new WordIsNotAdjacentException();
+            if(wordChecker.isValidWord(word) == null) {
+                throw new InvalidWordException();
+            } else {
+                //If one of the new composed words is invalid: throw new InvalidWordException - ADDED
+                if(!adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word)) {
+                    throw new InvalidWordException();
                 }
             }
-            if(board.isBoardEmpty() && board.fieldsCovered(startCoordinate, direction, word).contains("H8")) {
-                board.setCenterCovered(true);
-            }
-            if(!command.equalsIgnoreCase("word")){
-                throw new UnknownCommandException();
-            }
-            if (!board.isFieldValid(startCoordinate)){
-                throw new FieldDoesNotExistException();
-            }
-            if(!(direction.equalsIgnoreCase("H") || direction.equalsIgnoreCase("V"))){
-                throw new UnknownDirectionException();
-            }
-            if(!board.isCenterCovered()){
-                throw new CenterIsNotCoveredException();
-            }
-            if(!board.doesWordFit(startCoordinate, direction, word)){
-                throw new WordDoesNotFitException();
-            }
 
-            //Clean Up
             int lowercase = tilesNotOwned(currentPlayer,word);
             if(lowercase != 0){
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
@@ -97,13 +83,34 @@ public class LocalTUI implements UserInterface {
                 }
             }
 
-            if(wordChecker.isValidWord(word) == null) { //Does not recognize invalid words BTW this works in a way that if word is valid it gives a description so if there is no description given the word is invalid
-            	throw new InvalidWordException();
-            } else {
-            	//If one of the new composed words is invalid: throw new InvalidWordException - ADDED 
-            	if(!adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word)) {
-            		throw new InvalidWordException();
-            	}
+            if(board.isCenterCovered()) {
+                if(!isAdjacentChecker.isAdjacent(startCoordinate, direction, word)) {
+                    throw new WordIsNotAdjacentException();
+                }
+            }
+
+            if(board.isBoardEmpty() && board.fieldsCovered(startCoordinate, direction, word).contains("H8")) {
+                board.setCenterCovered(true);
+            }
+
+            if(!command.equalsIgnoreCase("word")){
+                throw new UnknownCommandException();
+            }
+
+            if (!board.isFieldValid(startCoordinate)){
+                throw new FieldDoesNotExistException();
+            }
+
+            if(!(direction.equalsIgnoreCase("H") || direction.equalsIgnoreCase("V"))){
+                throw new UnknownDirectionException();
+            }
+
+            if(!board.isCenterCovered()){
+                throw new CenterIsNotCoveredException();
+            }
+
+            if(!board.doesWordFit(startCoordinate, direction, word)){
+                throw new WordDoesNotFitException();
             }
         }
 

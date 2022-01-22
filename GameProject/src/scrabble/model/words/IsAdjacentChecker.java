@@ -26,7 +26,7 @@ public class IsAdjacentChecker {
 		
 		if(direction.equalsIgnoreCase("H")) {
 		
-			if(!board.isFieldEmpty(coords[0], coords[1] - 1)) {
+			if(!board.isFieldEmpty(coords[0], coords[1] - 1)) { //why -1? This may cause a ArrayIndexOutOfBoundsException.
 				return true;
 			}
 		
