@@ -38,7 +38,6 @@ public class AdjacentWordChecker {
 		
 		while(i != word.toCharArray().length) {
 			
-			String adjacentWordReversed = "";
 			String adjacentWord = "";
 			String firstLetter = "";
 			boolean flag2 = false;
@@ -78,8 +77,6 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				Collections.reverse(charList);
-				
 				charList.add(0, board.getTile(row, column + i));
 				
 				while(board.getTile(row - k, column + i) != ' ') {
@@ -87,17 +84,8 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
-				if(charList.get(1) == ' ') {
-					charList.remove(1);
-				}
-				
 				for(int l = 0; l < charList.size(); l++) {
-					adjacentWordReversed = adjacentWordReversed + charList.get(l);
-				}
-				
-				for(int f = 0; f < adjacentWordReversed.length(); f++) {
-					char ch = adjacentWordReversed.charAt(f);
-					adjacentWord = ch + adjacentWord;
+					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
@@ -138,7 +126,6 @@ public class AdjacentWordChecker {
 		
 		while(i != word.toCharArray().length) {
 			
-			String adjacentWordReversed = "";
 			String adjacentWord = "";
 			String firstLetter = "";
 			ArrayList<Character> charList = new ArrayList<>();
@@ -178,27 +165,24 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				Collections.reverse(charList);
-				
 				charList.add(0, board.getTile(row + i, column));
 				
-				while(board.getTile(row - i, column + k) != ' ') {
-					charList.add(0,board.getTile(row - i, column + k));
+				System.out.println(charList);
+				
+				while(board.getTile(row + i, column - k) != ' ') {
+					charList.add(0,board.getTile(row + i, column - k));
 					k = k + 1;
 				}
 				
-				if(charList.get(1) == ' ') {
-					charList.remove(1);
-				}
+				
+				
+				System.out.println(charList);
 				
 				for(int l = 0; l < charList.size(); l++) {
-					adjacentWordReversed = adjacentWordReversed + charList.get(l);
+					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				for(int f = 0; f < adjacentWordReversed.length(); f++) {
-					char ch = adjacentWordReversed.charAt(f);
-					adjacentWord = ch + adjacentWord;
-				}
+				System.out.println(adjacentWord);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;

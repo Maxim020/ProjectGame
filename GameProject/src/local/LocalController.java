@@ -50,8 +50,8 @@ public class LocalController {
 
             /** Instantiates universal PlayerList, Bag and other important objects */
             PlayerList playerList = PlayerList.getInstance();
-            playerList.setPlayers(createPlayerArrayList(players));
             Board board = new Board();
+            playerList.setPlayers(createPlayerArrayList(players, board));
             Bag bag = Bag.getInstance();
             Game game = new Game(board, bag);
 
@@ -112,6 +112,7 @@ public class LocalController {
                     }
                     if(isWordValid) {
                         updateTUI = processMove(move, board, playerList.getCurrentPlayer(), bag);
+                        board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]);
                     }
 
                 } else {
@@ -272,7 +273,7 @@ public class LocalController {
      * @return a list of all Players
      * @author Yasin
      */
-    public static List<Player> createPlayerArrayList(String[] players){
+    public static List<Player> createPlayerArrayList(String[] players, Board board){
         if (players.length < 2 || players.length > 4){
             throw new IllegalArgumentException();
         }
@@ -281,9 +282,9 @@ public class LocalController {
 
         for (int i=0; i<players.length; i++){
             if (players[i].equals("-N")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance()));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board));
             } else if (players[i].equals("-S")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy()));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board));
             } else {
                 playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
             }

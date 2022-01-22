@@ -3,6 +3,7 @@ import local.view.LocalTUI;
 import scrabble.model.words.WordScoreCounter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -25,6 +26,9 @@ public class Board {
     boolean isCenterCovered;
     WordScoreCounter wordScoreCounter;
     PlayerList playerList;
+    ArrayList<String> playedWords = new ArrayList<>();
+    HashMap<String, String> wordCoordinateMap = new HashMap<>();
+    HashMap<String, String> wordDirectionMap = new HashMap<>();
 
     /**
      * Constructor of the Board Class.
@@ -153,7 +157,7 @@ public class Board {
     public String convert(int row, int column) throws IllegalArgumentException{
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
         char[] letters = "ABCDEFGHIJKLMNO".toCharArray();
-        return Character.toString(letters[column])+(row+1);
+        return Character.toString(letters[column])+(row + 1);
     }
 
     /**
@@ -188,7 +192,6 @@ public class Board {
      */
     public FieldType checkFieldType(int row, int column) throws IllegalArgumentException{
         String field = convert(row,column);
-
         if(!isFieldValid(row, column)){throw new IllegalArgumentException();}
 
         if (tripleWordScore.contains(field)){return FieldType.TRIPLE_WORD_SCORE;}
@@ -270,6 +273,7 @@ public class Board {
         doubleLetterScore.add("G3");doubleLetterScore.add("I3");
         doubleLetterScore.add("A4");doubleLetterScore.add("H4");doubleLetterScore.add("O4");
         doubleLetterScore.add("C7");doubleLetterScore.add("G7");doubleLetterScore.add("I7");doubleLetterScore.add("M7");
+        doubleLetterScore.add("D8");doubleLetterScore.add("L8");
         doubleLetterScore.add("C9");doubleLetterScore.add("G9");doubleLetterScore.add("I9");doubleLetterScore.add("M9");
         doubleLetterScore.add("A12");doubleLetterScore.add("H12");doubleLetterScore.add("O12");
         doubleLetterScore.add("G13");doubleLetterScore.add("I13");
@@ -307,4 +311,24 @@ public class Board {
     public HashSet<String> getDoubleLetterScore() {
         return doubleLetterScore;
     }
+    
+    /** Added by Maxim, might be shit */
+    public void addPlayedWords(String coordinate, String direction, String word) {
+    	playedWords.add(word);
+    	wordCoordinateMap.put(word, coordinate);
+    	wordDirectionMap.put(word, direction);
+    }
+    
+    public ArrayList<String> getPlayedWords(){
+    	return playedWords;
+    }
+    
+    public HashMap<String, String> getWordCoordinateMap(){
+    	return wordCoordinateMap;
+    }
+    
+    public HashMap<String, String> getWordDirectionMap(){
+    	return wordDirectionMap;
+    }
+    
 }

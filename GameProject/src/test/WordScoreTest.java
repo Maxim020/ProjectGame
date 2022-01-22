@@ -19,42 +19,31 @@ class WordScoreTest {
 	
 	WordScoreCounter scoreCounter;
 	Board board;
-	PlayerList playerlist;
-	List<Player> players;
-	Bag bag;
-	
 
 	@BeforeEach
 	void setUp() throws Exception {
 		
 		board = new Board();
-		bag = Bag.getInstance();
 		scoreCounter = new WordScoreCounter(board);
-		playerlist = PlayerList.getInstance();
-		players = new ArrayList<>();
-		players.add(new Player("Richard", bag));
-		playerlist.setPlayers(players);
-		playerlist.setCurrentPlayer(0);
 		
 	}
-
+	
 	@Test
 	void testMultiplierRemoval() {
 		
-		board.setWord("H8", "h", "hello");
-		scoreCounter.getTotalWordScoreHorizontal("hello", 8, 8);
-		assertEquals(FieldType.NORMAL,board.checkFieldType(8, 13));
+		scoreCounter.getTotalWordScoreHorizontal("satyr", 8, 8);
+		assertEquals(FieldType.NORMAL,board.checkFieldType(8, 12));
+		assertEquals(FieldType.NORMAL,board.checkFieldType(8, 8));
 		
 	}
-
+	
 	@Test
 	void testScoreResult() {
 		
-		board.setWord("H8", "h", "hello");
-		assertEquals(17, scoreCounter.getTotalWordScoreHorizontal("hello", 8, 8));
+		assertEquals(18, scoreCounter.getTotalWordScoreHorizontal("satyr", 8, 8));
+		//Here the center DOUBLE_WORD_TILE is removed by the previous call hence it is only 9 not 18
+		assertEquals(9, scoreCounter.getTotalWordScoreVertical("hello", 8, 8));
 		
-		board.setWord("H13", "v", "olleh");
-		assertEquals(16, scoreCounter.getTotalWordScoreVertical("olleh", 13, 8));
 	}
 	
 	
