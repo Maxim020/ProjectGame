@@ -132,14 +132,17 @@ public class TextBoardRepresentation {
      * @author Yasin
      */
     public String addInstructions(int i){
-        if(i == 11){
+        if(i == 10){
             return ANSI_GREEN+"       Place a word:      'WORD' 'Start coordinate' 'Direction (H/V)' 'Word (lowercase = blank tile)' [i.e.: WORD B3 H SCRaBBLE]"+ANSI_RESET;
         }
-        if(i == 12){
+        if(i == 11){
             return ANSI_GREEN+"       Swap tiles:        'SWAP' 'Tiles you want to swap' [i.e.: SWAP ABC]"+ANSI_RESET;
         }
-        if(i == 13){
+        if(i == 12){
             return ANSI_GREEN+"       Skip turn:         'SWAP'"+ANSI_RESET;
+        }
+        if(i == 13){
+            return "       If a character is white in the terminal input, pls type in the character again directly after it";
         }
         return "";
     }

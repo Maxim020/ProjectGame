@@ -112,6 +112,8 @@ public class LocalTUI implements UserInterface {
             if(!board.doesWordFit(startCoordinate, direction, word)){
                 throw new WordDoesNotFitException();
             }
+
+            //if()
         }
 
         //Swap tiles

@@ -224,6 +224,7 @@ public class Board {
     public boolean isFieldValid(String field){
         String letter = String.valueOf(field.charAt(0)).toUpperCase();
         int number;
+        System.out.println("field.length(): "+field.length());
         if (field.length() == 2){
             number = Character.getNumericValue(field.charAt(1));
         } else{
@@ -312,7 +313,8 @@ public class Board {
         return doubleLetterScore;
     }
     
-    /** Added by Maxim, might be shit */
+    /** Added by Maxim, might be shit
+     * Still in use? - Yasin*/
     public void addPlayedWords(String coordinate, String direction, String word) {
     	playedWords.add(word);
     	wordCoordinateMap.put(word, coordinate);
