@@ -35,7 +35,7 @@ public class NaiveStrategy implements Strategy {
 	 * @return ArrayList<String> Res
 	 * @author Maxim
 	 */
-	public ArrayList<String> determineWord(String s) {
+	public ArrayList<String> determineWordOBSOLETE(String s) {
 
 		if (s.length() == 0) {
 
@@ -48,7 +48,7 @@ public class NaiveStrategy implements Strategy {
 
 		String substring = s.substring(1);
 
-		ArrayList<String> prevResult = determineWord(substring);
+		ArrayList<String> prevResult = determineWordOBSOLETE(substring);
 
 		ArrayList<String> Res = new ArrayList<>();
 
@@ -59,6 +59,137 @@ public class NaiveStrategy implements Strategy {
 		}
 
 		return Res;
+	}
+	
+	/**
+	 * This method is used to generate all the possible combinations of words from a letter deck
+	 * @param String s
+	 * @param int counter - necessary for the switch case
+	 * @requires s != null && counter starts from the length of the letter deck
+	 * @ensures All possible combinations from given letters
+	 * @return ArrayList<String> res
+	 * @author Maxim & Oren Arbiv
+	 */
+	public ArrayList<String> determineWord(String s, int counter) {
+
+		ArrayList<String> res = new ArrayList<>();
+		String word = "";
+		int sLength = s.length();
+
+		switch (counter) {
+		case 7:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					for (int k = 0; k < sLength; k++) {
+						for (int l = 0; l < sLength; l++) {
+							for (int m = 0; m < sLength; m++) {
+								for (int n = 0; n < sLength; n++) {
+									for (int o = 0; o < sLength; o++) {
+										if (i != j && i != k && i != l && i != m && i != n && i != o && j != k && j != l
+												&& j != m && j != n && j != o && k != l && k != m && k != n && k != o
+												&& l != m && l != n && l != o && m != n && m != o && n != o) {
+											word = word + s.charAt(i) + s.charAt(j) + s.charAt(k) + s.charAt(l)
+													+ s.charAt(m) + s.charAt(n) + s.charAt(o);
+											res.add(word);
+											word = "";
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return res;
+		case 6:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					for (int k = 0; k < sLength; k++) {
+						for (int l = 0; l < sLength; l++) {
+							for (int m = 0; m < sLength; m++) {
+								for (int n = 0; n < sLength; n++) {
+									if (i != j && i != k && i != l && i != m && i != n && j != k && j != l && j != m
+											&& j != n && k != l && k != m && k != n && l != m && l != n && m != n) {
+										word = word + s.charAt(i) + s.charAt(j) + s.charAt(k) + s.charAt(l)
+												+ s.charAt(m) + s.charAt(n);
+										res.add(word);
+										word = "";
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return res;
+		case 5:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					for (int k = 0; k < sLength; k++) {
+						for (int l = 0; l < sLength; l++) {
+							for (int m = 0; m < sLength; m++) {
+								if (i != j && i != k && i != l && i != m && j != k && j != l && j != m && k != l
+										&& k != m && l != m) {
+									word = word + s.charAt(i) + s.charAt(j) + s.charAt(k) + s.charAt(l) + s.charAt(m);
+									res.add(word);
+									word = "";
+								}
+							}
+						}
+					}
+				}
+			}
+			return res;
+		case 4:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					for (int k = 0; k < sLength; k++) {
+						for (int l = 0; l < sLength; l++) {
+							if (i != j && i != k && i != l && j != k && j != l && k != l) {
+								word = word + s.charAt(i) + s.charAt(j) + s.charAt(k) + s.charAt(l);
+								res.add(word);
+								word = "";
+							}
+						}
+					}
+				}
+			}
+			return res;
+		case 3:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					for (int k = 0; k < sLength; k++) {
+						if (i != j && i != k && j != k) {
+							word = word + s.charAt(i) + s.charAt(j) + s.charAt(k);
+							res.add(word);
+							word = "";
+						}
+					}
+				}
+			}
+			return res;
+		case 2:
+			for (int i = 0; i < sLength; i++) {
+				for (int j = 0; j < sLength; j++) {
+					if (i != j) {
+						word = word + s.charAt(i) + s.charAt(j);
+						res.add(word);
+						word = "";
+					}
+				}
+			}
+			return res;
+		case 1: 
+			for (int i = 0; i < sLength; i++) {
+				word = word + s.charAt(i);
+				res.add(word);
+				word = "";
+			}
+			return res;
+		}
+
+		res.add("");
+		return res;
 	}
 
 	@Override
@@ -112,17 +243,15 @@ public class NaiveStrategy implements Strategy {
 		/** If '*' is present in String, list with all word possibilities */
 		ArrayList<String> listWithBlanksReplaced = new ArrayList<>();
 		/** Calls method to get initial list of permuated Strings */
-		listOfAllPermutations = determineWord(formString(letterDeck));
 
-		String s = "";
 		/**
 		 * Calls method to permuate a String again but with size of the initial string
 		 * decreased until the word is of length 1
 		 */
-		for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i));
-			listOfAllPermutations.addAll(determineWord(s));
+		for (int i = 0; i < formString(letterDeck).length(); i++) {
+			listOfAllPermutations.addAll(determineWord(formString(letterDeck), formString(letterDeck).length() - i));
 		}
+
 
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -155,24 +284,17 @@ public class NaiveStrategy implements Strategy {
 				/** If word was not already played */
 				else if (!board.getPlayedWords().contains(word)) {
 					/** Cycle though words already on board */
-					System.out.println("Here1");
 					for (String playedWord : board.getPlayedWords()) {
 						/** Cycle through letters in played word */
-						System.out.println("Here2 " + playedWord);
 						for (char playedWordLetter : playedWord.toCharArray()) {
 							/** Cycle through letters in generated word */
-							System.out.println("Here3 " + playedWordLetter);
 							for (char letter : word.toCharArray()) {
 								/** Find matching letter */
-								System.out.println("Here4 " + letter);
 								if (playedWordLetter == letter) {
 									/** Stores Matching letters */
-									System.out.println("Here5");
 									char matchingLetter = letter;
-									System.out.println(letter);
 									/** If the played word is horizontal */
 									if (board.getWordDirectionMap().get(playedWord) == "H") {
-										System.out.println("Here6");
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
 											/** Get index of matching letter in playedWord */
@@ -206,7 +328,6 @@ public class NaiveStrategy implements Strategy {
 														|| !board.isFieldEmpty(checkedCoordinate[0] + j,
 																checkedCoordinate[1])) {
 													flag = false;
-													System.out.println(flag + "1");
 												}
 											}
 											/** Check if field above are empty and valid */
@@ -215,17 +336,14 @@ public class NaiveStrategy implements Strategy {
 														|| !board.isFieldEmpty(checkedCoordinate[0] - j,
 																checkedCoordinate[1])) {
 													flag = false;
-													System.out.println(flag + "2");
 												}
 											}
 											/**
 											 * Check if the newly created letter would be compatible with adjacent words
 											 */
-											System.out.println(startCoordinateOfNewWord + "SCOORDS");
 											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "V",
 													word)) {
 												flag = false;
-												System.out.println(flag + "3");
 											}
 											/**
 											 * If none of the conditions above changed the flag to false, return a word
