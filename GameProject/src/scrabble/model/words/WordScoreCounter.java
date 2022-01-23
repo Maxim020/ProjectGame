@@ -49,38 +49,42 @@ public class WordScoreCounter {
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
 		
 		for(int i = 0; i < word.toCharArray().length; i++) {
-			letterList.add(word.toUpperCase().toCharArray()[i]);
+			letterList.add(word.toCharArray()[i]);
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.TRIPLE_LETTER_SCORE)) {
-				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
+			if(board.checkFieldType(row, columnOfFirstLetter + i - 1).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(row, columnOfFirstLetter + i - 1).equals(FieldType.TRIPLE_LETTER_SCORE)) {
+				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i - 1)));
+				System.out.println(board.convert(row, columnOfFirstLetter + i - 1) + "Special");
 			}
 			
 			else {
 				score = score + letterChecker.scoreChecker(letterList.get(i));
+				System.out.println(board.convert(row, columnOfFirstLetter + i - 1));
 			}
 			
-			if(board.getDoubleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.getDoubleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getDoubleLetterScore().contains(board.convert(row, columnOfFirstLetter + i - 1))) {
+				System.out.println(board.getDoubleLetterScore());
+				board.getDoubleLetterScore().remove(board.convert(row, columnOfFirstLetter + i - 1));
+				System.out.println(board.getDoubleLetterScore());
 			}
-			if(board.getTripleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.getTripleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getTripleLetterScore().contains(board.convert(row, columnOfFirstLetter + i - 1))) {
+				board.getTripleLetterScore().remove(board.convert(row, columnOfFirstLetter + i - 1));
 			}
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.DOUBLE_WORD_SCORE) || board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.TRIPLE_WORD_SCORE)) {
+			if(board.checkFieldType(row, columnOfFirstLetter + i - 1).equals(FieldType.DOUBLE_WORD_SCORE) || board.checkFieldType(row, columnOfFirstLetter + i - 1).equals(FieldType.TRIPLE_WORD_SCORE)) {
 				
-			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
+			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i - 1)));
 			
-			if(board.getDoubleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.getDoubleWordScore().remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getDoubleWordScore().contains(board.convert(row, columnOfFirstLetter + i - 1))) {
+				board.getDoubleWordScore().remove(board.convert(row, columnOfFirstLetter + i - 1));
 			}
-			if(board.getTripleWordScore().contains(board.convert(row, columnOfFirstLetter + i))) {
-				board.getTripleWordScore().remove(board.convert(row, columnOfFirstLetter + i));
+			if(board.getTripleWordScore().contains(board.convert(row, columnOfFirstLetter + i - 1))) {
+				board.getTripleWordScore().remove(board.convert(row, columnOfFirstLetter + i - 1));
 			}
 			
 			}
@@ -116,39 +120,41 @@ public class WordScoreCounter {
 		ArrayList<Integer> listOfWordMultipliers = new ArrayList<>();
 		
 		for(int i = 0; i < word.toCharArray().length; i++) {
-			letterList.add(word.toUpperCase().toCharArray()[i]);
+			letterList.add(word.toCharArray()[i]);
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.TRIPLE_LETTER_SCORE)) {
-				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
+			if(board.checkFieldType(rowOfFirstLetter + i, column - 1).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(rowOfFirstLetter + i, column - 1).equals(FieldType.TRIPLE_LETTER_SCORE)) {
+				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column - 1)));
+				System.out.println(board.convert(rowOfFirstLetter + i, column - 1));
 			}
 			
 			else {
 				score = score + letterChecker.scoreChecker(letterList.get(i));
+				System.out.println(board.convert(rowOfFirstLetter + i, column - 1));
 			}
 			
-			if(board.getDoubleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.getDoubleLetterScore().remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getDoubleLetterScore().contains(board.convert(rowOfFirstLetter + i, column - 1))) {
+				board.getDoubleLetterScore().remove(board.convert(rowOfFirstLetter + i, column - 1));
 			}
 			
-			if(board.getTripleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.getTripleLetterScore().remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getTripleLetterScore().contains(board.convert(rowOfFirstLetter + i, column - 1))) {
+				board.getTripleLetterScore().remove(board.convert(rowOfFirstLetter + i, column - 1));
 			}
 		}
 		
 		for(int i = 0; i < letterList.size(); i++) {
 			
-			if(board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.DOUBLE_WORD_SCORE) || board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.TRIPLE_WORD_SCORE)) {
-			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
+			if(board.checkFieldType(rowOfFirstLetter + i, column - 1).equals(FieldType.DOUBLE_WORD_SCORE) || board.checkFieldType(rowOfFirstLetter + i, column - 1).equals(FieldType.TRIPLE_WORD_SCORE)) {
+			listOfWordMultipliers.add(multiplierChecker.wordMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column - 1)));
 			}
 			
-			if(board.getDoubleWordScore().contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.getDoubleWordScore().remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getDoubleWordScore().contains(board.convert(rowOfFirstLetter + i, column - 1))) {
+				board.getDoubleWordScore().remove(board.convert(rowOfFirstLetter + i, column - 1));
 			}
-			if(board.getTripleWordScore().contains(board.convert(rowOfFirstLetter + i, column))) {
-				board.getTripleWordScore().remove(board.convert(rowOfFirstLetter + i, column));
+			if(board.getTripleWordScore().contains(board.convert(rowOfFirstLetter + i, column - 1))) {
+				board.getTripleWordScore().remove(board.convert(rowOfFirstLetter + i, column - 1));
 			}
 			
 		}
