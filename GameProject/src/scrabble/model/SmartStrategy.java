@@ -135,7 +135,7 @@ public class SmartStrategy implements Strategy {
 		 */
 		
 		for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i));
+			s = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
 			listOfAllPermutations.addAll(determineWord(s));
 		}
 	
@@ -156,35 +156,16 @@ public class SmartStrategy implements Strategy {
 		/** Extending letters */
 		for (String word : board.getPlayedWords()) {
 			/** Extending from first letter */
-			if (letterDeck.getLettersInDeck().contains(word.charAt(0))) {
 
 				int[] playedWordStartCoords = board.convert(board.getWordCoordinateMap().get(word));
 
-				letterDeck.removeFromDeck(word.charAt(0));
-				ArrayList<String> permutationsWithoutFirstLetter = determineWord(formString(letterDeck));
-				String v = "";
-
-				for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-					v = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
-					permutationsWithoutFirstLetter.addAll(determineWord(v));
-				}
-
-				for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
-					for (int j = 0; j < alphabet.toCharArray().length; j++) {
-						if (containsBlank(listOfAllPermutations.get(i))) {
-							String blankReplaced = permutationsWithoutFirstLetter.get(i).replace('*',
-									alphabet.toCharArray()[j]);
-							permutationsWithoutFirstLetter.add(blankReplaced);
-						}
-					}
-				}
 				/** Horizontal from left */
 				if (board.getWordDirectionMap().get(word) == "H") {
-					for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
+					for (int i = 0; i < listOfAllPermutations.size(); i++) {
 
 						boolean flag = true;
 
-						String generatedWord = permutationsWithoutFirstLetter.get(i);
+						String generatedWord = listOfAllPermutations.get(i);
 
 						String newWord = generatedWord + word;
 
@@ -203,7 +184,7 @@ public class SmartStrategy implements Strategy {
 							}
 
 							if (adjacentChecker.areAdjacentWordsValid(board.convert(playedWordStartCoords[0],
-									playedWordStartCoords[1] - 1 - generatedWord.length()), "H", newWord)) {
+									playedWordStartCoords[1] - generatedWord.length()), "H", newWord)) {
 								flag = false;
 							}
 						}
@@ -222,11 +203,11 @@ public class SmartStrategy implements Strategy {
 				}
 				/** Vertical from top */
 				else {
-					for (int i = 0; i < permutationsWithoutFirstLetter.size(); i++) {
+					for (int i = 0; i < listOfAllPermutations.size(); i++) {
 
 						boolean flag = true;
 
-						String generatedWord = permutationsWithoutFirstLetter.get(i);
+						String generatedWord = listOfAllPermutations.get(i);
 
 						String newWord = generatedWord + word;
 
@@ -260,32 +241,11 @@ public class SmartStrategy implements Strategy {
 						}
 					}
 				}
-			}
+			
 			/** Extending from last letter */
-			else if (letterDeck.getLettersInDeck().contains(word.charAt(word.length() - 1))) {
-				int[] playedWordStartCoords = board.convert(board.getWordCoordinateMap().get(word));
-
-				letterDeck.removeFromDeck(word.charAt(word.length() - 1));
-				ArrayList<String> permutationsWithoutLastLetter = determineWord(formString(letterDeck));
-				String v = "";
-
-				for (int i = 0; i < formString(letterDeck).length() - 1; i++) {
-					v = formString(letterDeck).substring(0, formString(letterDeck).length() - (i + 1));
-					permutationsWithoutLastLetter.addAll(determineWord(v));
-				}
-
-				for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
-					for (int j = 0; j < alphabet.toCharArray().length; j++) {
-						if (containsBlank(listOfAllPermutations.get(i))) {
-							String blankReplaced = permutationsWithoutLastLetter.get(i).replace('*',
-									alphabet.toCharArray()[j]);
-							permutationsWithoutLastLetter.add(blankReplaced);
-						}
-					}
-				}
 				/** Horizontal from right */
 				if (board.getWordDirectionMap().get(word) == "H") {
-					for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
+					for (int i = 0; i < listOfAllPermutations.size(); i++) {
 
 						boolean flag = true;
 
@@ -295,7 +255,7 @@ public class SmartStrategy implements Strategy {
 
 						coordsOfLastLetterOfPlayedWord[1] = playedWordStartCoords[1] + word.length() - 1;
 
-						String generatedWord = permutationsWithoutLastLetter.get(i);
+						String generatedWord = listOfAllPermutations.get(i);
 
 						String newWord = word + generatedWord;
 
@@ -333,7 +293,7 @@ public class SmartStrategy implements Strategy {
 				}
 				/** Vertical from bottom */
 				else {
-					for (int i = 0; i < permutationsWithoutLastLetter.size(); i++) {
+					for (int i = 0; i < listOfAllPermutations.size(); i++) {
 
 						boolean flag = true;
 
@@ -343,7 +303,7 @@ public class SmartStrategy implements Strategy {
 
 						coordsOfLastLetterOfPlayedWord[1] = playedWordStartCoords[1];
 
-						String generatedWord = permutationsWithoutLastLetter.get(i);
+						String generatedWord = listOfAllPermutations.get(i);
 
 						String newWord = word + generatedWord;
 
@@ -375,9 +335,8 @@ public class SmartStrategy implements Strategy {
 							move = "";
 						}
 					}
-				}
+				}		
 			}
-		}
 
 		/** Cycle through generated list of words */
 		for (String word : listOfAllPermutations) {

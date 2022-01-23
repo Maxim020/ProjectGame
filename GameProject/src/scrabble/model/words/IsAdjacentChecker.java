@@ -30,7 +30,7 @@ public class IsAdjacentChecker {
 				return true;
 			}
 		
-			if(!board.isFieldEmpty(coords[0], coords[1] + word.length() + 1)) {
+			if(!board.isFieldEmpty(coords[0], coords[1] + word.length())) {
 				return true;
 			}
 			
@@ -54,7 +54,7 @@ public class IsAdjacentChecker {
 				return true;
 			}
 		
-			if(!board.isFieldEmpty(coords[0]  + word.length() + 1, coords[1])) {
+			if(!board.isFieldEmpty(coords[0]  + word.length(), coords[1])) {
 				return true;
 			}
 			
