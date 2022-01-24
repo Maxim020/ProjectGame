@@ -23,6 +23,7 @@ public class ComputerPlayer extends Player {
 		this.strategy = strategy;
 		this.checker = new InMemoryScrabbleWordChecker();
 		this.checkerAdjacency = new AdjacentWordChecker(board);
+		this.scoreCounter = new WordScoreCounter(board);
 	}
 
 	public ComputerPlayer(Bag bag, Board board) {
@@ -30,14 +31,15 @@ public class ComputerPlayer extends Player {
 		this.strategy = new NaiveStrategy();
 		this.checker = new InMemoryScrabbleWordChecker();
 		this.checkerAdjacency = new AdjacentWordChecker(board);
+		this.scoreCounter = new WordScoreCounter(board);
 	}
 
 	public String determineMove(Board board) {
-		if(strategy.determineMove(board, letterdeck, checker, checkerAdjacency, scoreCounter) != "") {
-			return strategy.determineMove(board, letterdeck, checker, checkerAdjacency, scoreCounter);
+		if(strategy.determineMove(board, this.getLetterDeck(), checker, checkerAdjacency, scoreCounter) != "") {
+			return strategy.determineMove(board, this.getLetterDeck(), checker, checkerAdjacency, scoreCounter);
 		}
 		else {
-			return "SWAP " + strategy.swapHand(letterdeck);
+			return "SWAP " + strategy.swapHand(this.getLetterDeck());
 		}
 	}
 }
