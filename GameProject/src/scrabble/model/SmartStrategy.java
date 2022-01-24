@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
+import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.model.words.WordScoreCounter;
 
@@ -38,7 +39,7 @@ public class SmartStrategy implements Strategy {
 	 * @return ArrayList<String> res
 	 * @author Maxim
 	 */
-	public ArrayList<String> determineWord(String s, int counter) {
+	public static ArrayList<String> determineWord(String s, int counter) {
 
 		ArrayList<String> res = new ArrayList<>();
 		String word = "";
@@ -173,8 +174,7 @@ public class SmartStrategy implements Strategy {
 	 * @return String move
 	 * @author Maxim
 	 */
-	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker,
-			AdjacentWordChecker adjacentChecker, WordScoreCounter scoreCounter) {
+	public String determineMove(Board board, LetterDeck letterDeck) {
 
 		String move = "";
 
@@ -183,6 +183,12 @@ public class SmartStrategy implements Strategy {
 		ArrayList<String> listOfExtendingMoves = new ArrayList<>();
 
 		HashMap<String, Integer> scoreMap = new HashMap<>();
+		
+		AdjacentWordChecker adjacentChecker = new AdjacentWordChecker(board);
+		
+		WordScoreCounter scoreCounter = new WordScoreCounter(board);
+		
+		ScrabbleWordChecker checker = new InMemoryScrabbleWordChecker();
 
 		// WHAT THIS DOES AT THIS POINT:
 		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
@@ -645,7 +651,7 @@ public class SmartStrategy implements Strategy {
 	 * @return true||false
 	 * @author Maxim
 	 */
-	public boolean containsBlank(String str) {
+	public static boolean containsBlank(String str) {
 		for (char c : str.toCharArray()) {
 			if (c == '*') {
 				return true;

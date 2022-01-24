@@ -13,30 +13,21 @@ public class ComputerPlayer extends Player {
 	private int score;
 	private LetterDeck letterdeck;
 	private Strategy strategy;
-	private ScrabbleWordChecker checker;
-	private AdjacentWordChecker checkerAdjacency;
-	private WordScoreCounter scoreCounter;
 	private Board board;
 	
 	public ComputerPlayer(Bag bag, Strategy strategy, Board board) {
 		super("Smart Computer", bag);
 		this.strategy = strategy;
-		this.checker = new InMemoryScrabbleWordChecker();
-		this.checkerAdjacency = new AdjacentWordChecker(board);
-		this.scoreCounter = new WordScoreCounter(board);
 	}
 
 	public ComputerPlayer(Bag bag, Board board) {
 		super("Naive Computer", bag);
 		this.strategy = new NaiveStrategy();
-		this.checker = new InMemoryScrabbleWordChecker();
-		this.checkerAdjacency = new AdjacentWordChecker(board);
-		this.scoreCounter = new WordScoreCounter(board);
 	}
 
 	public String determineMove(Board board) {
-		if(strategy.determineMove(board, this.getLetterDeck(), checker, checkerAdjacency, scoreCounter) != "") {
-			return strategy.determineMove(board, this.getLetterDeck(), checker, checkerAdjacency, scoreCounter);
+		if(strategy.determineMove(board, this.getLetterDeck()) != "") {
+			return strategy.determineMove(board, this.getLetterDeck());
 		}
 		else {
 			return "SWAP " + strategy.swapHand(this.getLetterDeck());

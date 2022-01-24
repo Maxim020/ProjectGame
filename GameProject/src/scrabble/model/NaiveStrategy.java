@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
+import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.model.words.WordScoreCounter;
 
@@ -204,10 +205,13 @@ public class NaiveStrategy implements Strategy {
 	 * @return String move
 	 * @author Maxim
 	 */
-	public String determineMove(Board board, LetterDeck letterDeck, ScrabbleWordChecker checker,
-			AdjacentWordChecker adjacentChecker, WordScoreCounter scoreCounter) {
+	public String determineMove(Board board, LetterDeck letterDeck) {
 
 		String move = "";
+		
+		AdjacentWordChecker adjacentChecker = new AdjacentWordChecker(board);
+		
+		ScrabbleWordChecker checker = new InMemoryScrabbleWordChecker();
 
 		// WHAT THIS DOES AT THIS POINT:
 		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
