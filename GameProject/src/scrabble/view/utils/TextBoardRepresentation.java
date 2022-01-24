@@ -123,7 +123,7 @@ public class TextBoardRepresentation {
      * TESTING
      */
     public String addBag(){
-        return bag.getLetterList().toString();
+        return "Size of Bag: "+bag.getLetterList().size()+"\n"+bag.getLetterList().toString();
     }
 
     /**

@@ -13,8 +13,8 @@ public class LetterDeck {
 	//Constructor
 	public LetterDeck(Bag bag) {
 		this.lettersInDeck = new ArrayList<>();
-		this.initializeDeck(bag);
 		this.bag = Bag.getInstance();
+		this.initializeDeck(bag);
 	}
 	
 	//Methods

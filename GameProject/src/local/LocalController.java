@@ -224,7 +224,7 @@ public class LocalController {
         }
         else {
             if(parts.length == 2){
-                //SWAP TEST
+                //SWAP ABC
                 exchangeTiles(parts, currentPlayer, bag, board, false);
             }
             //SWAP
@@ -255,14 +255,14 @@ public class LocalController {
                 if(direction.equalsIgnoreCase("h")) {
                     //Only exchange tiles if a square is not already occupied by a tile
                     if(board.isFieldEmpty(rowcol[0],(rowcol[1]+i))){
-                        processExchangeTile(tiles, i, currentPlayer, bag);
+                        processExchangeTile(tiles, i, currentPlayer, bag, word);
                     }
                 }
                 else {
                     //Only exchange tiles if a square is not already occupied by a tile
                     System.out.println("board.isFieldEmpty((rowcol[0]+i),rowcol[1]): "+board.isFieldEmpty((rowcol[0]+i),rowcol[1]));
                     if(board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
-                        processExchangeTile(tiles, i, currentPlayer, bag);
+                        processExchangeTile(tiles, i, currentPlayer, bag, word);
                     }
                 }
             }
@@ -272,7 +272,7 @@ public class LocalController {
             String tiles = parts[1];
 
             for (int i = 0; i < tiles.length(); i++) {
-                processExchangeTile(tiles, i, currentPlayer, bag); //Was passiert, wenn ich lower case swappen will?
+                processExchangeTile(tiles, i, currentPlayer, bag, word);
 //                currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i));
 //                bag.removeFromBag(tiles.charAt(i));
 //                bag.shuffleBag();
@@ -289,18 +289,22 @@ public class LocalController {
      * @param bag - a universal bag of letters
      * @author Yasin
      */
-    public static void processExchangeTile(String tiles, int i, Player currentPlayer, Bag bag){
+    public static void processExchangeTile(String tiles, int i, Player currentPlayer, Bag bag, boolean word){
         if (Character.isLowerCase(tiles.charAt(i))) {
             currentPlayer.getLetterDeck().removeFromDeck('*'); //removes old tiles from deck
-            bag.removeFromBag('*'); //removes old tile from bag --> ist das hier richtig von der logik?
+            if(word){
+                bag.removeFromBag('*'); //removes old tile from bag
+            }
         }
         else {
             System.out.println("currentPlayer.getLetterDeck().removeFromDeck: "+tiles.charAt(i));
             currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //shuffle bag
-            bag.removeFromBag(tiles.charAt(i)); //Add new Tiles to deck
+            if(word){
+                bag.removeFromBag(tiles.charAt(i)); //Add new Tiles to deck
+            }
         }
         bag.shuffleBag();
-        currentPlayer.getLetterDeck().addToDeck(1);
+        currentPlayer.getLetterDeck().addToDeck(1); //Already removes from bag
     }
 
 
