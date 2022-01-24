@@ -108,7 +108,6 @@ public class LocalController {
                     }
                     if(isWordValid) {
                         processMove(move, board, playerList.getCurrentPlayer(), bag);
-                        //board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]); does not work
                     }
 
                 } else {
@@ -221,6 +220,7 @@ public class LocalController {
             exchangeTiles(parts, currentPlayer, bag, board, true); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
             board.setWord(parts[1], parts[2], parts[3]);
             board.setBoardEmpty(false);
+            board.addPlayedWords(parts[1], parts[2], parts[3]);
         }
         else {
             if(parts.length == 2){
