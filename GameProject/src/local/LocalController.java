@@ -1,5 +1,6 @@
 package local;
 
+import local.view.HandleInput;
 import local.view.LocalTUI;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
@@ -8,56 +9,30 @@ import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterScoreChecker;
 import scrabble.view.utils.Countdown;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * I find it easier to program the game with everything in the main method
- * If something works for sure it can be moved and packed into a method
- */
-
 public class LocalController {
     public static void main(String[] args) {
-        /**
-         * Scans user input for the name of all players and if wanted any computer players
-         * Creates universal PlayerList (Singleton Design Pattern)
-         */
+
         boolean continueGame = true;
-        Scanner scanner = new Scanner(System.in);
 
         while(continueGame) {
-
-            /** Scans user input for the name of all players and if wanted any computer players */
-            String[] players;
-            int amountOfPlayers;
-
-            while (true) {
-                System.out.println("> Please type in the name of the players with a space in between (2-4)");
-                System.out.println("> If you want to play against the computer, type '-N' for a naive and '-S' for a smart computer");
-                String playersNames = scanner.nextLine();
-                players = playersNames.split(" ");
-                amountOfPlayers = players.length;
-
-                if (amountOfPlayers < 2 || amountOfPlayers > 4){
-                    System.out.println("\nScrabble needs at least 2 and maximum 4 Players");
-                } else {
-                    break;
-                }
-            }
-
-            /** Instantiates universal PlayerList, Bag and other important objects */
-            PlayerList playerList = PlayerList.getInstance();
+            /** Instantiates a Board, a Game, a universal PlayerList and Bag*/
             Board board = new Board();
-            playerList.setPlayers(createPlayerArrayList(players, board));
+            PlayerList playerList = PlayerList.getInstance();
+            playerList.setPlayers(new HandleInput().getPlayers(board));
+
             Bag bag = Bag.getInstance();
             Game game = new Game(board, bag);
 
+            int amountOfPlayers = playerList.getPlayers().size();
             int numberOfTurn = 0;
             int playersTurn;
 
+            //game.start
             while (game.isGameRunning()) {
 
                 /** Allows for rotation of players turn */
@@ -67,6 +42,8 @@ public class LocalController {
                 /** Creates localTUI and connects it with board and currentPlayer */
                 LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
                 localTUI.updateBoard();
+
+                HandleInput handleInputMove = new HandleInput(board, playerList.getCurrentPlayer());
 
                 /** DetermineMove() and Validates input */
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
@@ -79,47 +56,21 @@ public class LocalController {
                     countdown.counter(counter);
                     */
 
-
-                    String move = scanner.nextLine();
-
-
-                    //Program keeps asking user for input except if it's an InvalidWordException. Then the user loses his/her turn
-                    boolean isWordValid; //Zusammenspiel von updateTUI updateTUI
-
-                    while (true) {
-                        try {
-                            localTUI.validateInput(move);
-                            isWordValid = true;
-                            break;
-
-                        } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
-                                UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException e) {
-
-                            e.printStackTrace();
-                            System.out.println("Please type in a valid move");
-                            move = scanner.nextLine();
-
-                        } catch (InvalidWordException e) {
-                            e.printStackTrace();
-                            System.out.println(PlayerList.getInstance().getCurrentPlayer().getName() + " lost his turn");
-                            isWordValid = false;
-                            break;
-                        }
-                    }
-                    if(isWordValid) {
+                   //validates and asks for input processes move if word is valid
+                    if(handleInputMove.askForMove()){
+                        String move = handleInputMove.getLastInput();
                         processMove(move, board, playerList.getCurrentPlayer(), bag);
-                        //board.addPlayedWords(move.split(" ")[1], move.split(" ")[2], move.split(" ")[3]); does not work
                     }
-
-                } else {
+                }
+                else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
                     String move = computerPlayer.determineMove(board);
-                    localTUI.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
+                    handleInputMove.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
 
                     processMove(move, board, playerList.getCurrentPlayer(), bag);
                 }
 
-                /** breakes out of second while loop proivded the game ended */
+                /** breakes out of second while loop provided the game ended */
                 if(checkEndOfGame(bag, playerList.getCurrentPlayer())){
                     System.out.println("Either a player played all tiles left or there are no more possibilities");
                     break;
@@ -134,13 +85,8 @@ public class LocalController {
                             announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
 
             /** Ask for another game */
-            System.out.println("Do you want to play another Game? (y/n)");
-            String decision = scanner.nextLine();
-            continueGame = decision.equals("y");
-
+            continueGame = new HandleInput().askForNextGame();
         }
-
-        scanner.close();
     }
 
     /**
@@ -305,32 +251,5 @@ public class LocalController {
         }
         bag.shuffleBag();
         currentPlayer.getLetterDeck().addToDeck(1); //Already removes from bag
-    }
-
-
-    /**
-     * @requires the nr. of total players to be at least 2 and max. 4
-     * @param players a String array that holds the name (and type) of all Players
-     * @return a list of all Players
-     * @author Yasin
-     */
-    public static List<Player> createPlayerArrayList(String[] players, Board board){
-        if (players.length < 2 || players.length > 4){
-            throw new IllegalArgumentException();
-        }
-
-        List<Player> playerArrayList = new ArrayList<>();
-
-        for (int i=0; i<players.length; i++){
-            if (players[i].equals("-N")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board));
-            } else if (players[i].equals("-S")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board));
-            } else {
-                playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
-            }
-        }
-
-        return playerArrayList;
     }
 }

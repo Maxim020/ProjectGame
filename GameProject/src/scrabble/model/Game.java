@@ -27,10 +27,11 @@ public class Game {
 	public void start() {
 		while (isGameRunning){
 			board.reset();
-			play();
+			processTurns();
 			/**
 			 * Scanner does not work
 			 */
+
 //			System.out.println("\n> Play another time? (y/n)");
 //			Scanner scanner = new Scanner(System.in);
 //			String input = scanner.nextLine();
@@ -38,13 +39,12 @@ public class Game {
 //			continueGame = input.equals("y");
 		}
 
-//		if(listOfPlayers.size() <= 2) {System.out.println("A game must have at least two players");}
-//		else {
-//
-//		}
+
 	}
 
-	public void play(){}
+	public void processTurns(){
+
+	}
 
 	public PlayerList getPlayerList() {
 		return playerList;
