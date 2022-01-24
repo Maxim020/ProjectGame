@@ -37,10 +37,13 @@ class AdjacentWordCheckerTest {
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
-		board.setWord("H8", "h", "hello");
-		board.setWord("J8", "v", "loan");
+		board.setWord("H8", "H", "HELL");
+		board.setWord("H9", "H", "ILO");
+		board.setWord("I10", "H", "KW");
+		board.setWord("J7", "H", "SL");
+		board.setWord("K6", "H", "A");
 		
-		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
+		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELL"));
 		
 	}
 	

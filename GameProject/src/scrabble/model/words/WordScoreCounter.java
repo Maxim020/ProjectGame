@@ -56,18 +56,14 @@ public class WordScoreCounter {
 			
 			if(board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(row, columnOfFirstLetter + i).equals(FieldType.TRIPLE_LETTER_SCORE)) {
 				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(row, columnOfFirstLetter + i)));
-				System.out.println(board.convert(row, columnOfFirstLetter + i) + "Special");
 			}
 			
 			else {
 				score = score + letterChecker.scoreChecker(letterList.get(i));
-				System.out.println(board.convert(row, columnOfFirstLetter + i));
 			}
 			
 			if(board.getDoubleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
-				System.out.println(board.getDoubleLetterScore());
 				board.getDoubleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
-				System.out.println(board.getDoubleLetterScore());
 			}
 			if(board.getTripleLetterScore().contains(board.convert(row, columnOfFirstLetter + i))) {
 				board.getTripleLetterScore().remove(board.convert(row, columnOfFirstLetter + i));
@@ -127,12 +123,10 @@ public class WordScoreCounter {
 			
 			if(board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.DOUBLE_LETTER_SCORE) || board.checkFieldType(rowOfFirstLetter + i, column).equals(FieldType.TRIPLE_LETTER_SCORE)) {
 				score = score + (letterChecker.scoreChecker(letterList.get(i)) * multiplierChecker.letterMultiplierChecker(board.checkFieldType(rowOfFirstLetter + i, column)));
-				System.out.println(board.convert(rowOfFirstLetter + i, column));
 			}
 			
 			else {
 				score = score + letterChecker.scoreChecker(letterList.get(i));
-				System.out.println(board.convert(rowOfFirstLetter + i, column));
 			}
 			
 			if(board.getDoubleLetterScore().contains(board.convert(rowOfFirstLetter + i, column))) {

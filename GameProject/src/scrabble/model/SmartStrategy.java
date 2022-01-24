@@ -21,50 +21,12 @@ public class SmartStrategy implements Strategy {
 	 * @return String s
 	 * @author Maxim
 	 */
-	public String formString(LetterDeck letterDeck) {
+	public static String formString(LetterDeck letterDeck) {
 		String s = "";
 		for (int i = 0; i < letterDeck.getLettersInDeck().size(); i++) {
 			s = s + letterDeck.getLettersInDeck().get(i);
 		}
 		return s;
-	}
-
-	/**
-	 * Recursively makes permutations from given string and adds them to the list.
-	 * The method calls itself until the String "" is added to the list.
-	 * 
-	 * @param String s
-	 * @requires s != null
-	 * @ensures return of word contained in the scrabble dictionary
-	 * @return ArrayList<String> Res
-	 * @author Maxim
-	 * 
-	 * !!OBSOLETE!!
-	 */
-	public ArrayList<String> determineWordOBSOLETE(String s) {
-
-		if (s.length() == 0) {
-
-			ArrayList<String> empty = new ArrayList<>();
-			empty.add("");
-			return empty;
-		}
-
-		char ch = s.charAt(0);
-
-		String substring = s.substring(1);
-
-		ArrayList<String> prevResult = determineWordOBSOLETE(substring);
-
-		ArrayList<String> Res = new ArrayList<>();
-
-		for (String val : prevResult) {
-			for (int i = 0; i <= val.length(); i++) {
-				Res.add(val.substring(0, i) + ch + val.substring(i));
-			}
-		}
-
-		return Res;
 	}
 
 	/**
@@ -74,7 +36,7 @@ public class SmartStrategy implements Strategy {
 	 * @requires s != null && counter starts from the length of the letter deck
 	 * @ensures All possible combinations from given letters
 	 * @return ArrayList<String> res
-	 * @author Maxim & Oren Arbiv
+	 * @author Maxim
 	 */
 	public ArrayList<String> determineWord(String s, int counter) {
 
@@ -195,6 +157,7 @@ public class SmartStrategy implements Strategy {
 		}
 
 		res.add("");
+		System.out.println(res);
 		return res;
 	}
 

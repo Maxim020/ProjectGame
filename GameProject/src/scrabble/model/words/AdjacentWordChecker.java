@@ -58,6 +58,8 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
+				System.out.println(adjacentWord);
+				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
 				}
@@ -84,9 +86,14 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
+				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
+				
+				System.out.println("Here");
+				System.out.println(adjacentWord);
+				
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
@@ -146,6 +153,7 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
+				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;
 				}
@@ -167,22 +175,16 @@ public class AdjacentWordChecker {
 				
 				charList.add(0, board.getTile(row + i, column));
 				
-				System.out.println(charList);
-				
 				while(board.getTile(row + i, column - k) != ' ') {
 					charList.add(0,board.getTile(row + i, column - k));
 					k = k + 1;
 				}
 				
 				
-				
-				System.out.println(charList);
-				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				System.out.println(adjacentWord);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;
