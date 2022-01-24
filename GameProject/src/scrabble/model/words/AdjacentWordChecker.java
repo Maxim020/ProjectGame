@@ -25,12 +25,12 @@ public class AdjacentWordChecker {
 	 * @param String word
 	 * @param int row
 	 * @param int column
-	 * @requires word != null && 0 > row < 15 && 0 > column < 15
+	 * @requires word != null && 0 >= row < 15 && 0 >= column < 15
 	 * @ensures true or false return
 	 * @return true || false
 	 * @author Maxim
 	 */
-	public boolean checkHorizontalWordAdjacency(String word, int row, int column) {
+	public boolean checkHorizontalWordAdjacency(String word, int column, int row) {
 		
 		int i = 0;
 		
@@ -45,7 +45,7 @@ public class AdjacentWordChecker {
 			int j = 1;
 			int k = 1;
 			
-			if(board.isFieldEmpty(row - 1, column + i)) {
+			if(board.isFieldValid(row - 1, column + i) && board.isFieldEmpty(row - 1, column + i)) {
 				
 				while(board.getTile(row + k, column + i) != ' ') {
 					charList.add(board.getTile(row + k, column + i));
@@ -57,8 +57,6 @@ public class AdjacentWordChecker {
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
-				
-				System.out.println(adjacentWord);
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
@@ -72,7 +70,7 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else {
+			else if(board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i) && board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) {
 				
 				while(board.getTile(row + j, column + i) != ' ') {
 					charList.add(board.getTile(row + j, column + i));
@@ -91,10 +89,6 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				System.out.println("Here");
-				System.out.println(adjacentWord);
-				
-				
 				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
 					flag2 = true;
 				}
@@ -110,6 +104,46 @@ public class AdjacentWordChecker {
 			i = i + 1;
 		}
 		
+		int l = 1;
+		int m = 1;
+		ArrayList<Character> charList1 = new ArrayList<>();
+		ArrayList<Character> charList2 = new ArrayList<>();
+		
+		while(board.isFieldValid(row, column - l) && !board.isFieldEmpty(row, column - l)) {
+			charList1.add(board.getTile(row, column - l));
+			l = l + 1;
+		}
+		
+		if(!charList1.isEmpty()) {
+			
+			String s = word;
+		
+			for(int o = 0; o < charList1.size(); o++) {
+				s = charList1.get(o)  + s;
+			}
+		
+			if(wordChecker.isValidWord(s) == null) {
+				flag = false;
+			}
+		}
+		
+		while(board.isFieldValid(row, column + word.length() - 1 + m) && !board.isFieldEmpty(row, column + word.length() - 1 + m)) {
+			charList2.add(board.getTile(row, column + word.length() - 1 + m));
+			m = m + 1;
+		}
+		
+			if(!charList2.isEmpty()) {
+				
+				String s = word;
+		
+				for(int p = 0; p < charList2.size(); p++) {
+					s = s + charList2.get(p);
+				}
+		
+			if(wordChecker.isValidWord(s) == null) {
+				flag = false;
+			}
+		}
 		return flag;
 	}
 	
@@ -140,7 +174,7 @@ public class AdjacentWordChecker {
 			int j = 1;
 			int k = 1;
 			
-			if(board.isFieldEmpty(row + i, column - 1)) {
+			if(board.isFieldValid(row + i, column - 1) && board.isFieldEmpty(row + i, column - 1)) {
 				
 				while(board.getTile(row + i, column + k) != ' ') {
 					charList.add(board.getTile(row + i, column + k));
@@ -166,7 +200,7 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else {
+			else if (board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1) && board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1)) {
 				
 				while(board.getTile(row + i, column + j) != ' ') {
 					charList.add(board.getTile(row + i, column + j));
@@ -200,6 +234,48 @@ public class AdjacentWordChecker {
 			
 			i = i + 1;
 		}
+		
+		int l = 1;
+		int m = 1;
+		ArrayList<Character> charList1 = new ArrayList<>();
+		ArrayList<Character> charList2 = new ArrayList<>();
+		
+		while(board.isFieldValid(row - l, column) && !board.isFieldEmpty(row - l, column)) {
+			charList1.add(board.getTile(row - l, column));
+			l = l + 1;
+		}
+		
+		if(!charList1.isEmpty()) {
+			
+			String s = word;
+		
+			for(int o = 0; o < charList1.size(); o++) {
+				s = charList1.get(o)  + s;
+			}
+		
+			if(wordChecker.isValidWord(s) == null) {
+				flag = false;
+			}
+		}
+		
+		while(board.isFieldValid(row  + word.length() - 1 + m , column) && !board.isFieldEmpty(row  + word.length() - 1 + m, column)) {
+			charList2.add(board.getTile(row  + word.length() - 1 + m , column));
+			m = m + 1;
+		}
+		
+			if(!charList2.isEmpty()) {
+				
+				String s = word;
+		
+				for(int p = 0; p < charList2.size(); p++) {
+					s = s + charList2.get(p);
+				}
+		
+			if(wordChecker.isValidWord(s) == null) {
+				flag = false;
+			}
+		}
+		
 		return flag;
 	}
 	
@@ -219,10 +295,10 @@ public class AdjacentWordChecker {
 		int [] coords = board.convert(coordinate);
 		
 		if(direction.equalsIgnoreCase("H")) {
-			return checkHorizontalWordAdjacency(word, coords[0], coords[1]);
+			return checkHorizontalWordAdjacency(word, coords[1], coords[0]);
 		}
 		else {
-			return checkVerticalWordAdjacency(word, coords[0], coords[1]);
+			return checkVerticalWordAdjacency(word, coords[1], coords[0]);
 		}
 		
 	}
