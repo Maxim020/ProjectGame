@@ -23,21 +23,15 @@ class TestNaiveStrategy {
 	
 	NaiveStrategy naive;
 	LetterDeck deck;
-	ScrabbleWordChecker checker;
 	Board board;
 	Bag bag;
 	PlayerList playerlist;
 	List<Player> players;
-	AdjacentWordChecker adjacentChecker;
-	WordScoreCounter scoreCounter;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		naive = new NaiveStrategy();
-		checker = new InMemoryScrabbleWordChecker();
 		board = new Board();
-		adjacentChecker = new AdjacentWordChecker(board);
-		scoreCounter = new WordScoreCounter(board);
 		playerlist = PlayerList.getInstance();
 		players = new ArrayList<>();
 	}
@@ -52,7 +46,7 @@ class TestNaiveStrategy {
 		playerlist.setCurrentPlayer(0);
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = naive.determineMove(board, deck, checker, adjacentChecker, scoreCounter);
+		String s = naive.determineMove(board, deck);
 		String[] splt = s.split(" ");
 		System.out.println(splt[1]);
 		System.out.println(splt[2]);
@@ -82,7 +76,7 @@ class TestNaiveStrategy {
 		board.addPlayedWords("H8", "H", "ADVANCE");
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = naive.determineMove(board, deck, checker, adjacentChecker, scoreCounter);
+		String s = naive.determineMove(board, deck);
 		String[] splt = s.split(" ");
 		System.out.println(splt[1]);
 		System.out.println(splt[2]);

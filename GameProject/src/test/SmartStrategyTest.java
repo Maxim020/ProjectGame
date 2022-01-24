@@ -24,21 +24,15 @@ class SmartStrategyTest {
 
 	SmartStrategy smart;
 	LetterDeck deck;
-	ScrabbleWordChecker checker;
 	Board board;
 	Bag bag;
 	PlayerList playerlist;
 	List<Player> players;
-	AdjacentWordChecker adjacentChecker;
-	WordScoreCounter scoreCounter;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		smart = new SmartStrategy();
-		checker = new InMemoryScrabbleWordChecker();
 		board = new Board();
-		adjacentChecker = new AdjacentWordChecker(board);
-		scoreCounter = new WordScoreCounter(board);
 		playerlist = PlayerList.getInstance();
 		players = new ArrayList<>();
 		
@@ -55,7 +49,7 @@ class SmartStrategyTest {
 		playerlist.setCurrentPlayer(0);
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = smart.determineMove(board, deck, checker, adjacentChecker, scoreCounter);
+		String s = smart.determineMove(board, deck);
 		System.out.print(s);
 		if(!s.equals("")) {
 		String[] splt = s.split(" ");
@@ -86,7 +80,7 @@ class SmartStrategyTest {
 		board.addPlayedWords("H8", "H", "ADVANCE");
 		
 		System.out.println(deck.getLettersInDeck());
-		String s = smart.determineMove(board, deck, checker, adjacentChecker, scoreCounter);
+		String s = smart.determineMove(board, deck);
 		String[] splt = s.split(" ");
 		System.out.println(splt[1]);
 		System.out.println(splt[2]);
