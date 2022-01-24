@@ -13,6 +13,7 @@ public class DeadEndChecker {
 	/**
 	 * Method for checking whether there is a possible word to be played from the current decks of players.
 	 * Should be called near the end of the game, preferably when the bag is empty.
+	 * NOTE: Uses same code as smart strategy to determine whether there is a word that can be played.
 	 * @requires PlayerList to be instantiated
 	 * @ensures return of true when no more words can be created
 	 * @return true || false
@@ -51,6 +52,12 @@ public class DeadEndChecker {
 		}
 		
 		listOfWords.addAll(listWithBlanksReplaced);
+		
+		for(int i = 0; i < listOfWords.size(); i++) {
+			if(checker.isValidWord(listOfWords.get(i)) != null) {
+				return false;
+			}
+		}
 		
 		/** Extending letters */
 		for (String word : board.getPlayedWords()) {
