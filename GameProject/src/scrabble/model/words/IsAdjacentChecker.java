@@ -24,6 +24,13 @@ public class IsAdjacentChecker {
 		
 		int[] coords = board.convert(coordinate);
 		
+		
+		for(int i = 0; i < board.getPlayedWords().size(); i++) {
+			if(word.contains(board.getPlayedWords().get(i))) {
+				return true;
+			}
+		}
+		
 		if(direction.equalsIgnoreCase("H")) {
 		
 			if(!board.isFieldEmpty(coords[0], coords[1] - 1)) {
