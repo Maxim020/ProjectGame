@@ -1,8 +1,9 @@
-package scrabble.view;
+package local.view;
 
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
+import scrabble.model.letters.CrossChecker;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.IsAdjacentChecker;
@@ -152,7 +153,7 @@ public class InputHandler {
                 board.setCenterCovered(true);
             }
 
-            if(!command.equalsIgnoreCase("word")){
+            if(!command.equalsIgnoreCase("word") || startCoordinate.length() < 2 || startCoordinate.length() > 3 || direction.length() != 1){
                 throw new UnknownCommandException();
             }
 
@@ -172,7 +173,9 @@ public class InputHandler {
                 throw new WordDoesNotFitException();
             }
 
-            //if()
+            if(CrossChecker.isMoveValid(board,startCoordinate,direction,word)){
+                throw new scrabble.model.exceptions.InvalidCrossException();
+            }
         }
 
         //Swap tiles

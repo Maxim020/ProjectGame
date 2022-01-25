@@ -1,11 +1,12 @@
 package local;
 
-import scrabble.view.InputHandler;
+import local.view.InputHandler;
 import local.view.LocalTUI;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
 import scrabble.model.letters.Bag;
+import scrabble.model.letters.DeadEndChecker;
 import scrabble.model.letters.LetterScoreChecker;
 
 import java.util.ArrayList;

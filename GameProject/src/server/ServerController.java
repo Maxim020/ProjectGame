@@ -1,10 +1,24 @@
 package server;
+import scrabble.model.Board;
+import scrabble.model.PlayerList;
+import local.view.InputHandler;
+
 import java.io.*;
 import java.net.*;
 
 
 
 public class ServerController {
+    private String communication;
+
+    public String getCommunication() {
+        return communication;
+    }
+
+    public void setCommunication(String communication) {
+        this.communication = communication;
+    }
+
     public static void main(String[] args) {
         ServerSocket server = null;
 
@@ -20,13 +34,13 @@ public class ServerController {
                 Socket client = server.accept();
 
                 // Displaying that new client is connected to server
-                System.out.println("WELCOME" + client.getInetAddress().getHostAddress());
+                System.out.println("Client " + client.getInetAddress().getHostAddress() +" has successfully connected to this server");
 
                 // create a new thread object
-                ClientHandler clientSock = new ClientHandler(client);
+                ClientHandler clientHandler = new ClientHandler(client);
 
                 // This thread will handle the client separately
-                new Thread(clientSock).start();
+                new Thread(clientHandler).start();
             }
         }
         catch (IOException e) {
@@ -42,13 +56,16 @@ public class ServerController {
                 }
             }
         }
+
+        PlayerList playerList = PlayerList.getInstance();
+        Board board = new Board();
+        //playerList.setPlayers();
+
     }
 
-    // ClientHandler class
     private static class ClientHandler implements Runnable {
         private final Socket clientSocket;
 
-        // Constructor
         public ClientHandler(Socket socket){
             this.clientSocket = socket;
         }
@@ -57,22 +74,24 @@ public class ServerController {
 
             PrintWriter out = null;
             BufferedReader in = null;
+
             try {
-
-                // get the outputstream of client (Clients perspective)
+                // get the outputstream and inputstream of client (Clients perspective)
                 out = new PrintWriter(clientSocket.getOutputStream(), true);
-
-                // get the inputstream of client
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-                String line;
+
+
                 //Reads message from Client
+                String line;
                 while ((line = in.readLine()) != null) {
                     //Process Input with control flow
 
+                    //Send Input Player to Server Controller
+
                     //WELCOME CLIENT
-                    System.out.printf("WELCOME: %s\n", line);
-                    out.println(line);
+                    System.out.printf("> Message from Client: %s\n", line);
+                    out.println(line); //?
                 }
             }
             catch (IOException e) {

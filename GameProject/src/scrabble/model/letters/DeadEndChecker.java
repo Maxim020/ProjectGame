@@ -1,8 +1,12 @@
-package scrabble.model;
+package scrabble.model.letters;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import scrabble.model.Board;
+import scrabble.model.Player;
+import scrabble.model.PlayerList;
+import scrabble.model.SmartStrategy;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
