@@ -45,6 +45,14 @@ public class AdjacentWordChecker {
 			int j = 1;
 			int k = 1;
 			
+			if(row - 1 > 14 || column + i < 0 || row - 1 < 0 || column + i > 14) {
+				return false;
+			}
+			
+			if(row + j > 14 || row - k < 0) {
+				return false;
+			}
+			
 			if(board.isFieldValid(row - 1, column + i) && board.isFieldEmpty(row - 1, column + i)) {
 				
 				while(board.getTile(row + k, column + i) != ' ') {
@@ -108,6 +116,10 @@ public class AdjacentWordChecker {
 		int m = 1;
 		ArrayList<Character> charList1 = new ArrayList<>();
 		ArrayList<Character> charList2 = new ArrayList<>();
+		
+		if(column - l < 0 || column  + word.length() - 1 + m > 14) {
+			return false;
+		}
 		
 		while(board.isFieldValid(row, column - l) && !board.isFieldEmpty(row, column - l)) {
 			charList1.add(board.getTile(row, column - l));
@@ -174,6 +186,14 @@ public class AdjacentWordChecker {
 			int j = 1;
 			int k = 1;
 			
+			if(row + i > 14 || column - 1 < 0 || row + i < 0 || column + 1 > 14) {
+				return false;
+			}
+			
+			if(column + j > 14 || column - k < 0) {
+				return false;
+			}
+			
 			if(board.isFieldValid(row + i, column - 1) && board.isFieldEmpty(row + i, column - 1)) {
 				
 				while(board.getTile(row + i, column + k) != ' ') {
@@ -238,6 +258,10 @@ public class AdjacentWordChecker {
 		int m = 1;
 		ArrayList<Character> charList1 = new ArrayList<>();
 		ArrayList<Character> charList2 = new ArrayList<>();
+		
+		if(row - l < 0 || row  + word.length() - 1 + m > 14) {
+			return false;
+		}
 		
 		while(board.isFieldValid(row - l, column) && !board.isFieldEmpty(row - l, column)) {
 			charList1.add(board.getTile(row - l, column));

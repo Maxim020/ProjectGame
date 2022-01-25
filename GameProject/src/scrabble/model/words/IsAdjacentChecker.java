@@ -24,6 +24,10 @@ public class IsAdjacentChecker {
 		
 		int[] coords = board.convert(coordinate);
 		
+		if(coords[0] < 0 || coords[0] > 14 || coords[1] < 0 || coords[1] > 14) {
+			return false;
+		}
+		
 		
 		for(int i = 0; i < board.getPlayedWords().size(); i++) {
 			if(word.contains(board.getPlayedWords().get(i))) {

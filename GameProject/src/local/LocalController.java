@@ -54,13 +54,13 @@ public class LocalController {
                 else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
                     String move = computerPlayer.determineMove(board);
-                    inputHandlerMove.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
+
 
                     processMove(move, board, playerList.getCurrentPlayer(), bag);
                 }
 
-                /** breakes out of second while loop provided the game ended */
-                if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
+                /** breaks out of second while loop provided the game ended */
+                if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board) && bag.getLetterList().size() <= 7){
                     System.out.println("Either a player played all tiles left or there are no more possibilities"); //InputHandler or local TUI
                     break;
                 }

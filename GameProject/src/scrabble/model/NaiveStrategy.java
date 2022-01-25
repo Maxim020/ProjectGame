@@ -61,11 +61,13 @@ public class NaiveStrategy implements Strategy {
 
 		return Res;
 	}
-	
+
 	/**
-	 * This method is used to generate all the possible combinations of words from a letter deck
+	 * This method is used to generate all the possible combinations of words from a
+	 * letter deck
+	 * 
 	 * @param String s
-	 * @param int counter - necessary for the switch case
+	 * @param int    counter - necessary for the switch case
 	 * @requires s != null && counter starts from the length of the letter deck
 	 * @ensures All possible combinations from given letters
 	 * @return ArrayList<String> res
@@ -180,7 +182,7 @@ public class NaiveStrategy implements Strategy {
 				}
 			}
 			return res;
-		case 1: 
+		case 1:
 			for (int i = 0; i < sLength; i++) {
 				word = word + s.charAt(i);
 				res.add(word);
@@ -208,9 +210,9 @@ public class NaiveStrategy implements Strategy {
 	public String determineMove(Board board, LetterDeck letterDeck) {
 
 		String move = "";
-		
+
 		AdjacentWordChecker adjacentChecker = new AdjacentWordChecker(board);
-		
+
 		ScrabbleWordChecker checker = new InMemoryScrabbleWordChecker();
 
 		// WHAT THIS DOES AT THIS POINT:
@@ -256,7 +258,6 @@ public class NaiveStrategy implements Strategy {
 			listOfAllPermutations.addAll(determineWord(formString(letterDeck), formString(letterDeck).length() - i));
 		}
 
-
 		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		/** Blank replacer */
@@ -276,9 +277,7 @@ public class NaiveStrategy implements Strategy {
 			/** Suitable word found */
 			if (checker.isValidWord(word) != null) {
 				/** If first turn play from center */
-				System.out.println(word);
 				if (board.getPlayedWords().isEmpty()) {
-					System.out.println("First Word");
 					/**
 					 * We dont have to check if the word will fit here because it will always fit
 					 */
@@ -298,7 +297,7 @@ public class NaiveStrategy implements Strategy {
 									/** Stores Matching letters */
 									char matchingLetter = letter;
 									/** If the played word is horizontal */
-									if (board.getWordDirectionMap().get(playedWord) == "H") {
+									if (board.getWordDirectionMap().get(playedWord).equals("H")) {
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
 											/** Get index of matching letter in playedWord */
@@ -317,50 +316,61 @@ public class NaiveStrategy implements Strategy {
 											 */
 											boolean flag = true;
 											/** Create Starting coordinate of new word */
-											String startCoordinateOfNewWord = board.convert(
-													board.convert(coordsOfMatchingLetter)[0] - indexMatchingLetterWord,
-													board.convert(coordsOfMatchingLetter)[1]);
-											/** How far up does the word go above the matching letter */
-											int up = 0 + indexMatchingLetterWord;
-											/** How far down does the word go under the matching letter */
-											int down = word.length() - 1 - indexMatchingLetterWord;
-											/** Converted coordinates of matching letter */
-											int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
-											/** Check if fields below are empty and valid */
-											for (int j = down; j >= 1; j--) {
-												if (!board.isFieldValid(checkedCoordinate[0] + j, checkedCoordinate[1])
-														|| !board.isFieldEmpty(checkedCoordinate[0] + j,
-																checkedCoordinate[1])) {
+											String startCoordinateOfNewWord = "";
+
+											if (playedWordStartCoords[0] - indexMatchingLetterWord < 15
+													&& playedWordStartCoords[0] - indexMatchingLetterWord >= 0) {
+												startCoordinateOfNewWord = board.convert(
+														board.convert(coordsOfMatchingLetter)[0]
+																- indexMatchingLetterWord,
+														board.convert(coordsOfMatchingLetter)[1]);
+											}
+											if (!startCoordinateOfNewWord.equals("")) {
+												/** How far up does the word go above the matching letter */
+												int up = 0 + indexMatchingLetterWord;
+												/** How far down does the word go under the matching letter */
+												int down = word.length() - 1 - indexMatchingLetterWord;
+												/** Converted coordinates of matching letter */
+												int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
+												/** Check if fields below are empty and valid */
+												for (int j = down; j >= 1; j--) {
+													if (!board.isFieldValid(checkedCoordinate[0] + j,
+															checkedCoordinate[1])
+															|| !board.isFieldEmpty(checkedCoordinate[0] + j,
+																	checkedCoordinate[1])) {
+														flag = false;
+													}
+												}
+												/** Check if field above are empty and valid */
+												for (int j = 1; j <= up; j++) {
+													if (!board.isFieldValid(checkedCoordinate[0] - j,
+															checkedCoordinate[1])
+															|| !board.isFieldEmpty(checkedCoordinate[0] - j,
+																	checkedCoordinate[1])) {
+														flag = false;
+													}
+												}
+												/**
+												 * Check if the newly created letter would be compatible with adjacent
+												 * words
+												 */
+												if (adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "V",
+														word) == false) {
 													flag = false;
 												}
-											}
-											/** Check if field above are empty and valid */
-											for (int j = 1; j <= up; j++) {
-												if (!board.isFieldValid(checkedCoordinate[0] - j, checkedCoordinate[1])
-														|| !board.isFieldEmpty(checkedCoordinate[0] - j,
-																checkedCoordinate[1])) {
-													flag = false;
+												/**
+												 * If none of the conditions above changed the flag to false, return a
+												 * word to be placed with starting coordinate and direction
+												 */
+												if (flag == true) {
+													move = move + "WORD "
+															+ board.convert(
+																	board.convert(coordsOfMatchingLetter)[0]
+																			- indexMatchingLetterWord,
+																	board.convert(coordsOfMatchingLetter)[1])
+															+ " V " + word;
+													return move;
 												}
-											}
-											/**
-											 * Check if the newly created letter would be compatible with adjacent words
-											 */
-											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "V",
-													word)) {
-												flag = false;
-											}
-											/**
-											 * If none of the conditions above changed the flag to false, return a word
-											 * to be placed with starting coordinate and direction
-											 */
-											if (flag == true) {
-												move = move + "WORD "
-														+ board.convert(
-																board.convert(coordsOfMatchingLetter)[0]
-																		- indexMatchingLetterWord,
-																board.convert(coordsOfMatchingLetter)[1])
-														+ " V " + word;
-												return move;
 											}
 										}
 									}
@@ -378,6 +388,7 @@ public class NaiveStrategy implements Strategy {
 
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
+
 											/** Get index of matching letter in playedWord */
 											int indexMatchingLetterPlayedWord = playedWord.indexOf(matchingLetter);
 											/** Get index of matching letter in word */
@@ -395,56 +406,66 @@ public class NaiveStrategy implements Strategy {
 											 */
 											boolean flag = true;
 											/** Create Starting coordinate of new word */
-											String startCoordinateOfNewWord = board.convert(
-													board.convert(coordsOfMatchingLetter)[0],
-													board.convert(coordsOfMatchingLetter)[1] - indexMatchingLetterWord);
-											/** How far left does the word go left from the matching letter */
-											int left = 0 + indexMatchingLetterWord;
-											/** How far right does the word go right from the matching letter */
-											int right = word.length() - 1 - indexMatchingLetterWord;
-											/** Converted coordinates of matching letter */
-											int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
-											/** Check if fields below are empty and valid */
-											for (int j = right; j >= 0; j--) {
-												if (!board.isFieldValid(checkedCoordinate[0], checkedCoordinate[1] + j)
-														|| !board.isFieldEmpty(checkedCoordinate[0],
-																checkedCoordinate[1] + j)) {
+											String startCoordinateOfNewWord = "";
+											if (playedWordStartCoords[1] - indexMatchingLetterWord < 15
+													&& playedWordStartCoords[1] - indexMatchingLetterWord >= 0) {
+												startCoordinateOfNewWord = board.convert(
+														board.convert(coordsOfMatchingLetter)[0],
+														board.convert(coordsOfMatchingLetter)[1]
+																- indexMatchingLetterWord);
+											}
+											if (!startCoordinateOfNewWord.equals("")) {
+
+												/** How far left does the word go left from the matching letter */
+												int left = 0 + indexMatchingLetterWord;
+												/** How far right does the word go right from the matching letter */
+												int right = word.length() - 1 - indexMatchingLetterWord;
+												/** Converted coordinates of matching letter */
+												int[] checkedCoordinate = board.convert(coordsOfMatchingLetter);
+												/** Check if fields to the right are empty and valid */
+												for (int j = right; j >= 1; j--) {
+													if (!board.isFieldValid(checkedCoordinate[0],
+															checkedCoordinate[1] + j)
+															|| !board.isFieldEmpty(checkedCoordinate[0],
+																	checkedCoordinate[1] + j)) {
+														flag = false;
+													}
+												}
+												/** Check if fields to the left are empty and valid */
+												for (int j = 1; j <= left; j++) {
+													if (!board.isFieldValid(checkedCoordinate[0],
+															checkedCoordinate[1] - j)
+															|| !board.isFieldEmpty(checkedCoordinate[0],
+																	checkedCoordinate[1] - j)) {
+														flag = false;
+													}
+												}
+												/**
+												 * Check if the newly created letter would be compatible with adjacent
+												 * words
+												 */
+												if (adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "H",
+														word) == false) {
 													flag = false;
 												}
-											}
-											/** Check if field above are empty and valid */
-											for (int j = 0; j < left; j++) {
-												if (!board.isFieldValid(checkedCoordinate[0], checkedCoordinate[1] - j)
-														|| !board.isFieldEmpty(checkedCoordinate[0],
-																checkedCoordinate[1] - j)) {
-													flag = false;
+												/**
+												 * If none of the conditions above changed the flag to false, return a
+												 * word to be placed with starting coordinate and direction
+												 */
+												if (flag == true) {
+													move = move
+															+ "WORD " + board
+																	.convert(board.convert(coordsOfMatchingLetter)[0],
+																			board.convert(coordsOfMatchingLetter)[1]
+																					- indexMatchingLetterWord)
+															+ " H " + word;
+													return move;
 												}
-											}
-											/**
-											 * Check if the newly created letter would be compatible with adjacent words
-											 */
-											if (!adjacentChecker.areAdjacentWordsValid(startCoordinateOfNewWord, "H",
-													word)) {
-												flag = false;
-											}
-											/**
-											 * If none of the conditions above changed the flag to false, return a word
-											 * to be placed with starting coordinate and direction
-											 */
-											if (flag == true) {
-												move = move
-														+ "WORD " + board
-																.convert(board.convert(coordsOfMatchingLetter)[0],
-																		board.convert(coordsOfMatchingLetter)[1]
-																				- indexMatchingLetterWord)
-														+ " H " + word;
-												return move;
 											}
 										}
 									}
 								}
 							}
-
 						}
 					}
 				}
@@ -456,7 +477,8 @@ public class NaiveStrategy implements Strategy {
 	}
 
 	/**
-	 * Returns true if a String contains a blank tile 
+	 * Returns true if a String contains a blank tile
+	 * 
 	 * @param String str
 	 * @return true||false
 	 * @author Maxim
@@ -469,12 +491,12 @@ public class NaiveStrategy implements Strategy {
 		}
 		return false;
 	}
-	
-	public String swapHand(LetterDeck letterDeck){
-		
+
+	public String swapHand(LetterDeck letterDeck) {
+
 		String lettersInHand = "";
-		
-		for(char letter : letterDeck.getLettersInDeck()) {
+
+		for (char letter : letterDeck.getLettersInDeck()) {
 			lettersInHand = lettersInHand + letter;
 		}
 		return lettersInHand;

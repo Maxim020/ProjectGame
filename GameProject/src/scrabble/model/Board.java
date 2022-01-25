@@ -224,7 +224,7 @@ public class Board {
     public boolean isFieldValid(String field){
         String letter = String.valueOf(field.charAt(0)).toUpperCase();
         int number;
-        System.out.println("field.length(): "+field.length());
+        //System.out.println("field.length(): "+field.length());
         if (field.length() == 2){
             number = Character.getNumericValue(field.charAt(1));
         } else{
