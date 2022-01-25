@@ -88,7 +88,7 @@ public class InputHandler {
                 break;
 
             } catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
-                    UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException e) {
+                    UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
 
                 e.printStackTrace();
                 System.out.println("Please type in a valid move");
@@ -153,6 +153,10 @@ public class InputHandler {
                 board.setCenterCovered(true);
             }
 
+            if(!CrossChecker.isMoveValid(board,startCoordinate,direction,word)){
+                throw new scrabble.model.exceptions.InvalidCrossException();
+            }
+
             if(!command.equalsIgnoreCase("word") || startCoordinate.length() < 2 || startCoordinate.length() > 3 || direction.length() != 1){
                 throw new UnknownCommandException();
             }
@@ -173,9 +177,6 @@ public class InputHandler {
                 throw new WordDoesNotFitException();
             }
 
-            if(CrossChecker.isMoveValid(board,startCoordinate,direction,word)){
-                throw new scrabble.model.exceptions.InvalidCrossException();
-            }
         }
 
         //Swap tiles

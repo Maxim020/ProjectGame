@@ -1,26 +1,28 @@
 package server;
+import local.LocalController;
 import scrabble.model.Board;
 import scrabble.model.PlayerList;
 import local.view.InputHandler;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
-
-
-public class ServerController {
-    private String communication;
-
-    public String getCommunication() {
-        return communication;
-    }
-
-    public void setCommunication(String communication) {
-        this.communication = communication;
-    }
+public class ServerController implements Runnable{
 
     public static void main(String[] args) {
+        // In main: Three lines:
+        // ServerController instantiation
+        ServerController serverController = new ServerController();
+        // Print statement that the server started
+        System.out.println("Server started");
+        // New Thread(serverController).start() --> main is already a thread?!
+        new Thread(serverController).start();
+
         ServerSocket server = null;
+
+        List<ClientHandler> clientHandlerList = new ArrayList<>();
 
         try {
             // server is listening on port 1234
@@ -39,8 +41,13 @@ public class ServerController {
                 // create a new thread object
                 ClientHandler clientHandler = new ClientHandler(client);
 
+                //Add newly joined Client to list of clients
+                clientHandlerList.add(clientHandler);
+
                 // This thread will handle the client separately
                 new Thread(clientHandler).start();
+
+
             }
         }
         catch (IOException e) {
@@ -56,12 +63,16 @@ public class ServerController {
                 }
             }
         }
-
-        PlayerList playerList = PlayerList.getInstance();
-        Board board = new Board();
-        //playerList.setPlayers();
-
     }
+
+    //run method:
+    @Override
+    public void run() {
+        String[] arguments = new String[]{};
+        LocalController.main(arguments);
+    }
+
+    //setUpGame method: Initialize a Game
 
     private static class ClientHandler implements Runnable {
         private final Socket clientSocket;
@@ -70,14 +81,16 @@ public class ServerController {
             this.clientSocket = socket;
         }
 
+        //All methods to client (Game logic)
+
         public void run() {
 
-            PrintWriter out = null;
+            BufferedWriter out = null;
             BufferedReader in = null;
 
             try {
                 // get the outputstream and inputstream of client (Clients perspective)
-                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
 
@@ -91,7 +104,8 @@ public class ServerController {
 
                     //WELCOME CLIENT
                     System.out.printf("> Message from Client: %s\n", line);
-                    out.println(line); //?
+                    out.write(line);
+                    //flush
                 }
             }
             catch (IOException e) {
@@ -114,4 +128,6 @@ public class ServerController {
         }
 
     }
+
+
 }

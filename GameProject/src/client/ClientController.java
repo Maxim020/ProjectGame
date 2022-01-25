@@ -1,10 +1,8 @@
 package client;
 
 import scrabble.view.utils.Protocol;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -16,7 +14,7 @@ public class ClientController {
             System.out.println("Client has successfully connected to localhost on port 1234\n");
 
             // writing to server
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             // reading from server
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -37,7 +35,7 @@ public class ClientController {
                 // sending the user input to server
                 //ANNOUNCE+Protocol.UNIT_SEPARATOR+NAME+Protocol.UNIT_SEPARATOR+FLAG+Protocol.MESSAGE_SEPARATOR
                 //ANNOUNCE+Protocol.UNIT_SEPARATOR+NAME+Protocol.MESSAGE_SEPARATOR
-                out.println(line);
+                out.write(line);
 
                 out.flush();
 
@@ -51,6 +49,57 @@ public class ClientController {
 
         catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    private static class ServerController implements Runnable {
+        private final Socket clientSocket;
+
+        public ServerController(Socket socket) {
+            this.clientSocket = socket;
+        }
+
+        //All methods to client (Game logic)
+
+        public void run() {
+
+            BufferedWriter out = null;
+            BufferedReader in = null;
+
+            try {
+                // get the outputstream and inputstream of client (Clients perspective)
+                out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
+
+                //Reads message from Client
+                String line;
+                while ((line = in.readLine()) != null) {
+                    //Process Input with control flow
+
+                    //Send Input Player to Server Controller
+
+                    //WELCOME CLIENT
+                    System.out.printf("> Message from Client: %s\n", line);
+                    out.write(line);
+                    //flush
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                    if (in != null) {
+                        in.close();
+                        clientSocket.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

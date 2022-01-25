@@ -8,7 +8,6 @@ import scrabble.model.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.DeadEndChecker;
 import scrabble.model.letters.LetterScoreChecker;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
