@@ -54,8 +54,9 @@ class AdjacentWordCheckerTest {
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
-		board.setWord("H8", "v", "hello");
-		board.setWord("H10", "h", "loan");
+		board.setWord("H8", "V", "HELLO");
+		board.setWord("H10", "H", "LOAN");
+		board.setWord("F12", "H", "ABOVE");
 		
 		assertTrue(checker.areAdjacentWordsValid("H8", "V", "HELLO"));
 		
@@ -68,8 +69,8 @@ class AdjacentWordCheckerTest {
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
-		board.setWord("H8", "h", "hello");
-		board.setWord("J8", "v", "lkju");
+		board.setWord("H8", "H", "HELLO");
+		board.setWord("J8", "V", "LKLKLK");
 		
 		assertFalse(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
 		
@@ -82,8 +83,8 @@ class AdjacentWordCheckerTest {
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
-		board.setWord("H8", "v", "hello");
-		board.setWord("H10", "h", "lujada");
+		board.setWord("H8", "V", "HELLO");
+		board.setWord("H10", "H", "LKLKLKL");
 		
 		assertFalse(checker.areAdjacentWordsValid("H8", "V", "HELLO"));
 		
@@ -114,5 +115,22 @@ class AdjacentWordCheckerTest {
 		
 	}
 	
+	@Test
+	void testInvalidGroupingOfWords() {
+		bag = Bag.getInstance();
+		players.add(new Player("Richard", bag));
+		playerlist.setPlayers(players);
+		playerlist.setCurrentPlayer(0);
+		
+		
+		board.setWord("H8", "H", "HELLO");
+		board.setWord("I6", "V", "ELECTRIC");
+		board.setWord("J6", "V", "MILITIA");
+		
+		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
+		assertFalse(checker.areAdjacentWordsValid("J6", "V", "MILITIA"));
+		
+		System.out.println("________________________________________");
+	}
 
 }
