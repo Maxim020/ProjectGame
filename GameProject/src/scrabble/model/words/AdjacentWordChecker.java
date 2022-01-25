@@ -70,7 +70,7 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else if(board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i) && board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) {
+			else if(board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) {
 				
 				while(board.getTile(row + j, column + i) != ' ') {
 					charList.add(board.getTile(row + j, column + i));
@@ -160,7 +160,7 @@ public class AdjacentWordChecker {
 	 * @author Maxim
 	 */
 	
-	public boolean checkVerticalWordAdjacency(String word, int row, int column) {
+	public boolean checkVerticalWordAdjacency(String word, int column, int row) {
 		
 		int i = 0;
 		boolean flag = true;
@@ -187,7 +187,6 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
 					flag2 = true;
 				}
@@ -200,7 +199,7 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else if (board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1) && board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1)) {
+			else if (board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1)) {
 				
 				while(board.getTile(row + i, column + j) != ' ') {
 					charList.add(board.getTile(row + i, column + j));
