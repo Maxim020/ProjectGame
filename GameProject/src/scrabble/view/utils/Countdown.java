@@ -32,4 +32,11 @@ public class Countdown {
         };
         timerA.schedule(task,0,1000);
     }
+
+    //Timer of Opponent starts --> revert move within timeframe?
+//                    int counter = 60;
+//
+//                    Countdown countdown = new Countdown();
+//                    System.out.println("\nYou have one minute to decide!");
+//                    countdown.counter(counter);
 }

@@ -1,4 +1,4 @@
-package local.view;
+package scrabble.view;
 
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
@@ -11,7 +11,7 @@ import scrabble.view.utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HandleInput {
+public class InputHandler {
     private Board board;
     private Player currentPlayer;
     private Bag bag;
@@ -20,7 +20,7 @@ public class HandleInput {
     private IsAdjacentChecker isAdjacentChecker;
     private String lastInput;
 
-    public HandleInput(Board board, Player currentPlayer){
+    public InputHandler(Board board, Player currentPlayer){
         this.board = board;
         this.adjacentWordChecker = new AdjacentWordChecker(board);
         this.isAdjacentChecker = new IsAdjacentChecker(board);
@@ -28,9 +28,14 @@ public class HandleInput {
         this.bag = Bag.getInstance();
     }
 
-    public HandleInput(){
+    public InputHandler(){
+        //this needs to be here smh for the program to work
     }
 
+    /**
+     * @param board
+     * @return an ArrayList of Players
+     */
     public List<Player> getPlayers(Board board){
         /** Scans user input for the name of all players and if wanted any computer players */
         String[] players;
@@ -65,6 +70,10 @@ public class HandleInput {
         return playerArrayList;
     }
 
+    /**
+     * Input validation also happens in this method
+     * @return true if input is valid
+     */
     public boolean askForMove(){
         boolean isWordValid;
 
@@ -243,6 +252,10 @@ public class HandleInput {
         return count;
     }
 
+    /**
+     * @return true if user wants to play another game
+     * @author Yasin
+     */
     public boolean askForNextGame(){
         System.out.println("Do you want to play another Game? (y/n)");
         String decision = TextIO.getlnString();

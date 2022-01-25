@@ -1,4 +1,4 @@
-package scrabble.view.utils;
+package scrabble.view;
 import scrabble.model.Board;
 import scrabble.model.PlayerList;
 import scrabble.model.letters.Bag;

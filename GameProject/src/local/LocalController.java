@@ -1,18 +1,15 @@
 package local;
 
-import local.view.HandleInput;
+import scrabble.view.InputHandler;
 import local.view.LocalTUI;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
-import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterScoreChecker;
-import scrabble.view.utils.Countdown;
+
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
 
 public class LocalController {
     public static void main(String[] args) {
@@ -23,7 +20,7 @@ public class LocalController {
             /** Instantiates a Board, a Game, a universal PlayerList and Bag*/
             Board board = new Board();
             PlayerList playerList = PlayerList.getInstance();
-            playerList.setPlayers(new HandleInput().getPlayers(board));
+            playerList.setPlayers(new InputHandler().getPlayers(board));
 
             Bag bag = Bag.getInstance();
             Game game = new Game(board, bag);
@@ -32,8 +29,7 @@ public class LocalController {
             int numberOfTurn = 0;
             int playersTurn;
 
-            //game.start
-            while (game.isGameRunning()) {
+            while (game.isGameRunning()) { //handle turn
 
                 /** Allows for rotation of players turn */
                 playersTurn = numberOfTurn % amountOfPlayers;
@@ -43,36 +39,29 @@ public class LocalController {
                 LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
                 localTUI.updateBoard();
 
-                HandleInput handleInputMove = new HandleInput(board, playerList.getCurrentPlayer());
+                InputHandler inputHandlerMove = new InputHandler(board, playerList.getCurrentPlayer());
 
                 /** DetermineMove() and Validates input */
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
-                    /** Timer starts
-                    //Timer of Opponent starts --> revert move within timeframe?
-                    int counter = 60;
+                    //Timer
 
-                    Countdown countdown = new Countdown();
-                    System.out.println("\nYou have one minute to decide!");
-                    countdown.counter(counter);
-                    */
-
-                   //validates and asks for input processes move if word is valid
-                    if(handleInputMove.askForMove()){
-                        String move = handleInputMove.getLastInput();
+                    //validates and asks for input processes move if word is valid
+                    if(inputHandlerMove.askForMove()){
+                        String move = inputHandlerMove.getLastInput();
                         processMove(move, board, playerList.getCurrentPlayer(), bag);
                     }
                 }
                 else {
                     ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
                     String move = computerPlayer.determineMove(board);
-                    handleInputMove.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
+                    inputHandlerMove.validateInput(move);//Actually not necessary because the Computer should only make valid moves. But useful for testing purposes
 
                     processMove(move, board, playerList.getCurrentPlayer(), bag);
                 }
 
                 /** breakes out of second while loop provided the game ended */
-                if(checkEndOfGame(bag, playerList.getCurrentPlayer())){
-                    System.out.println("Either a player played all tiles left or there are no more possibilities");
+                if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
+                    System.out.println("Either a player played all tiles left or there are no more possibilities"); //InputHandler or local TUI
                     break;
                 }
 
@@ -85,7 +74,7 @@ public class LocalController {
                             announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
 
             /** Ask for another game */
-            continueGame = new HandleInput().askForNextGame();
+            continueGame = new InputHandler().askForNextGame();
         }
     }
 
@@ -143,14 +132,14 @@ public class LocalController {
      * @return - return true if game ended
      * @author Yasin
      */
-    public static boolean checkEndOfGame(Bag bag, Player currentPlayer){
+    public static boolean checkEndOfGame(Bag bag, Player currentPlayer, Board board){
         //Either player uses more than 10 minutes of overtime.
 
         boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
 
-        //boolean deadEnd = ???
+        boolean deadEnd = bag.getLetterList().isEmpty() && new DeadEndChecker().isDeadEnd(board);
 
-        return goingOut; //|| deadEnd;
+        return goingOut || deadEnd;
     }
 
     /**
@@ -196,6 +185,7 @@ public class LocalController {
             String direction = parts[2];
             String tiles = parts[3];
             int[] rowcol = board.convert(coordinate);
+            int tilesUsed = 0;
 
             //Loops over length of word
             for (int i = 0; i < tiles.length(); i++) {
@@ -203,15 +193,21 @@ public class LocalController {
                     //Only exchange tiles if a square is not already occupied by a tile
                     if(board.isFieldEmpty(rowcol[0],(rowcol[1]+i))){
                         processExchangeTile(tiles, i, currentPlayer, bag, word);
+                        tilesUsed++;
                     }
                 }
                 else {
                     //Only exchange tiles if a square is not already occupied by a tile
-                    System.out.println("board.isFieldEmpty((rowcol[0]+i),rowcol[1]): "+board.isFieldEmpty((rowcol[0]+i),rowcol[1]));
                     if(board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
                         processExchangeTile(tiles, i, currentPlayer, bag, word);
+                        tilesUsed++;
+
                     }
                 }
+            }
+
+            if(tilesUsed == 7){
+                currentPlayer.addToScore(50); //Bingo!
             }
         }
         else {
@@ -244,7 +240,6 @@ public class LocalController {
             }
         }
         else {
-            System.out.println("currentPlayer.getLetterDeck().removeFromDeck: "+tiles.charAt(i));
             currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i)); //shuffle bag
             if(word){
                 bag.removeFromBag(tiles.charAt(i)); //Add new Tiles to deck

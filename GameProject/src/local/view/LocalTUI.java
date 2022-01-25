@@ -1,32 +1,22 @@
 package local.view;
 
 import scrabble.model.*;
-import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.IsAdjacentChecker;
 import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.view.UserInterface;
-import scrabble.view.utils.TextBoardRepresentation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import scrabble.view.TextBoardRepresentation;
 
-public class LocalTUI implements UserInterface {
-    private Board board;
+import java.util.List;
+
+public class LocalTUI {
     private TextBoardRepresentation representation;
     private Player currentPlayer;
     private Bag bag;
-    private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
-    private AdjacentWordChecker adjacentWordChecker;
-    private IsAdjacentChecker isAdjacentChecker;
 
     public LocalTUI(Board board, Player currentPlayer){
-        this.board = board;
         this.representation = new TextBoardRepresentation(board);
-        this.adjacentWordChecker = new AdjacentWordChecker(board);
-        this.isAdjacentChecker = new IsAdjacentChecker(board);
         this.currentPlayer = currentPlayer;
         this.bag = Bag.getInstance();
     }
@@ -58,7 +48,6 @@ public class LocalTUI implements UserInterface {
      * Updates Board with instructions, Board representation and Rack of current Player
      * @author Yasin
      */
-    @Override
     public void updateBoard() {
         System.out.println("\n\n"+representation);
         showRack();
@@ -68,7 +57,6 @@ public class LocalTUI implements UserInterface {
      * prints out rack of current Player
      * @author Yasin
      */
-    @Override
     public void showRack() {
         String tiles = "\n"+currentPlayer.getName()+" has the tiles:";
         for(int i=0; i<currentPlayer.getLetterDeck().getLettersInDeck().size(); i++){
