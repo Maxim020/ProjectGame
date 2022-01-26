@@ -129,7 +129,7 @@ public class InputHandler {
                 throw new InvalidWordException();
             } else {
                 //If one of the new composed words is invalid: throw new InvalidWordException - ADDED
-                if(!adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word)) {
+                if(adjacentWordChecker.areAdjacentWordsValid(startCoordinate, direction, word) == false) {
                     throw new InvalidWordException();
                 }
             }

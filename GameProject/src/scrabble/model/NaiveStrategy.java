@@ -71,7 +71,7 @@ public class NaiveStrategy implements Strategy {
 	 * @requires s != null && counter starts from the length of the letter deck
 	 * @ensures All possible combinations from given letters
 	 * @return ArrayList<String> res
-	 * @author Maxim & Oren Arbiv
+	 * @author Maxim
 	 */
 	public ArrayList<String> determineWord(String s, int counter) {
 

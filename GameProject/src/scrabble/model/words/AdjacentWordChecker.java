@@ -1,7 +1,6 @@
 package scrabble.model.words;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import scrabble.model.Board;
 
@@ -60,7 +59,7 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
-				charList.add(0, board.getTile(row, column + i));
+				charList.add(0, word.charAt(i));
 				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
@@ -85,7 +84,7 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				charList.add(0, board.getTile(row, column + i));
+				charList.add(0, word.charAt(i));
 				
 				while(board.getTile(row - k, column + i) != ' ') {
 					charList.add(0,board.getTile(row - k, column + i));
@@ -201,7 +200,7 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
-				charList.add(0, board.getTile(row + i, column));
+				charList.add(0, word.charAt(i));
 				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
@@ -226,7 +225,7 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				charList.add(0, board.getTile(row + i, column));
+				charList.add(0, word.charAt(i));
 				
 				while(board.getTile(row + i, column - k) != ' ') {
 					charList.add(0,board.getTile(row + i, column - k));
@@ -237,6 +236,8 @@ public class AdjacentWordChecker {
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
+				
+				System.out.println(adjacentWord);
 				
 				
 				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
