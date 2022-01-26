@@ -105,6 +105,14 @@ class AdjacentWordCheckerTest {
 		assertFalse(checker.areAdjacentWordsValid("F8", "H", "HE"));
 		assertFalse(checker.areAdjacentWordsValid("M8", "H", "DO"));
 		
+		board.setWord("A3", "V", "RAIL");
+		board.setWord("A1", "V", "DE");
+		board.setWord("A7", "V", "ED");
+		
+		assertTrue(checker.areAdjacentWordsValid("A3", "V", "RAIL"));
+		assertTrue(checker.areAdjacentWordsValid("A1", "V", "DE"));
+		assertTrue(checker.areAdjacentWordsValid("A7", "V", "ED"));
+		
 	}
 	
 	@Test
@@ -122,21 +130,7 @@ class AdjacentWordCheckerTest {
 		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
 		assertFalse(checker.areAdjacentWordsValid("J6", "V", "MILITIA"));
 		
-	}
-	
-	@Test
-	void testMakingTwoNewWords() {
-		bag = Bag.getInstance();
-		players.add(new Player("Richard", bag));
-		playerlist.setPlayers(players);
-		playerlist.setCurrentPlayer(0);
-		
-		board.setWord("H8", "H", "LOS");
-		board.setWord("K5", "V", "COST");
-		
-		assertTrue(checker.areAdjacentWordsValid("H8", "H", "LOS"));
-		assertTrue(checker.areAdjacentWordsValid("K5", "V", "COST"));
-		
+		System.out.println("________________________________________");
 	}
 
 }
