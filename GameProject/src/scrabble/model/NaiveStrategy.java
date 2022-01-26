@@ -282,6 +282,7 @@ public class NaiveStrategy implements Strategy {
 					 * We dont have to check if the word will fit here because it will always fit
 					 */
 					move = move + "WORD H8 H " + word;
+					System.out.println("COMPUTER PLAYER MOVE: " + move);
 					return move;
 				}
 				/** If word was not already played */
@@ -369,6 +370,7 @@ public class NaiveStrategy implements Strategy {
 																			- indexMatchingLetterWord,
 																	board.convert(coordsOfMatchingLetter)[1])
 															+ " V " + word;
+													System.out.println("COMPUTER PLAYER MOVE: " + move);
 													return move;
 												}
 											}
@@ -459,6 +461,7 @@ public class NaiveStrategy implements Strategy {
 																			board.convert(coordsOfMatchingLetter)[1]
 																					- indexMatchingLetterWord)
 															+ " H " + word;
+													System.out.println("COMPUTER PLAYER MOVE: " + move);
 													return move;
 												}
 											}
@@ -472,6 +475,7 @@ public class NaiveStrategy implements Strategy {
 			}
 
 		}
+		System.out.println("COMPUTER PLAYER MOVE: " + move);
 
 		return move;
 	}
