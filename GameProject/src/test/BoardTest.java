@@ -59,14 +59,14 @@ class BoardTest {
 	@Test
 	void testMultipleMoves() throws Exception {
 		bag = Bag.getInstance();
-		//players.add(new Player("Richard", bag));
+		players.add(new Player("Richard", bag));
 		playerlist.setPlayers(players);
 		playerlist.setCurrentPlayer(0);
 		
 		ArrayList<String> listOfCoveredTilesH = new ArrayList<>(); listOfCoveredTilesH.add("H8"); listOfCoveredTilesH.add("I8"); listOfCoveredTilesH.add("J8"); listOfCoveredTilesH.add("K8"); listOfCoveredTilesH.add("L8");
 		ArrayList<String> listOfCoveredTilesV = new ArrayList<>(); listOfCoveredTilesV.add("L8"); listOfCoveredTilesV.add("L9"); listOfCoveredTilesV.add("L10"); listOfCoveredTilesV.add("L11"); listOfCoveredTilesV.add("L12");
-		board.setWord("H8", "h", "hello");
-		board.setWord("L8", "v", "olleh");
+		board.setWord("H8", "H", "HELLO");
+		board.setWord("L8", "V", "OLLEH");
 		assertEquals(listOfCoveredTilesH ,board.fieldsCovered("H8", "h", "hello"));
 		assertEquals(listOfCoveredTilesV ,board.fieldsCovered("L8", "v", "olleh"));
 	}
