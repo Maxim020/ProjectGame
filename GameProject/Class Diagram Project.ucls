@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="scrabble.model.GameBuilder" project="GameProject" 
+    file="/GameProject/src/scrabble/model/GameBuilder.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="88" width="117" x="646" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="2" language="java" name="scrabble.model.Strategy" project="GameProject" 
+    file="/GameProject/src/scrabble/model/Strategy.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="260" x="2999" y="2309"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="3" language="java" name="scrabble.model.Board" project="GameProject" 
+    file="/GameProject/src/scrabble/model/Board.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="772" width="326" x="3361" y="707"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="scrabble.model.ComputerPlayer" project="GameProject" 
+    file="/GameProject/src/scrabble/model/ComputerPlayer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="240" x="3446" y="2073"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="scrabble.model.HumanPlayer" project="GameProject" 
+    file="/GameProject/src/scrabble/model/HumanPlayer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="173" x="3892" y="2073"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="scrabble.model.NaiveStrategy" project="GameProject" 
+    file="/GameProject/src/scrabble/model/NaiveStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="196" width="332" x="2627" y="2073"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="scrabble.model.PlayerList" project="GameProject" 
+    file="/GameProject/src/scrabble/model/PlayerList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="178" width="196" x="3840" y="1519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="scrabble.model.SmartStrategy" project="GameProject" 
+    file="/GameProject/src/scrabble/model/SmartStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="178" width="280" x="2999" y="2073"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="scrabble.model.Game" project="GameProject" 
+    file="/GameProject/src/scrabble/model/Game.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="340" width="209" x="3321" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="scrabble.model.Player" project="GameProject" 
+    file="/GameProject/src/scrabble/model/Player.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="286" width="182" x="3892" y="1747"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="11" language="java" name="scrabble.model.Board.FieldType" project="GameProject" 
+    file="/GameProject/src/scrabble/model/Board.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="178" width="250" x="4086" y="1519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <package id="12" language="java" name="scrabble.model" project="GameProject" file="/GameProject/src/scrabble/model" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="132" x="3390" y="37"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <class id="13" language="java" name="scrabble.model.words.FileStreamScrabbleWordChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/FileStreamScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="260" x="2622" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="scrabble.model.words.IsAdjacentChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/IsAdjacentChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="254" x="3570" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="scrabble.model.words.ScrabbleWordChecker.WordResponse" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/ScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="178" width="195" x="2329" y="1519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="16" language="java" name="scrabble.model.words.ScrabbleWordChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/ScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="88" width="230" x="2672" y="707"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="17" language="java" name="scrabble.model.words.AdjacentWordChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/AdjacentWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="338" x="2943" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="scrabble.model.words.WordScoreCounter" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/WordScoreCounter.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="290" x="3885" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="scrabble.model.words.InMemoryScrabbleWordChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/InMemoryScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="253" x="2329" y="327"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="scrabble.model.words.WordList" project="GameProject" 
+    file="/GameProject/src/scrabble/model/words/WordList.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="142" width="217" x="3133" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="scrabble.model.letters.TileMultiplierChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/TileMultiplierChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="160" width="309" x="4027" y="707"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="scrabble.model.letters.LetterDeck" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/LetterDeck.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="196" width="260" x="3979" y="2309"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="scrabble.model.letters.DeadEndChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/DeadEndChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="180" x="2913" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="scrabble.model.letters.CrossChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/CrossChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="106" width="299" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="scrabble.model.letters.Bag" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/Bag.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="286" width="256" x="3852" y="2545"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="scrabble.model.letters.LetterScoreChecker" project="GameProject" 
+    file="/GameProject/src/scrabble/model/letters/LetterScoreChecker.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="260" x="3727" y="707"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="scrabble.model.exceptions.FieldDoesNotExistException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/FieldDoesNotExistException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="227" x="1900" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="scrabble.model.exceptions.NotEnoughBlankTilesException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/NotEnoughBlankTilesException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="250" x="3340" y="2309"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="scrabble.model.exceptions.UnknownCommandException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/UnknownCommandException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="231" x="1629" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="scrabble.model.exceptions.IllegalSwapException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/IllegalSwapException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="175" x="1022" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="scrabble.model.exceptions.WordIsNotAdjacentException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/WordIsNotAdjacentException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="230" x="2167" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="scrabble.model.exceptions.InvalidCrossException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/InvalidCrossException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="184" x="2437" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="scrabble.model.exceptions.NotEnougTilesException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/NotEnougTilesException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="201" x="3630" y="2309"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="scrabble.model.exceptions.WordDoesNotFitException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/WordDoesNotFitException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="212" x="2661" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="scrabble.model.exceptions.InvalidWordException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/InvalidWordException.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="124" width="179" x="803" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="scrabble.model.exceptions.UnknownDirectionException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/UnknownDirectionException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="226" x="380" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="scrabble.model.exceptions.CenterIsNotCoveredException" project="GameProject" 
+    file="/GameProject/src/scrabble/model/exceptions/CenterIsNotCoveredException.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="243" x="3562" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="local.view.InputHandler" project="GameProject" 
+    file="/GameProject/src/local/view/InputHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="250" width="305" x="3845" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="local.view.LocalTUI" project="GameProject" 
+    file="/GameProject/src/local/view/LocalTUI.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="160" width="261" x="3539" y="1519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="local.LocalController" project="GameProject" 
+    file="/GameProject/src/local/LocalController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="196" width="352" x="1237" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="41">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="42" name="isAdjacentChecker"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="45" name="wordScoreCounter"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="48" name="instance"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="51" name="board"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="53">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="16"/>  
+  </realization>  
+  <association id="54">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="55" name="instance"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="57">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="58" name="bag"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="60">    
+    <bendpoint x="3356" y="2240"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="61" name="strategy"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="64" name="board"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="67" name="letterdeck"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="70" name="multiplierChecker"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="72">    
+    <bendpoint x="2338" y="707"/>    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="73" name="words"/>      
+      <multiplicity id="74" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="75">    
+    <end type="SOURCE" refId="28" navigable="false">      
+      <attribute id="76" name="bag"/>      
+      <multiplicity id="77" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="78">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="79" name="board"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <bendpoint x="3861" y="1747"/>    
+    <bendpoint x="3861" y="2073"/>    
+    <bendpoint x="3861" y="2309"/>    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="82" name="bag"/>      
+      <multiplicity id="83" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="84">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <association id="85">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="86" name="wordChecker"/>      
+      <multiplicity id="87" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="88">    
+    <bendpoint x="3330" y="707"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="89" name="playerList"/>      
+      <multiplicity id="90" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="91">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="16"/>  
+  </realization>  
+  <association id="92">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="93" name="bag"/>      
+      <multiplicity id="94" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="95">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="96">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="97" name="playerList"/>      
+      <multiplicity id="98" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="99">    
+    <bendpoint x="4387" y="327"/>    
+    <bendpoint x="4387" y="707"/>    
+    <bendpoint x="4387" y="1519"/>    
+    <bendpoint x="4387" y="1747"/>    
+    <bendpoint x="4387" y="2073"/>    
+    <bendpoint x="4387" y="2309"/>    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="100" name="bag"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="102">    
+    <bendpoint x="3854" y="327"/>    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="103" name="board"/>      
+      <multiplicity id="104" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="105">    
+    <bendpoint x="4366" y="327"/>    
+    <bendpoint x="4366" y="707"/>    
+    <bendpoint x="4366" y="1519"/>    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="106" name="currentPlayer"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="108">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
+  <association id="109">    
+    <bendpoint x="3309" y="707"/>    
+    <bendpoint x="3309" y="1519"/>    
+    <bendpoint x="3309" y="1747"/>    
+    <bendpoint x="3309" y="2073"/>    
+    <bendpoint x="3308" y="2577"/>    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="110" name="bag"/>      
+      <multiplicity id="111" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="112">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <association id="113">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="114" name="letterChecker"/>      
+      <multiplicity id="115" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="116">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="117" name="board"/>      
+      <multiplicity id="118" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="119">    
+    <bendpoint x="4095" y="2073"/>    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="120" name="letterdeck"/>      
+      <multiplicity id="121" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="122">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="123" name="adjacentWordChecker"/>      
+      <multiplicity id="124" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="125">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="126" name="currentPlayer"/>      
+      <multiplicity id="127" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="128">    
+    <bendpoint x="2912" y="327"/>    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="129" name="wordChecker"/>      
+      <multiplicity id="130" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="131">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="11"/>  
+  </nesting>  
+  <association id="132">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="133" name="players"/>      
+      <multiplicity id="134" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="135">    
+    <end type="SOURCE" refId="39" navigable="false">      
+      <attribute id="136" name="currentPlayer"/>      
+      <multiplicity id="137" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="138">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="2"/>  
+  </realization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

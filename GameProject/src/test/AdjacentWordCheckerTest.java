@@ -126,7 +126,6 @@ class AdjacentWordCheckerTest {
 		assertTrue(checker.areAdjacentWordsValid("H8", "H", "HELLO"));
 		assertFalse(checker.areAdjacentWordsValid("J6", "V", "MILITIA"));
 		
-		System.out.println("________________________________________");
 	}
 
 }

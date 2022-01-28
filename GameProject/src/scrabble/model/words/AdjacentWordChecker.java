@@ -60,13 +60,13 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
-				charList.add(0, board.getTile(row, column + i));
+				charList.add(0, word.charAt(i));
 				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
 					flag2 = true;
 				}
 				
@@ -85,7 +85,7 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				charList.add(0, board.getTile(row, column + i));
+				charList.add(0, word.charAt(i));
 				
 				while(board.getTile(row - k, column + i) != ' ') {
 					charList.add(0,board.getTile(row - k, column + i));
@@ -97,7 +97,7 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				if(adjacentWord.equals(firstLetter + board.getTile(row, column + i))) {
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
 					flag2 = true;
 				}
 				
@@ -201,13 +201,13 @@ public class AdjacentWordChecker {
 					k = k + 1;
 				}
 				
-				charList.add(0, board.getTile(row + i, column));
+				charList.add(0, word.charAt(i));
 				
 				for(int l = 0; l < charList.size(); l++) {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
 					flag2 = true;
 				}
 				
@@ -226,7 +226,7 @@ public class AdjacentWordChecker {
 					j = j + 1;
 				}
 				
-				charList.add(0, board.getTile(row + i, column));
+				charList.add(0, word.charAt(i));
 				
 				while(board.getTile(row + i, column - k) != ' ') {
 					charList.add(0,board.getTile(row + i, column - k));
@@ -238,8 +238,7 @@ public class AdjacentWordChecker {
 					adjacentWord = adjacentWord + charList.get(l);
 				}
 				
-				
-				if(adjacentWord.equals(firstLetter + board.getTile(row + i, column))) {
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
 					flag2 = true;
 				}
 				
