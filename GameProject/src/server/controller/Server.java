@@ -4,23 +4,21 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-/**
- * 1
- */
-
 public class Server {
     private ServerSocket serverSocket;
     private BufferedReader in;
     private ArrayList<ClientHandler> listOfClients;
+    private ArrayList<String> log;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
         this.listOfClients = new ArrayList<>();
-
+        this.log = new ArrayList<>();
     }
 
     /**
-     * Establishes a Server
+     * Repeatedly asks the user for a valid port number
+     * @author Yasin
      */
     public static void main(String[] args) throws IOException { //throws or try catch?
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //not socket.getInputStream())?
@@ -70,12 +68,27 @@ public class Server {
         }
     }
 
+    /**
+     * Initializes WaitingList, add it to a thread and start it.
+     * Everytime a new Client connects to server, a new concurrent ClientHandler will be initialized
+     * @author Yasin
+     */
     public void start(){
-        //To be implemented
+        WaitingList waitingList = new WaitingList(listOfClients);
+        new Thread(waitingList).start();
+
+        while (true){
+            Socket socket;
+            try {
+                socket = serverSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(socket, log, listOfClients);
+                new Thread(clientHandler).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+                break;
+            }
+        }
     }
-
-
-    //setUpGame method: Initialize a Game
 }
 
 

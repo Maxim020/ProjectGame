@@ -17,6 +17,8 @@ public class Client {
     private BufferedReader in;
     private ServerHandler serverHandler;
     private ClientTUI clientTUI;
+    private boolean isLoggedIn;
+    private boolean isRunning;
 
     public Client(Socket socket) throws IOException{
         this.socket = socket;
@@ -52,10 +54,16 @@ public class Client {
     }
 
     public void start(){
-        setUsername(clientTUI.getUsername());
-        sendMessage("ANNOUNCE"+ Protocol.UNIT_SEPARATOR+username+Protocol.MESSAGE_SEPARATOR);
-        //Check if user already logged in?
-        //tui.handleUserInput()
+        isRunning = true;
+        username = clientTUI.getUsername();
+        sendMessage("ANNOUNCE" + Protocol.UNIT_SEPARATOR + username + Protocol.MESSAGE_SEPARATOR);
+
+        while (serverHandler.isLoggedIn()) {
+            clientTUI.printMessage("This user name is already in use");
+            username = clientTUI.getUsername();
+        }
+        setUsername(username);
+        clientTUI.handleInput();
     }
 
     public void sendMessage(String msg){

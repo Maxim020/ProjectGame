@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
 import scrabble.model.Player;
-import scrabble.model.PlayerList;
+import local.model.PlayerList;
 import scrabble.model.letters.Bag;
 import scrabble.model.words.AdjacentWordChecker;
 

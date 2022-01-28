@@ -1,5 +1,5 @@
 package scrabble.model;
-import local.view.LocalTUI;
+import local.model.PlayerList;
 import scrabble.model.words.WordScoreCounter;
 
 import java.util.ArrayList;

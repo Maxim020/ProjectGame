@@ -9,16 +9,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
-import scrabble.model.NaiveStrategy;
 import scrabble.model.Player;
-import scrabble.model.PlayerList;
+import local.model.PlayerList;
 import scrabble.model.SmartStrategy;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.model.words.WordScoreCounter;
 
 class SmartStrategyTest {
 

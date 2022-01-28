@@ -1,5 +1,6 @@
 package local.view;
 
+import local.model.PlayerList;
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;

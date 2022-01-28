@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Locale;
 
 /**
  * 1
@@ -19,11 +20,9 @@ public class ClientTUI {
     private BufferedReader bufferedReader;
     private ServerHandler serverHandler;
     private Client client;
-    private InputHandler inputHandler;
 
     public ClientTUI(){
         this.bufferedReader  = new BufferedReader(new InputStreamReader(System.in));
-        inputHandler = new InputHandler();
     }
 
     public void printMessage(String msg){
@@ -101,7 +100,10 @@ public class ClientTUI {
         return username;
     }
 
-    public void askForMove(){
+    /**
+     * Handles input from Client
+     */
+    public void handleInput(){
         printCommands();
         String move = null;
         System.out.println("Enter your next move");
@@ -111,27 +113,41 @@ public class ClientTUI {
             System.out.println("ERROR: Input could not be read");
         }
 
-        //validateMove
-        if(serverHandler.validateInput(move)){
-            String[] parts = move.split(" ");
-            switch (parts.length) {
-                case 1:
-                    client.sendMessage(parts[0] + Protocol.MESSAGE_SEPARATOR);
-                    break;
-                case 2:
-                    client.sendMessage(parts[0] + Protocol.UNIT_SEPARATOR
-                            + parts[1] + Protocol.MESSAGE_SEPARATOR);
-                    break;
-                case 4:
-                    client.sendMessage(parts[0] + Protocol.UNIT_SEPARATOR
-                            + parts[1] + Protocol.UNIT_SEPARATOR + parts[2]
-                            + parts[2] + Protocol.UNIT_SEPARATOR
-                            + parts[3] + Protocol.MESSAGE_SEPARATOR);
-                    break;
-            }
-            client.sendMessage(move);
-        }
+        String[] parts = move.split(" ");
 
+        String word = parts[0];
+        switch (word.toUpperCase()){
+            case "ANNOUNCE":
+                client.sendMessage(word+Protocol.UNIT_SEPARATOR+parts[1]+Protocol.MESSAGE_SEPARATOR);
+                break;
+            case "REQUESTGAME":
+                client.sendMessage(word+Protocol.MESSAGE_SEPARATOR);
+                break;
+            case "MAKEMOVE":
+                if(serverHandler.isAllowedToMove()) {
+                    if (parts[1].equals("WORD")) {
+                        client.sendMessage(word + Protocol.UNIT_SEPARATOR + parts[1] + Protocol.UNIT_SEPARATOR + parts[2] + Protocol.UNIT_SEPARATOR + parts[3] + Protocol.UNIT_SEPARATOR + parts[4] + Protocol.MESSAGE_SEPARATOR);
+                    } else if (parts[1].equals("SWAP")) {
+                        if (parts.length == 3) {
+                            client.sendMessage(word + Protocol.UNIT_SEPARATOR + parts[1] + Protocol.UNIT_SEPARATOR + parts[2] + Protocol.MESSAGE_SEPARATOR);
+                        } else if (parts.length == 2) {
+                            client.sendMessage(word + Protocol.UNIT_SEPARATOR + parts[1] + Protocol.MESSAGE_SEPARATOR);
+                        } else {
+                            printMessage("Error: Unknown Swap command");
+                        }
+                    } else {
+                        printMessage("Error: Unknown move");
+                    }
+                }
+                break;
+            case "COMMANDS":
+                printCommands();
+                break;
+            default:
+                printMessage("Error invalid command");
+                printCommands();
+                break;
+        }
     }
 
     public void printCommands(){

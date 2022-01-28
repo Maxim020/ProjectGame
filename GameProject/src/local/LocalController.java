@@ -1,5 +1,6 @@
 package local;
 
+import local.model.PlayerList;
 import local.view.InputHandler;
 import local.view.LocalTUI;
 import scrabble.model.ComputerPlayer;
@@ -23,13 +24,12 @@ public class LocalController {
             playerList.setPlayers(new InputHandler().getPlayers(board));
 
             Bag bag = Bag.getInstance();
-            Game game = new Game(board, bag);
 
             int amountOfPlayers = playerList.getPlayers().size();
             int numberOfTurn = 0;
             int playersTurn;
 
-            while (game.isGameRunning()) { //handle turn
+            while (true) { //handle turn
 
                 /** Allows for rotation of players turn */
                 playersTurn = numberOfTurn % amountOfPlayers;
@@ -216,10 +216,7 @@ public class LocalController {
 
             for (int i = 0; i < tiles.length(); i++) {
                 processExchangeTile(tiles, i, currentPlayer, bag, word);
-//                currentPlayer.getLetterDeck().removeFromDeck(tiles.charAt(i));
-//                bag.removeFromBag(tiles.charAt(i));
-//                bag.shuffleBag();
-//                currentPlayer.getLetterDeck().addToDeck(1);
+
             }
         }
     }

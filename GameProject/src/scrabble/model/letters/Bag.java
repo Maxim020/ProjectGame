@@ -1,7 +1,5 @@
 package scrabble.model.letters;
 
-import scrabble.model.PlayerList;
-
 import java.util.ArrayList;
 import java.util.Collections;
 

@@ -1,11 +1,8 @@
 package local.view;
 
+import local.model.PlayerList;
 import scrabble.model.*;
 import scrabble.model.letters.Bag;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.IsAdjacentChecker;
-import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.TextBoardRepresentation;
 
 import java.util.List;

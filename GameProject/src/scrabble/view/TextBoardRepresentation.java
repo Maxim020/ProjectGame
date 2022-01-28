@@ -1,6 +1,6 @@
 package scrabble.view;
 import scrabble.model.Board;
-import scrabble.model.PlayerList;
+import local.model.PlayerList;
 import scrabble.model.letters.Bag;
 
 /**

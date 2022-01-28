@@ -1,4 +1,6 @@
-package scrabble.model;
+package local.model;
+
+import scrabble.model.Player;
 
 import java.util.ArrayList;
 import java.util.List;
