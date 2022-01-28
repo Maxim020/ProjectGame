@@ -1,16 +1,13 @@
 package client.view;
 
 import client.controller.Client;
-import local.view.InputHandler;
 import scrabble.view.utils.Protocol;
-import server.controller.ServerHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Locale;
 
 /**
  * 1
@@ -18,7 +15,6 @@ import java.util.Locale;
 
 public class ClientTUI {
     private BufferedReader bufferedReader;
-    private ServerHandler serverHandler;
     private Client client;
 
     public ClientTUI(){
@@ -124,7 +120,7 @@ public class ClientTUI {
                 client.sendMessage(word+Protocol.MESSAGE_SEPARATOR);
                 break;
             case "MAKEMOVE":
-                if(serverHandler.isAllowedToMove()) {
+                if(client.isAllowedToMove()) {
                     if (parts[1].equals("WORD")) {
                         client.sendMessage(word + Protocol.UNIT_SEPARATOR + parts[1] + Protocol.UNIT_SEPARATOR + parts[2] + Protocol.UNIT_SEPARATOR + parts[3] + Protocol.UNIT_SEPARATOR + parts[4] + Protocol.MESSAGE_SEPARATOR);
                     } else if (parts[1].equals("SWAP")) {
@@ -151,15 +147,13 @@ public class ClientTUI {
     }
 
     public void printCommands(){
-        System.out.println("You can do the following moves:\n1... 2... 3...");
+        System.out.println("");
     }
 
     public void setClient(Client client) {
         this.client = client;
     }
 
-    public void setServerHandler(ServerHandler serverHandler) {
-        this.serverHandler = serverHandler;
-    }
+
 }
 
