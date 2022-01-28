@@ -3,6 +3,7 @@ package scrabble.model.words;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import local.model.PlayerList;
 import scrabble.model.Board;
 
 public class AdjacentWordChecker {
@@ -10,11 +11,13 @@ public class AdjacentWordChecker {
 	//Attributes
 	private ScrabbleWordChecker wordChecker;
 	private Board board;
+	private WordScoreCounter scoreCounter;
 	
 	//Constructor
 	public AdjacentWordChecker(Board board) {
 		this.board = board;
 		wordChecker = new InMemoryScrabbleWordChecker();
+		scoreCounter = new WordScoreCounter(board);
 	}
 	
 	//Methods
@@ -44,6 +47,7 @@ public class AdjacentWordChecker {
 			ArrayList<Character> charList = new ArrayList<>();
 			int j = 1;
 			int k = 1;
+			int score = 0;
 			
 			if(row - 1 > 14 || column + i < 0 || row - 1 < 0 || column + i > 14) {
 				return false;
@@ -108,8 +112,19 @@ public class AdjacentWordChecker {
 				}
 				
 			}
+
+			if(board.isFieldValid(row, column + i)) {
+				if((board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) || (board.isFieldValid(row + 1, column + i) && !board.isFieldEmpty(row + 1, column + i))) {
+					if(word.charAt(i) != board.getTile(row, column + i)) {
+						score = scoreCounter.getTotalWordScoreVertical(adjacentWord, row - k, column + i);
+						System.out.println(adjacentWord + " " + (row - k + 1) + " " + (column + i));
+						PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+					}
+				}
+			}
 			
 			i = i + 1;
+			
 		}
 		
 		int l = 1;
@@ -185,6 +200,7 @@ public class AdjacentWordChecker {
 			boolean flag2 = false;
 			int j = 1;
 			int k = 1;
+			int score = 0;
 			
 			if(row + i > 14 || column - 1 < 0 || row + i < 0 || column + 1 > 14) {
 				return false;
@@ -248,6 +264,16 @@ public class AdjacentWordChecker {
 					}
 				}
 				
+			}
+			
+			if(board.isFieldValid(row + i, column)) {
+				if((board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i , column - 1)) || (board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1))) {
+					if(word.charAt(i) != board.getTile(row + i, column)) {
+						score = scoreCounter.getTotalWordScoreHorizontal(adjacentWord, row + i, column - k);
+						System.out.println(adjacentWord + " " + (row + i) + " " + (column - k + 1));
+						PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+					}
+				}
 			}
 			
 			i = i + 1;
