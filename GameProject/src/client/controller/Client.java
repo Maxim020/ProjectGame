@@ -2,10 +2,14 @@ package client.controller;
 
 import client.view.ClientTUI;
 import scrabble.view.utils.Protocol;
+import server.model.ExitProgram;
+import server.model.ProtocolException;
+import server.model.ServerUnavailableException;
 
 import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * 2
@@ -20,32 +24,13 @@ public class Client {
     private boolean isRunning;
     private boolean isAllowedToMove;
 
-    public Client(Socket socket) throws IOException{
-        this.socket = socket;
-        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    public Client(){
+        clientTUI = new ClientTUI(this);
     }
 
     public static void main(String[] args) {
-        ClientTUI tui = new ClientTUI();
-        InetAddress ip = tui.getHostIP();
-        int port = tui.getPort();
+        (new Client()).start();
 
-        try (Socket socket = new Socket(ip, port)) {
-
-            Client client = new Client(socket);
-
-            //Connect ServerHandler, Client, TUI
-            client.setClientTUI(tui);
-            client.getClientTUI().setClient(client);
-
-            client.start();
-        }
-
-        catch (IOException e) {
-            System.out.println("ERROR: Connection to socket failed (IP: "+ip+", Port: "+port);
-            System.exit(0); //Necessary?
-        }
     }
 
     /**
@@ -57,12 +42,13 @@ public class Client {
         while (true){
             try {
                 String input = in.readLine();
+                clientTUI.showMessage(input);
 
                 String[] parts = input.split(" ");
                 String command = parts[0];
 
                 if(input == null){
-                    clientTUI.printMessage("Server stopped working");
+                    clientTUI.showMessage("Server stopped working");
                     break;
                 }
 
@@ -70,7 +56,7 @@ public class Client {
                     case "WELCOME":
                         isLoggedIn = true;
                         System.out.println("Test");
-                        clientTUI.printMessage("WELCOME "+username);
+                        clientTUI.showMessage("WELCOME "+username);
                     case "INFORMQUEUE":
                         //‘INFORMQUEUE’: server informs the client about the queue for a new game
                         //Arguments:
@@ -127,18 +113,68 @@ public class Client {
     }
 
     public void start(){
-        isRunning = true;
-        username = clientTUI.getUsername();
-        sendMessage("ANNOUNCE" + Protocol.UNIT_SEPARATOR + username + Protocol.MESSAGE_SEPARATOR);
-
-        while (isLoggedIn) {
-            clientTUI.printMessage("This user name is already in use");
-            username = clientTUI.getUsername();
+        try{
+            createConnection();
+        } catch (ExitProgram e){
+            e.printStackTrace();
         }
-        setUsername(username);
 
-        clientTUI.handleInput();
-        handleInput();
+        username = clientTUI.getUsername();
+
+
+        announce();
+
+//        clientTUI.start();
+//
+//        isRunning = true;
+//        username = clientTUI.getUsername();
+//        sendMessage("ANNOUNCE" + Protocol.UNIT_SEPARATOR + username + Protocol.MESSAGE_SEPARATOR);
+//
+//        while (isLoggedIn) {
+//            clientTUI.showMessage("This user name is already in use");
+//            username = clientTUI.getUsername();
+//        }
+//        setUsername(username);
+//
+//        clientTUI.handleInput();
+//        handleInput();
+    }
+
+    public void announce(){
+        sendMessage("ANNOUNCE "+username);
+        //Serverhandshake
+    }
+
+    //done
+    public void createConnection() throws ExitProgram {
+
+        clearConnection();
+
+        while (socket == null) {
+            String host = "127.0.0.1";
+            int port = clientTUI.getInt("Please type in a port number");
+                try {
+                    InetAddress address = InetAddress.getByName(host);
+                    clientTUI.showMessage("Attempting to connect to " + address + " on port " + port);
+                    socket = new Socket(address, port);
+                    out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+                    in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    System.out.println("Successfully connected");
+                } catch (IOException e) {
+                    clientTUI.showMessage("Error: Could not create socket on " + host + " and port " + port);
+                    if (!clientTUI.getBoolean("Do you want to try again?")) {
+                        throw new ExitProgram("Exit ...");
+                    }
+                }
+        }
+    }
+
+
+
+    public void clearConnection(){
+        socket = null;
+        in = null;
+        out = null;
     }
 
     public void sendMessage(String msg){
@@ -148,7 +184,7 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        clientTUI.printMessage("To Server: "+msg);
+        clientTUI.showMessage("To Server: "+msg);
     }
 
     public boolean isAllowedToMove() {

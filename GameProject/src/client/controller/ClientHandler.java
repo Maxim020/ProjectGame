@@ -4,12 +4,14 @@ import scrabble.model.Game;
 import scrabble.model.Player;
 import scrabble.model.letters.Bag;
 import scrabble.view.utils.Protocol;
+import server.controller.Server;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
+    private Server server;
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
@@ -19,7 +21,7 @@ public class ClientHandler implements Runnable {
     private String name;
     private Game game;
 
-    public ClientHandler(Socket socket, ArrayList<String> log, ArrayList<ClientHandler> clientHandlers) throws IOException {
+    public ClientHandler(Socket socket, Server server) throws IOException {
         this.socket = socket;
         this.clientHandlers = clientHandlers;
         this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -29,20 +31,34 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                //reads and processes input from client
-                String input = in.readLine();
+        String input = "";
+
+        try{
+            input = in.readLine();
+            while (input != null) {
+                System.out.println("> ["+name+"] Incomming: "+input);
                 handleInput(input);
-            } catch (IOException e) {
-                System.out.println("Client disconnected");
-                //removes clientHandler from List
-                log.remove(getName());
-                if (game != null) {
-                    game.clientDisconnected(this);
-                }
+                out.newLine();
+                out.flush();
+                input = in.readLine();
             }
+            shutdown();
+        }catch (IOException e){
+            shutdown();
         }
+
+    }
+
+    public void shutdown(){
+        System.out.println("> ["+name+"] Shutting down");
+        try{
+            in.close();
+            out.close();
+            socket.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        server.removeClient(this);
     }
 
     /**

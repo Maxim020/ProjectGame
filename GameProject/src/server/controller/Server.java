@@ -1,93 +1,93 @@
 package server.controller;
 import client.controller.ClientHandler;
+import scrabble.model.Game;
+import server.model.ExitProgram;
+import server.view.ServerTUI;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Server {
+public class Server implements Runnable{
     private ServerSocket serverSocket;
-    private BufferedReader in;
-    private ArrayList<ClientHandler> listOfClients;
-    private ArrayList<String> log;
+    private ServerTUI serverTUI;
+    private Game game;
+    private List<ClientHandler> clients;
 
-    public Server(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
-        this.listOfClients = new ArrayList<>();
-        this.log = new ArrayList<>();
+    public Server() {
+        clients = new ArrayList<>();
+        serverTUI = new ServerTUI();
     }
 
     /**
      * Repeatedly asks the user for a valid port number
      * @author Yasin
      */
-    public static void main(String[] args) throws IOException { //throws or try catch?
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); //not socket.getInputStream())?
-        ServerSocket serverSocket = new ServerSocket(0);
+    public static void main(String[] args) throws IOException {
+        Server server = new Server();
+        System.out.println("Server is starting ...");
+        new Thread(server).start();
+    }
 
-        System.out.println("Please enter a port number or only press enter " +
-                "when the port number is wished to be " + serverSocket.getLocalPort());
+    public void setUpGame(){
 
-        //Ask as long as a given port number is invalid
-        while (true){
-            String input = br.readLine();
+    }
 
-            //User wants to create a server on the preset port number
-            if (input.trim().isEmpty()) {
-                Server server = new Server(serverSocket);
-                System.out.println("Server successfully established and listens on port " + serverSocket.getLocalPort());
-                server.start();
-                break;
-            }
-            //User wants to create a server on a custom port number
-            else {
-                serverSocket.close(); //close because a new serverSocket with a new port number will be created
+    //Done
+    public void setUp() throws ExitProgram{
+        setUpGame();
+        serverSocket = null;
 
-                int port = Integer.parseInt(input);
+        while (serverSocket == null){
+            int port = serverTUI.getInt("Please enter a server port");
 
-                try {
-                    port = Integer.parseInt(input);///
-                } catch (NumberFormatException e) {
-                    System.out.println("ERROR: The given port '" + input + "' is not an Integer");
-                }
-                if (port < 0 || port > 65535) {
-                    System.out.println("Port number must be a positive Integer and be smaller than 65535");
-                }
-                else {
-                    //Throws IOException if port number is already used
-                    try (ServerSocket serverSocket1 = new ServerSocket(port)) {
-                        Server server = new Server(serverSocket1);
-                        System.out.println("Server successfully established and listens on port " + serverSocket1.getLocalPort());
-                        server.start();
-                        break;
-                    } catch (IOException e) {
-                        System.out.println("ERROR: Port number " + port + " is already in use, " +
-                                "please enter another port number");
-                    }
+            try{
+                serverTUI.showMessage("Attempting to create socket at 127.0.0.1 on port "+port+" ...");
+                serverSocket = new ServerSocket(port, 0, InetAddress.getByName("127.0.0.1"));
+                serverTUI.showMessage("Server started on port "+port);
+            } catch (IOException e) {
+                serverTUI.showMessage("ERROR: Could not create socket 127.0.0.1 and port "+port);
+                e.printStackTrace();
+
+                if(!serverTUI.getBoolean("Do you want to try again?")){
+                    throw new ExitProgram("User indicated to exit program");
                 }
             }
         }
     }
 
-    /**
-     * Initializes WaitingList, add it to a thread and start it.
-     * Everytime a new Client connects to server, a new concurrent ClientHandler will be initialized
-     * @author Yasin
-     */
-    public void start(){
-        WaitingList waitingList = new WaitingList(listOfClients);
-        new Thread(waitingList).start();
+    public void removeClient(ClientHandler clientHandler){
+        this.clients.remove(clientHandler);
+    }
 
-        while (true){
-            Socket socket;
+    @Override
+    public void run() {
+        boolean openNewSocket = true;
+
+        while (openNewSocket){
             try {
-                socket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(socket, log, listOfClients);
-                new Thread(clientHandler).start();
+                setUp();
+
+                while (true) {
+                    Socket socket = serverSocket.accept();
+                    serverTUI.showMessage("New Client connected");
+                    ClientHandler clientHandler = new ClientHandler(socket, this);
+                    new Thread(clientHandler).start();
+                    clients.add(clientHandler);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
-                break;
+                System.out.println("A server IO error occured: "+e.getMessage());
+                if(!serverTUI.getBoolean("Do you want to open a new Socket for clients to connect to")){
+                    openNewSocket = false;
+                }
+            } catch (ExitProgram e){
+                openNewSocket = false;
             }
         }
+        serverTUI.showMessage("No more clients will be accepted");
     }
 }
 
