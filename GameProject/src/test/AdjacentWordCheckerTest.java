@@ -109,10 +109,6 @@ class AdjacentWordCheckerTest {
 		board.setWord("A1", "V", "DE");
 		board.setWord("A7", "V", "ED");
 		
-		assertTrue(checker.areAdjacentWordsValid("A3", "V", "RAIL"));
-		assertTrue(checker.areAdjacentWordsValid("A1", "V", "DE"));
-		assertTrue(checker.areAdjacentWordsValid("A7", "V", "ED"));
-		
 	}
 	
 	@Test
