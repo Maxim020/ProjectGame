@@ -45,7 +45,7 @@ public class Server {
                 int port = Integer.parseInt(input);
 
                 try {
-                    port = Integer.parseInt(input);
+                    port = Integer.parseInt(input);///
                 } catch (NumberFormatException e) {
                     System.out.println("ERROR: The given port '" + input + "' is not an Integer");
                 }
