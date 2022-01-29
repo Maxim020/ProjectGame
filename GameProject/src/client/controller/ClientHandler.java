@@ -15,30 +15,25 @@ import java.util.List;
  */
 
 public class ClientHandler implements Runnable {
+    private Server server;
     public static List<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
     private String clientUsername;
-
-    private Server server;
     private Player player;
-
 
     public ClientHandler(Socket socket, Server server) {
         try {
             this.socket = socket;
             this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = in.readLine();
-            clientHandlers.add(this);
-            broadcastMessage("SERVER: "+clientUsername+" has entered the chat!");
+            //removed
         } catch (IOException e){
             closeEverything();
         }
         this.server = server;
     }
-
 
     @Override
     public void run() {
@@ -47,9 +42,7 @@ public class ClientHandler implements Runnable {
         while (socket.isConnected()) {
             try{
                 messageFromClient = in.readLine();
-                broadcastMessage(messageFromClient);
-
-                //handleInput(messageFromClient);
+                handleInput(messageFromClient);
                 }
             catch (IOException e){
                 closeEverything();
@@ -58,53 +51,32 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
-    public void broadcastMessage(String msg){
-        for(ClientHandler clientHandler : clientHandlers){
-            if(!clientHandler.clientUsername.equals(clientUsername)){
-                clientHandler.sendMessage(msg);
-            }
-        }
-    }
-
-
-    public void closeEverything(){
-        removeClientHandler();
-        try{
-            if(in != null){
-                in.close();
-            }
-            if(out != null){
-                out.close();
-            }
-            if(socket != null){
-                socket.close();
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void removeClientHandler(){
-        clientHandlers.remove(this);
-        broadcastMessage("SERVER: "+clientUsername+" has left the chat");
-    }
-
-
     /**
      * handles input form client
      * @param input - input from client
      */
     public void handleInput(String input) {
+        //
         String[] parts = input.split(" "); //Wie soll ich Unit und message seperator trennen?
         String command = parts[0];
+        System.out.println("[INCOMING FROM "+clientUsername+"] "+input);
 
         switch (command){
             case "ANNOUNCE":
-                setName(parts[1]);
-                setPlayer(new Player(getName(), Bag.getInstance()));
-                sendMessage("WELCOME" + Protocol.UNIT_SEPARATOR + getName() + Protocol.MESSAGE_SEPARATOR);
+                if(parts[1] != null) {
+                    this.clientUsername = parts[1];
+                    clientHandlers.add(this);
+                    broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+                    sendMessage("WELCOME " + clientUsername);
+                    setPlayer(new Player(getName(), Bag.getInstance()));
+                }
+                break;
+            case "CHAT":
+                String message = clientUsername+":";
+                for (int i=1; i<parts.length; i++){
+                    message += " "+parts[i];
+                }
+                broadcastMessage(message);
                 break;
             case "REQUESTGAME": //Argument: Numbers of players
                 sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.size()+Protocol.UNIT_SEPARATOR+(2-ClientHandler.clientHandlers.size())+Protocol.MESSAGE_SEPARATOR);
@@ -138,6 +110,14 @@ public class ClientHandler implements Runnable {
     }
 
 
+    public void broadcastMessage(String msg){
+        for(ClientHandler clientHandler : clientHandlers){
+            if(!clientHandler.clientUsername.equals(clientUsername)){
+                clientHandler.sendMessage(msg);
+            }
+        }
+    }
+
     public void sendMessage(String msg) {
         try {
             out.write(msg);
@@ -148,6 +128,29 @@ public class ClientHandler implements Runnable {
         }
     }
 
+
+    public void removeClientHandler(){
+        clientHandlers.remove(this);
+        broadcastMessage("SERVER: "+clientUsername+" has left the chat");
+    }
+
+
+    public void closeEverything(){
+        removeClientHandler();
+        try{
+            if(in != null){
+                in.close();
+            }
+            if(out != null){
+                out.close();
+            }
+            if(socket != null){
+                socket.close();
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
     public String getName() {
         return clientUsername;

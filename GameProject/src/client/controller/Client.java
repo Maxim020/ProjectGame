@@ -21,6 +21,7 @@ public class Client {
     private BufferedWriter out;
     private BufferedReader in;
     private String username;
+    private boolean isLogged;
 
 
     public Client(Socket socket, String username){
@@ -39,7 +40,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username for the group chat: ");
+        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME]");
         String username = scanner.nextLine();
         Socket socket = new Socket("localhost",1234);
         Client client = new Client(socket, username);
@@ -57,7 +58,7 @@ public class Client {
 
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
-                out.write(username+": "+messageToSend);
+                out.write(messageToSend);//username+": "+
                 out.newLine();
                 out.flush();
             }
@@ -76,13 +77,28 @@ public class Client {
                 while (socket.isConnected()){
                     try {
                         messageFromGroupChat = in.readLine();
-                        System.out.println(messageFromGroupChat);
+                        handleInput(messageFromGroupChat);
+                        //System.out.println(messageFromGroupChat);
                     }catch (IOException e){
                         closeEverything();
                     }
                 }
             }
         }).start();
+    }
+
+    public void handleInput(String input){
+        String[] parts = input.split(" ");
+        String command = parts[0];
+
+        switch (command){
+            case "WELCOME":
+                System.out.println(input);
+                isLogged = true;
+                break;
+            default:
+                System.out.println(input);
+        }
     }
 
     public void closeEverything(){
