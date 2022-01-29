@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ClientHandler implements Runnable {
     public static List<ClientHandler> clientHandlers = new ArrayList<>();
-
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
@@ -118,7 +117,7 @@ public class ClientHandler implements Runnable {
                         s += +Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.get(i).getName();
                     }
                     sendMessage(s+Protocol.MESSAGE_SEPARATOR);
-                    server.setUpGame();
+                    //server.setUpGame();
                 }
 
                 break;

@@ -32,8 +32,9 @@ public class Server{
                 Socket socket = serverSocket.accept();
                 System.out.println("New Client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
-                new Thread(clientHandler).start();
-                ClientHandler.clientHandlers.add(clientHandler);
+
+                Thread thread = new Thread(clientHandler);
+                thread.start();
             }
         } catch (IOException e){
             e.printStackTrace();
