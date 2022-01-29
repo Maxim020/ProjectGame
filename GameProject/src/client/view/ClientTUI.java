@@ -13,7 +13,8 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
- * 1
+ * IDEAS:
+ * 1)
  */
 
 public class ClientTUI {
@@ -21,23 +22,27 @@ public class ClientTUI {
     private Client client;
     private TextBoardRepresentation representation;
 
+
     public ClientTUI(Client client){
         this.client = client;
         this.scanner = new Scanner(System.in);
     }
+
 
     public void start(){
         printCommands();
         while (true){
             showMessage("Input: ");
             String s = scanner.nextLine();
-            client.sendMessage(s);//Send input to client
+            client.sendMessage();//Send input to client
         }
     }
+
 
     public void showMessage(String msg){
         System.out.println(msg);
     }
+
 
     public void updateBoard(String tiles){
         Board board = new Board();
@@ -46,40 +51,18 @@ public class ClientTUI {
         System.out.println(representation);
     }
 
-//    /**
-//     * Asks Client for a hostname to get ip address of server
-//     * @return ip address of server
-//     */
-//    public InetAddress getHostIP(){
-//        InetAddress ip = null;
-//        String input = "";
-//
-//        while (ip == null){
-//            System.out.println("Please enter a host address");
-//            try {
-//                input = bufferedReader.readLine();
-//            } catch (IOException e) {
-//                System.out.println("ERROR: Input could not be read");
-//            }
-//            try {
-//                ip = InetAddress.getByName(input);
-//            } catch (UnknownHostException e) {
-//                System.out.println("ERROR: The given hostname '"+input+"' is unknown");
-//            }
-//        }
-//        return ip;
-//    }
-
 
     public void setRepresentation(TextBoardRepresentation representation) {
         this.representation = representation;
     }
+
 
     public boolean getBoolean(String question){
         showMessage(question);
         showMessage("yes or no?");
         return scanner.nextLine().equalsIgnoreCase("yes");
     }
+
 
     public int getInt(String question){
         showMessage(question);
@@ -92,6 +75,7 @@ public class ClientTUI {
         }
     }
 
+
     public boolean isNumeric(String string){
         try{
             Integer.parseInt(string);
@@ -102,49 +86,6 @@ public class ClientTUI {
     }
 
 
-    /**
-     * Asks Client for port number of the server
-     * @return port number
-     */
-//    public int getPort(){
-//        int port = -1;
-//        String input = "";
-//
-//        while (port == -1){
-//            System.out.println("Please enter a port number");
-//            try {
-//                input = bufferedReader.readLine();
-//            } catch (IOException e) {
-//                System.out.println("ERROR: Input could not be read");
-//            }
-//            try {
-//                port = Integer.parseInt(input);
-//            }
-//            catch (NumberFormatException e){
-//                System.out.println("ERROR: The given port '"+input+"' is not an Integer");
-//            }
-//            if(port<0 || port>65535){
-//                System.out.println("Port number must be a positive Integer and be smaller than 65535");
-//                port = -1;
-//            }
-//        }
-//        return port;
-//    }
-//
-    /**
-     * Asks user for name
-     * @return username
-     */
-    public String getUsername(){
-        String username = null;
-
-        while (username == null || username.trim().isEmpty()){
-            System.out.println("Please enter a username");
-            username = scanner.nextLine();
-        }
-        return username;
-    }
-//
 //    /**
 //     * Handles input from Client
 //     */

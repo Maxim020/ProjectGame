@@ -7,63 +7,91 @@ import server.controller.Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * IDEAS:
+ * 1) Muss ein ClientHandler wirklich mit Server connected sein?
+ */
 
 public class ClientHandler implements Runnable {
-    private Server server;
+    public static List<ClientHandler> clientHandlers = new ArrayList<>();
+
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
-    private ArrayList<String> log;
-    private Player player;
-    private String name;
+    private String clientUsername;
 
-    public ClientHandler(Socket socket, Server server) throws IOException {
-        this.socket = socket;
-        this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.log = new ArrayList<>();
+    private Server server;
+    private Player player;
+
+
+    public ClientHandler(Socket socket, Server server) {
+        try {
+            this.socket = socket;
+            this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.clientUsername = in.readLine();
+            clientHandlers.add(this);
+            broadcastMessage("SERVER: "+clientUsername+" has entered the chat!");
+        } catch (IOException e){
+            closeEverything();
+        }
         this.server = server;
     }
 
+
     @Override
     public void run() {
-        String input;
+        String messageFromClient;
 
-        try{
-            input = in.readLine();
+        while (socket.isConnected()) {
+            try{
+                messageFromClient = in.readLine();
+                broadcastMessage(messageFromClient);
 
-            System.out.println();
-            while (input != null) {
-                if(name != null){
-                    System.out.println("> ["+name+"] Incomming: "+input);
+                //handleInput(messageFromClient);
                 }
-                else {
-                    System.out.println("Incomming: "+input);
-                }
-                handleInput(input);
-                out.newLine();
-                out.flush();
-                input = in.readLine();
+            catch (IOException e){
+                closeEverything();
+                break;
             }
-
-            shutdown();
-        }catch (IOException e){
-            shutdown();
         }
-
     }
 
-    public void shutdown(){
-        System.out.println("> ["+name+"] Shutting down");
+
+    public void broadcastMessage(String msg){
+        for(ClientHandler clientHandler : clientHandlers){
+            if(!clientHandler.clientUsername.equals(clientUsername)){
+                clientHandler.sendMessage(msg);
+            }
+        }
+    }
+
+
+    public void closeEverything(){
+        removeClientHandler();
         try{
-            in.close();
-            out.close();
-            socket.close();
+            if(in != null){
+                in.close();
+            }
+            if(out != null){
+                out.close();
+            }
+            if(socket != null){
+                socket.close();
+            }
         }catch (IOException e){
             e.printStackTrace();
         }
-        server.removeClient(this);
     }
+
+
+    public void removeClientHandler(){
+        clientHandlers.remove(this);
+        broadcastMessage("SERVER: "+clientUsername+" has left the chat");
+    }
+
 
     /**
      * handles input form client
@@ -80,14 +108,14 @@ public class ClientHandler implements Runnable {
                 sendMessage("WELCOME" + Protocol.UNIT_SEPARATOR + getName() + Protocol.MESSAGE_SEPARATOR);
                 break;
             case "REQUESTGAME": //Argument: Numbers of players
-                sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR+server.getClients().size()+Protocol.UNIT_SEPARATOR+(2-server.getClients().size())+Protocol.MESSAGE_SEPARATOR);
-                if(server.getClients().size() >= 2){
+                sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.size()+Protocol.UNIT_SEPARATOR+(2-ClientHandler.clientHandlers.size())+Protocol.MESSAGE_SEPARATOR);
+                if(ClientHandler.clientHandlers.size() >= 2){
                     sendMessage("Not enough clients connected");
                 }
                 else {
                     String s = "STARTGAME";
-                    for(int i=0; i<server.getClients().size(); i++){
-                        s += +Protocol.UNIT_SEPARATOR+server.getClients().get(i).getName();
+                    for(int i=0; i<ClientHandler.clientHandlers.size(); i++){
+                        s += +Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.get(i).getName();
                     }
                     sendMessage(s+Protocol.MESSAGE_SEPARATOR);
                     server.setUpGame();
@@ -110,6 +138,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
+
     public void sendMessage(String msg) {
         try {
             out.write(msg);
@@ -120,12 +149,13 @@ public class ClientHandler implements Runnable {
         }
     }
 
+
     public String getName() {
-        return name;
+        return clientUsername;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.clientUsername = name;
     }
 
     public Player getPlayer() {
