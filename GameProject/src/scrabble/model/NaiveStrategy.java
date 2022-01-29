@@ -258,7 +258,7 @@ public class NaiveStrategy implements Strategy {
 			listOfAllPermutations.addAll(determineWord(formString(letterDeck), formString(letterDeck).length() - i));
 		}
 
-		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 		/** Blank replacer */
 		for (int i = 0; i < listOfAllPermutations.size(); i++) {

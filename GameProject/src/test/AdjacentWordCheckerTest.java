@@ -127,5 +127,19 @@ class AdjacentWordCheckerTest {
 		assertFalse(checker.areAdjacentWordsValid("J6", "V", "MILITIA"));
 		
 	}
+	
+	@Test
+	void testIBorderPlay() {
+		bag = Bag.getInstance();
+		players.add(new Player("Richard", bag));
+		playerlist.setPlayers(players);
+		playerlist.setCurrentPlayer(0);
+		
+		assertTrue(checker.areAdjacentWordsValid("A1", "H", "HELLO"));
+		assertTrue(checker.areAdjacentWordsValid("A1", "V", "HELLO"));
+		assertTrue(checker.areAdjacentWordsValid("A15", "H", "HELLO"));
+		assertTrue(checker.areAdjacentWordsValid("O10", "V", "HELLO"));
+		
+	}
 
 }
