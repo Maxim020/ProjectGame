@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import local.model.PlayerList;
 import scrabble.model.Board;
+import scrabble.model.ComputerPlayer;
 
 public class AdjacentWordChecker {
 	
@@ -49,17 +50,9 @@ public class AdjacentWordChecker {
 			int k = 1;
 			int score = 0;
 			
-			if(row - 1 > 14 || column + i < 0 || row - 1 < 0 || column + i > 14) {
-				return false;
-			}
-			
-			if(row + j > 14 || row - k < 0) {
-				return false;
-			}
-			
-			if(board.isFieldValid(row - 1, column + i) && board.isFieldEmpty(row - 1, column + i)) {
+			if((board.isFieldValid(row - 1, column + i) && board.isFieldEmpty(row - 1, column + i)) || board.isFieldValid(row - 1, column + i) == false) {
 				
-				while(board.getTile(row + k, column + i) != ' ') {
+				while(board.isFieldValid(row + k, column + i) && board.getTile(row + k, column + i) != ' ') {
 					charList.add(board.getTile(row + k, column + i));
 					k = k + 1;
 				}
@@ -82,16 +75,16 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else if(board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) {
+			else if(board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i) && board.isFieldValid(row + 1, column + i) && !board.isFieldEmpty(row + 1, column + i)) {
 				
-				while(board.getTile(row + j, column + i) != ' ') {
+				while(board.isFieldValid(row + j, column + i) && board.getTile(row + j, column + i) != ' ') {
 					charList.add(board.getTile(row + j, column + i));
 					j = j + 1;
 				}
 				
 				charList.add(0, word.charAt(i));
 				
-				while(board.getTile(row - k, column + i) != ' ') {
+				while(board.isFieldValid(row - k, column + i) && board.getTile(row - k, column + i) != ' ') {
 					charList.add(0,board.getTile(row - k, column + i));
 					k = k + 1;
 				}
@@ -112,13 +105,41 @@ public class AdjacentWordChecker {
 				}
 				
 			}
-
-			if(board.isFieldValid(row, column + i)) {
-				if((board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) || (board.isFieldValid(row + 1, column + i) && !board.isFieldEmpty(row + 1, column + i))) {
-					if(word.charAt(i) != board.getTile(row, column + i)) {
-						score = scoreCounter.getTotalWordScoreVertical(adjacentWord, row - k, column + i);
-						System.out.println(adjacentWord + " " + (row - k + 1) + " " + (column + i));
-						PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+			
+			else if((board.isFieldValid(row + 1, column + i) && board.isFieldEmpty(row + 1, column + i)) || board.isFieldValid(row + 1, column + i) == false) {
+				
+				charList.add(0, word.charAt(i));
+				
+				while(board.isFieldValid(row - k, column + i) && board.getTile(row - k, column + i) != ' ') {
+					charList.add(0,board.getTile(row - k, column + i));
+					k = k + 1;
+				}
+				
+				
+				for(int l = 0; l < charList.size(); l++) {
+					adjacentWord = adjacentWord + charList.get(l);
+				}
+				
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
+					flag2 = true;
+				}
+				
+				if(flag2 == false) {
+					if(wordChecker.isValidWord(adjacentWord) == null) {
+						flag = false;
+					}
+				}
+			}
+			
+			if(flag != false && !(PlayerList.getInstance().getCurrentPlayer() instanceof ComputerPlayer)) {
+				if(board.isFieldValid(row, column + i) && board.isFieldEmpty(row, column + i)) {
+					if((board.isFieldValid(row - 1, column + i) && !board.isFieldEmpty(row - 1, column + i)) || (board.isFieldValid(row + 1, column + i) && !board.isFieldEmpty(row + 1, column + i))) {
+						if(!adjacentWord.equals(firstLetter)) {
+							if(board.isFieldValid(row - k + 1, column + i)) {
+							score = scoreCounter.getTotalWordScoreVertical(adjacentWord, row - k + 1, column + i);
+							PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+							}
+						}
 					}
 				}
 			}
@@ -132,9 +153,6 @@ public class AdjacentWordChecker {
 		ArrayList<Character> charList1 = new ArrayList<>();
 		ArrayList<Character> charList2 = new ArrayList<>();
 		
-		if(column - l < 0 || column  + word.length() - 1 + m > 14) {
-			return false;
-		}
 		
 		while(board.isFieldValid(row, column - l) && !board.isFieldEmpty(row, column - l)) {
 			charList1.add(board.getTile(row, column - l));
@@ -202,17 +220,10 @@ public class AdjacentWordChecker {
 			int k = 1;
 			int score = 0;
 			
-			if(row + i > 14 || column - 1 < 0 || row + i < 0 || column + 1 > 14) {
-				return false;
-			}
 			
-			if(column + j > 14 || column - k < 0) {
-				return false;
-			}
-			
-			if(board.isFieldValid(row + i, column - 1) && board.isFieldEmpty(row + i, column - 1)) {
+			if((board.isFieldValid(row + i, column - 1) && board.isFieldEmpty(row + i, column - 1)) || board.isFieldValid(row + i, column - 1) == false) {
 				
-				while(board.getTile(row + i, column + k) != ' ') {
+				while(board.isFieldValid(row + i, column + k) && board.getTile(row + i, column + k) != ' ') {
 					charList.add(board.getTile(row + i, column + k));
 					k = k + 1;
 				}
@@ -235,16 +246,16 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			else if (board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1)) {
+			else if (board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1) && board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1)) {
 				
-				while(board.getTile(row + i, column + j) != ' ') {
+				while(board.isFieldValid(row + i, column + j) && board.getTile(row + i, column + j) != ' ') {
 					charList.add(board.getTile(row + i, column + j));
 					j = j + 1;
 				}
 				
 				charList.add(0, word.charAt(i));
 				
-				while(board.getTile(row + i, column - k) != ' ') {
+				while(board.isFieldValid(row + i, column - k) && board.getTile(row + i, column - k) != ' ') {
 					charList.add(0,board.getTile(row + i, column - k));
 					k = k + 1;
 				}
@@ -266,12 +277,40 @@ public class AdjacentWordChecker {
 				
 			}
 			
-			if(board.isFieldValid(row + i, column)) {
-				if((board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i , column - 1)) || (board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1))) {
-					if(word.charAt(i) != board.getTile(row + i, column)) {
-						score = scoreCounter.getTotalWordScoreHorizontal(adjacentWord, row + i, column - k);
-						System.out.println(adjacentWord + " " + (row + i) + " " + (column - k + 1));
-						PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+			else if((board.isFieldValid(row + i, column + 1) && board.isFieldEmpty(row + i, column + 1)) || board.isFieldValid(row + i, column + 1) == false) {
+				charList.add(0, word.charAt(i));
+				
+				while(board.isFieldValid(row + i, column - k) && board.getTile(row + i, column - k) != ' ') {
+					charList.add(0,board.getTile(row + i, column - k));
+					k = k + 1;
+				}
+				
+				
+				for(int l = 0; l < charList.size(); l++) {
+					adjacentWord = adjacentWord + charList.get(l);
+				}
+				
+				if(adjacentWord.equals(firstLetter + word.charAt(i))) {
+					flag2 = true;
+				}
+				
+				if(flag2 == false) {
+					if(wordChecker.isValidWord(adjacentWord) == null) {
+						flag = false;
+					}
+				}
+			}
+			
+			
+			
+			if(flag != false && !(PlayerList.getInstance().getCurrentPlayer() instanceof ComputerPlayer) ) {
+				if(board.isFieldValid(row + i, column) && board.isFieldEmpty(row + i, column)) {
+					if((board.isFieldValid(row + i, column - 1) && !board.isFieldEmpty(row + i, column - 1)) || (board.isFieldValid(row + i, column + 1) && !board.isFieldEmpty(row + i, column + 1))) {
+						if(!adjacentWord.equals(firstLetter)) {
+							if(board.isFieldValid(row + i, column - k + 1))
+							score = scoreCounter.getTotalWordScoreHorizontal(adjacentWord, row + i, column - k + 1);
+							PlayerList.getInstance().getCurrentPlayer().addToScore(score);
+						}
 					}
 				}
 			}
@@ -283,10 +322,6 @@ public class AdjacentWordChecker {
 		int m = 1;
 		ArrayList<Character> charList1 = new ArrayList<>();
 		ArrayList<Character> charList2 = new ArrayList<>();
-		
-		if(row - l < 0 || row  + word.length() - 1 + m > 14) {
-			return false;
-		}
 		
 		while(board.isFieldValid(row - l, column) && !board.isFieldEmpty(row - l, column)) {
 			charList1.add(board.getTile(row - l, column));
