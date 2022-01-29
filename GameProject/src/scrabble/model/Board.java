@@ -46,6 +46,14 @@ public class Board {
         playerList = PlayerList.getInstance();
     }
 
+    public void updateBoard(String tiles){
+        for(int i=0; i<tiles.length(); i++){
+            int row = i%14;
+            int col = i/14;
+            setTile(tiles.charAt(i),row, col);
+        }
+    }
+
     /**
      * Empties all fields of this board
      * @ensures all fields are empty
@@ -183,6 +191,18 @@ public class Board {
         return rowcol;
     }
 
+    @Override
+    public String toString(){
+        String result = null;
+
+        for(int i=0; i<15; i++){
+            for(int j=0; j<15; j++){
+                result += fields[i][j];
+            }
+        }
+        return result;
+    }
+
     /**
      * @requires (isFieldValid(row, column))
      * @param row - int to indicate row
@@ -303,6 +323,10 @@ public class Board {
 
     public HashSet<String> getDoubleWordScore() {
         return doubleWordScore;
+    }
+
+    public char[][] getFields() {
+        return fields;
     }
 
     public HashSet<String> getTripleLetterScore() {

@@ -1,11 +1,9 @@
 package client.controller;
 
-import scrabble.model.Game;
 import scrabble.model.Player;
 import scrabble.model.letters.Bag;
 import scrabble.view.utils.Protocol;
 import server.controller.Server;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,33 +13,39 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
-    private ArrayList<ClientHandler> clientHandlers;
     private ArrayList<String> log;
     private Player player;
     private String name;
-    private Game game;
 
     public ClientHandler(Socket socket, Server server) throws IOException {
         this.socket = socket;
-        this.clientHandlers = clientHandlers;
         this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.log = new ArrayList<>();
+        this.server = server;
     }
 
     @Override
     public void run() {
-        String input = "";
+        String input;
 
         try{
             input = in.readLine();
+
+            System.out.println();
             while (input != null) {
-                System.out.println("> ["+name+"] Incomming: "+input);
+                if(name != null){
+                    System.out.println("> ["+name+"] Incomming: "+input);
+                }
+                else {
+                    System.out.println("Incomming: "+input);
+                }
                 handleInput(input);
                 out.newLine();
                 out.flush();
                 input = in.readLine();
             }
+
             shutdown();
         }catch (IOException e){
             shutdown();
@@ -71,37 +75,24 @@ public class ClientHandler implements Runnable {
 
         switch (command){
             case "ANNOUNCE":
-                if(!log.contains(parts[1])) {
-                    log.add(parts[1]);
-                    setName(parts[1]);
-                    setPlayer(new Player(getName(), Bag.getInstance()));
-                    sendMessage("WELCOME" + Protocol.UNIT_SEPARATOR + getName() + Protocol.MESSAGE_SEPARATOR);
-                }
-                else{
-                    sendMessage("Client is already logged in");
-                }
+                setName(parts[1]);
+                setPlayer(new Player(getName(), Bag.getInstance()));
+                sendMessage("WELCOME" + Protocol.UNIT_SEPARATOR + getName() + Protocol.MESSAGE_SEPARATOR);
                 break;
             case "REQUESTGAME": //Argument: Numbers of players
-                int queuesize = clientHandlers.size();
+                sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR+server.getClients().size()+Protocol.UNIT_SEPARATOR+(2-server.getClients().size())+Protocol.MESSAGE_SEPARATOR);
+                if(server.getClients().size() >= 2){
+                    sendMessage("Not enough clients connected");
+                }
+                else {
+                    String s = "STARTGAME";
+                    for(int i=0; i<server.getClients().size(); i++){
+                        s += +Protocol.UNIT_SEPARATOR+server.getClients().get(i).getName();
+                    }
+                    sendMessage(s+Protocol.MESSAGE_SEPARATOR);
+                    server.setUpGame();
+                }
 
-                sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR +
-                        queuesize+Protocol.UNIT_SEPARATOR+
-                        (Integer.parseInt(parts[1])-queuesize)+Protocol.MESSAGE_SEPARATOR);
-
-                //If enough players
-                sendMessage("STARTGAME");
-                //‘STARTGAME’: server informs clients that the game is starting
-                //Arguments:
-                //1. Name of player 1
-                //2. Name of player 2
-                //3. Name of player 3 (optional)
-                //4. Name of player 4 (optional)
-
-                sendMessage("NOTIFYTURN");
-                //‘NOTIFYTURN’: server informs clients whose turn it is
-                //Arguments:
-                //1. Whether it is the turn of the destination client (boolean)
-                //2. Name of the player that can now make a turn
                 break;
             case "MAKEMOVE":
                 //‘MAKEMOVE’: client requesting to make a move to the server
@@ -122,14 +113,11 @@ public class ClientHandler implements Runnable {
     public void sendMessage(String msg) {
         try {
             out.write(msg);
+            out.newLine();
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
     }
 
     public String getName() {

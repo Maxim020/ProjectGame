@@ -39,6 +39,7 @@ public class LocalController {
                 LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
                 localTUI.updateBoard();
 
+                //Make move
                 InputHandler inputHandlerMove = new InputHandler(board, playerList.getCurrentPlayer());
 
                 /** DetermineMove() and Validates input */

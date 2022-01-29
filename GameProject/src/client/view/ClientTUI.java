@@ -1,6 +1,8 @@
 package client.view;
 
 import client.controller.Client;
+import scrabble.model.Board;
+import scrabble.view.TextBoardRepresentation;
 import scrabble.view.utils.Protocol;
 
 import java.io.BufferedReader;
@@ -17,6 +19,7 @@ import java.util.Scanner;
 public class ClientTUI {
     private Scanner scanner;
     private Client client;
+    private TextBoardRepresentation representation;
 
     public ClientTUI(Client client){
         this.client = client;
@@ -24,11 +27,23 @@ public class ClientTUI {
     }
 
     public void start(){
-
+        printCommands();
+        while (true){
+            showMessage("Input: ");
+            String s = scanner.nextLine();
+            client.sendMessage(s);//Send input to client
+        }
     }
 
     public void showMessage(String msg){
         System.out.println(msg);
+    }
+
+    public void updateBoard(String tiles){
+        Board board = new Board();
+        board.updateBoard(tiles);
+        setRepresentation(new TextBoardRepresentation(board));
+        System.out.println(representation);
     }
 
 //    /**
@@ -54,6 +69,11 @@ public class ClientTUI {
 //        }
 //        return ip;
 //    }
+
+
+    public void setRepresentation(TextBoardRepresentation representation) {
+        this.representation = representation;
+    }
 
     public boolean getBoolean(String question){
         showMessage(question);

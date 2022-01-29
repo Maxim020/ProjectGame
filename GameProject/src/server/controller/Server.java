@@ -31,12 +31,12 @@ public class Server implements Runnable{
     }
 
     public void setUpGame(){
-
+        game = new Game(clients);
+        game.start(); //main method in local controller
     }
 
     //Done
     public void setUp() throws ExitProgram{
-        setUpGame();
         serverSocket = null;
 
         while (serverSocket == null){
@@ -88,6 +88,10 @@ public class Server implements Runnable{
             }
         }
         serverTUI.showMessage("No more clients will be accepted");
+    }
+
+    public List<ClientHandler> getClients() {
+        return clients;
     }
 }
 
