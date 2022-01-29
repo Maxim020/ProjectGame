@@ -66,7 +66,7 @@ public class ClientHandler implements Runnable {
                 if(parts[1] != null) {
                     this.clientUsername = parts[1];
                     clientHandlers.add(this);
-                    broadcastMessage("SERVER: " + clientUsername + " has entered the chat!");
+                    broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
                     sendMessage("WELCOME " + clientUsername);
                     setPlayer(new Player(getName(), Bag.getInstance()));
                 }
@@ -76,20 +76,26 @@ public class ClientHandler implements Runnable {
                 for (int i=1; i<parts.length; i++){
                     message += " "+parts[i];
                 }
-                broadcastMessage(message);
+                broadcastMessage(message,false);
                 break;
-            case "REQUESTGAME": //Argument: Numbers of players
-                sendMessage("INFORMQUEUE"+Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.size()+Protocol.UNIT_SEPARATOR+(2-ClientHandler.clientHandlers.size())+Protocol.MESSAGE_SEPARATOR);
-                if(ClientHandler.clientHandlers.size() >= 2){
-                    sendMessage("Not enough clients connected");
+            case "REQUESTGAME": //Was passiert wenn mehr als players needed in der queue sind?
+                int inQueue = ClientHandler.clientHandlers.size();
+                int playersNeeded = Integer.parseInt(parts[1]);
+                int playersStillNeeded = playersNeeded - inQueue;
+                broadcastMessage("INFORMQUEUE "+inQueue+" "+playersNeeded, true);
+
+                if(playersStillNeeded == 0){
+                    String msg = "STARTGAME";
+                    for(int i=0; i<playersNeeded; i++){
+                        msg += " "+ClientHandler.clientHandlers.get(i).getName();
+                    }
+                    broadcastMessage(msg,true);
+                    //server.setUpGame();
+
                 }
                 else {
-                    String s = "STARTGAME";
-                    for(int i=0; i<ClientHandler.clientHandlers.size(); i++){
-                        s += +Protocol.UNIT_SEPARATOR+ClientHandler.clientHandlers.get(i).getName();
-                    }
-                    sendMessage(s+Protocol.MESSAGE_SEPARATOR);
-                    //server.setUpGame();
+                    sendMessage("Not enough clients connected");
+                    sendMessage("Too many clients connected");
                 }
 
                 break;
@@ -110,9 +116,9 @@ public class ClientHandler implements Runnable {
     }
 
 
-    public void broadcastMessage(String msg){
+    public void broadcastMessage(String msg, boolean includeSender){
         for(ClientHandler clientHandler : clientHandlers){
-            if(!clientHandler.clientUsername.equals(clientUsername)){
+            if(includeSender || !clientHandler.clientUsername.equals(clientUsername)){
                 clientHandler.sendMessage(msg);
             }
         }
@@ -131,7 +137,7 @@ public class ClientHandler implements Runnable {
 
     public void removeClientHandler(){
         clientHandlers.remove(this);
-        broadcastMessage("SERVER: "+clientUsername+" has left the chat");
+        broadcastMessage("SERVER: "+clientUsername+" has left the chat",false);
     }
 
 

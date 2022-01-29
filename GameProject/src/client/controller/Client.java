@@ -58,7 +58,7 @@ public class Client {
 
             while (socket.isConnected()){
                 String messageToSend = scanner.nextLine();
-                out.write(messageToSend);//username+": "+
+                out.write(messageToSend);
                 out.newLine();
                 out.flush();
             }
@@ -69,19 +69,16 @@ public class Client {
 
     //Listen for messages, need thread because it is a blocking operation
     public void listenForMessages(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                String messageFromGroupChat;
+        new Thread(() -> {
+            String messageFromGroupChat;
 
-                while (socket.isConnected()){
-                    try {
-                        messageFromGroupChat = in.readLine();
-                        handleInput(messageFromGroupChat);
-                        //System.out.println(messageFromGroupChat);
-                    }catch (IOException e){
-                        closeEverything();
-                    }
+            while (socket.isConnected()){
+                try {
+                    messageFromGroupChat = in.readLine();
+                    handleInput(messageFromGroupChat);
+                    //System.out.println(messageFromGroupChat);
+                }catch (IOException e){
+                    closeEverything();
                 }
             }
         }).start();
@@ -96,7 +93,7 @@ public class Client {
                 System.out.println(input);
                 isLogged = true;
                 break;
-            default:
+            default: //idk what should be there
                 System.out.println(input);
         }
     }
