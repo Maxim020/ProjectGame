@@ -14,6 +14,7 @@ public class Server{
     private Game game;
 
 
+
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
@@ -47,6 +48,9 @@ public class Server{
         game.start(); //main method in local controller
     }
 
+    public Game getGame() {
+        return game;
+    }
 
     public void closeServerSocket(){
         try{

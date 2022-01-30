@@ -22,7 +22,7 @@ public class LocalTUI {
      * prints Scoreboard after match ends
      * @author Yasin
      */
-    public void printFinalScoreBoard(Player winner){
+    public String printFinalScoreBoard(Player winner){
         PlayerList playerList = PlayerList.getInstance();
         List<Player> players = playerList.getPlayers();
         String scoreboard = "";
@@ -33,12 +33,11 @@ public class LocalTUI {
             }
         }
 
-        System.out.println ("*******************************\n"+
-                            "WINNER WINNER CHICKEN DINNER!\n\n"+
-                            winner.getName()+" has won the game!"+
-                            scoreboard+"\n\n"+
-                            "*******************************"
-                            );
+        return  "*******************************\n"+
+                "WINNER WINNER CHICKEN DINNER!\n\n"+
+                winner.getName()+" has won the game!"+
+                scoreboard+"\n\n"+
+                "*******************************";
     }
 
     /**

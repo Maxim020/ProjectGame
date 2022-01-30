@@ -30,7 +30,6 @@ public class LocalController {
             int playersTurn;
 
             while (true) { //handle turn
-
                 /** Allows for rotation of players turn */
                 playersTurn = numberOfTurn % amountOfPlayers;
                 playerList.setCurrentPlayer(playersTurn);

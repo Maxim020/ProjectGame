@@ -145,7 +145,7 @@ public class InputHandler {
             }
 
             if(board.isCenterCovered()) {
-                if(isAdjacentChecker.isAdjacent(startCoordinate, direction, word) == false) {
+                if(!isAdjacentChecker.isAdjacent(startCoordinate, direction, word)) {
                     throw new WordIsNotAdjacentException();
                 }
             }

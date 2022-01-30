@@ -1,8 +1,18 @@
 package client.controller;
 
+import local.model.PlayerList;
+import local.view.InputHandler;
+import scrabble.model.Board;
 import scrabble.model.Player;
+import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
+import scrabble.model.letters.CrossChecker;
+import scrabble.model.words.AdjacentWordChecker;
+import scrabble.model.words.InMemoryScrabbleWordChecker;
+import scrabble.model.words.IsAdjacentChecker;
+import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.view.utils.Protocol;
+import scrabble.view.utils.TextIO;
 import server.controller.Server;
 import java.io.*;
 import java.net.Socket;
@@ -28,7 +38,6 @@ public class ClientHandler implements Runnable {
             this.socket = socket;
             this.out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //removed
         } catch (IOException e){
             closeEverything();
         }
@@ -90,7 +99,7 @@ public class ClientHandler implements Runnable {
                         msg += " "+ClientHandler.clientHandlers.get(i).getName();
                     }
                     broadcastMessage(msg,true);
-                    //server.setUpGame();
+                    server.setUpGame(); //The game takes all connected clients as arguments in the constructor
 
                 }
                 else {
@@ -100,20 +109,25 @@ public class ClientHandler implements Runnable {
 
                 break;
             case "MAKEMOVE":
-                //‘MAKEMOVE’: client requesting to make a move to the server
-                //Everyone needs to implement in their server: “MAKEMOVE-SWAP-” is swapping 0 tiles, not an error. “MAKEMOVE-SWAP” would be an error, since you are missing an argument (no delimiter).
-                //Arguments:
-                //1. Type of turn (WORD | SWAP)
-                //If WORD:
-                //2. Start coordinate (format: B3 (as in Project manual))
-                //3. Direction (horizontal/vertical)
-                //4. Word (e.g. DOg, where g is a blank tile)
-                //If SWAP:
-                //2. String with tiles you want to swap (e.g. PQG)
-                //SWAP- (if you want to swap no tiles)
+                if(clientUsername.equals(server.getGame().getCurrentClient().getName())) {
+                    System.out.println("TEST");
+                    String move = "";
+                    for (int i = 1; i < parts.length; i++) {
+                        move += parts[i] + " ";
+                    }
+                    this.server.getGame().setMove(move);
+//                    synchronized (this){
+//                        this.server.getGame().notify();
+//                    }
+                }
+                else {
+                    sendMessage("ERROR: It is not your turn");
+                }
                 break;
         }
     }
+
+
 
 
     public void broadcastMessage(String msg, boolean includeSender){

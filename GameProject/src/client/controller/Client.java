@@ -1,15 +1,9 @@
 package client.controller;
 
 import client.view.ClientTUI;
-import scrabble.view.utils.Protocol;
-import server.model.ExitProgram;
-import server.model.ProtocolException;
-import server.model.ServerUnavailableException;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 /**
@@ -21,8 +15,7 @@ public class Client {
     private BufferedWriter out;
     private BufferedReader in;
     private String username;
-    private boolean isLogged;
-
+    private ClientTUI clientTUI;
 
     public Client(Socket socket, String username){
         try {
@@ -30,6 +23,7 @@ public class Client {
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.username = username;
+            clientTUI = new ClientTUI();
         } catch (IOException e){
             closeEverything();
         }
@@ -44,6 +38,7 @@ public class Client {
         String username = scanner.nextLine();
         Socket socket = new Socket("localhost",1234);
         Client client = new Client(socket, username);
+        client.clientTUI.printCommands();
         client.listenForMessages();
         client.sendMessage();
     }
@@ -90,11 +85,22 @@ public class Client {
 
         switch (command){
             case "WELCOME":
-                System.out.println(input);
-                isLogged = true;
+                System.out.println(input+"\n");
                 break;
-            default: //idk what should be there
+            case "BOARD":
+                if(parts.length == 2) {
+                    clientTUI.updateBoard(parts[1]);
+                }
+                else {
+                    clientTUI.updateBoard("");
+                }
+                break;
+            case "TILES":
                 System.out.println(input);
+                break;
+            case "NOTIFYTURN":
+                System.out.println(input);
+                break;
         }
     }
 
