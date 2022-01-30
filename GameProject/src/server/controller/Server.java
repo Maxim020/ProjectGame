@@ -12,8 +12,7 @@ import java.net.*;
 public class Server{
     private ServerSocket serverSocket;
     private Game game;
-
-
+    private boolean requestGame = false;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -23,6 +22,7 @@ public class Server{
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(1234);
         Server server = new Server(serverSocket);
+        server.startGame();
         server.startServer();
     }
 
@@ -30,6 +30,9 @@ public class Server{
     public void startServer() {
         try {
             while (!serverSocket.isClosed()) {
+                if(requestGame){
+                    break;
+                }
                 Socket socket = serverSocket.accept();
                 System.out.println("New Client has connected");
                 ClientHandler clientHandler = new ClientHandler(socket, this);
@@ -40,6 +43,21 @@ public class Server{
         } catch (IOException e){
             e.printStackTrace();
         }
+        //System.out.println("setting up game ...");
+        //setUpGame();
+    }
+
+    public void startGame(){
+        new Thread(() -> {
+            while (true){
+                //Another (dirty) solution: Make Thread sleep 100 ms
+                synchronized (this) {
+                    if (requestGame) {
+                        setUpGame();
+                    }
+                }
+            }
+        }).start();
     }
 
 
@@ -50,6 +68,10 @@ public class Server{
 
     public Game getGame() {
         return game;
+    }
+
+    public void setRequestGame(boolean requestGame) {
+        this.requestGame = requestGame;
     }
 
     public void closeServerSocket(){

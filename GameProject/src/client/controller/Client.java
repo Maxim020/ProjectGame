@@ -80,27 +80,30 @@ public class Client {
     }
 
     public void handleInput(String input){
-        String[] parts = input.split(" ");
-        String command = parts[0];
+        if(input.startsWith("BOARD")){
+            StringBuilder stringBuilder = new StringBuilder(input);
+            stringBuilder.delete(0,6);
+            input = String.valueOf(stringBuilder);
+            clientTUI.updateBoard(input);
 
-        switch (command){
-            case "WELCOME":
-                System.out.println(input+"\n");
-                break;
-            case "BOARD":
-                if(parts.length == 2) {
-                    clientTUI.updateBoard(parts[1]);
-                }
-                else {
-                    clientTUI.updateBoard("");
-                }
-                break;
-            case "TILES":
-                System.out.println(input);
-                break;
-            case "NOTIFYTURN":
-                System.out.println(input);
-                break;
+        }
+        else {
+            String[] parts = input.split(" ");
+            String command = parts[0];
+
+            switch (command) {
+                case "WELCOME":
+                    System.out.println(input + "\n");
+                    break;
+                case "TILES":
+                    System.out.println(input);
+                    break;
+                case "NOTIFYTURN":
+                    System.out.println(input);
+                    break;
+                default: //Leave it theres <-- Needed for chat
+                    System.out.println(input);
+            }
         }
     }
 

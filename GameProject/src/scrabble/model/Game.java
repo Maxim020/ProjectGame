@@ -33,6 +33,7 @@ public class Game {
 	private boolean isMoveIndicated;
 	private boolean isMoveValid;
 	private String move;
+	private String oldMove;
 	private Board board;
 	private Bag bag;
 	private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
@@ -55,22 +56,29 @@ public class Game {
 			notifyTurn(clients.get(playersTurn));
 
 			/** wait until move is not null anymore */
-			while (move == null);
-
-
-//			synchronized (this){
-//				try {
-//					wait();
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			}
+			while (move == null){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				//System.out.println("FOREVER");
+			}
 
 			/** DetermineMove() and Validates input */
 			while (true){
+				//Wait until client changes value of move
+				while (move.equals(oldMove)) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+
 				try {
 					validateInput(move);
-					//setMove(move);
+					setOldMove(move); //maybe not necessary
 					isMoveValid = true;
 					break;
 				} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
@@ -78,20 +86,22 @@ public class Game {
 
 					e.printStackTrace();
 					getCurrentClient().sendMessage("Please type in a valid move");
+					setOldMove(move);
 
 				} catch (InvalidWordException e) {
 					e.printStackTrace();
 					getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
-					//setMove(move);
+					setOldMove(move); //maybe not necessary
 					isMoveValid = false;
 					break;
 				}
 			}
+
 			if(isMoveValid){
 				processMove(move, board, playerList.getCurrentPlayer(), bag);
 			}
 			setMove(null);
-
+			setOldMove(null);
 			if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
 				broadcastMessage("Game ends because either a player played all tiles left or there are no more possibilities");
 				break;
@@ -119,6 +129,10 @@ public class Game {
 		for(ClientHandler clientHandler : clients){
 			clientHandler.sendMessage(msg);
 		}
+	}
+
+	public void setOldMove(String oldMove) {
+		this.oldMove = oldMove;
 	}
 
 	/**

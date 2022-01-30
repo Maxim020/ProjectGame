@@ -48,8 +48,26 @@ public class Board {
 
     public void updateBoard(String tiles){
         for(int i=0; i<tiles.length(); i++){
-            int row = i%14;
-            int col = i/14;
+            int row = i/15;
+            int col = i%15;
+            if(tiles.charAt(i) != ' '){
+                FieldType fieldType = checkFieldType(row,col);
+
+                switch (fieldType){
+                    case DOUBLE_LETTER_SCORE:
+                        doubleLetterScore.remove(convert(row, col));
+                        break;
+                    case TRIPLE_LETTER_SCORE:
+                        tripleLetterScore.remove(convert(row,col));
+                        break;
+                    case DOUBLE_WORD_SCORE:
+                        doubleWordScore.remove(convert(row, col));
+                        break;
+                    case TRIPLE_WORD_SCORE:
+                        tripleWordScore.remove(convert(row, col));
+                        break;
+                }
+            }
             setTile(tiles.charAt(i),row, col);
         }
     }

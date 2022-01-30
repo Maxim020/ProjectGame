@@ -68,7 +68,6 @@ public class ClientHandler implements Runnable {
         //
         String[] parts = input.split(" "); //Wie soll ich Unit und message seperator trennen?
         String command = parts[0];
-        System.out.println("[INCOMING FROM "+clientUsername+"] "+input);
 
         switch (command){
             case "ANNOUNCE":
@@ -99,8 +98,8 @@ public class ClientHandler implements Runnable {
                         msg += " "+ClientHandler.clientHandlers.get(i).getName();
                     }
                     broadcastMessage(msg,true);
-                    server.setUpGame(); //The game takes all connected clients as arguments in the constructor
-
+                    server.setRequestGame(true);
+                    //server.setUpGame(); //The game takes all connected clients as arguments in the constructor
                 }
                 else {
                     sendMessage("Not enough clients connected");
@@ -116,14 +115,14 @@ public class ClientHandler implements Runnable {
                         move += parts[i] + " ";
                     }
                     this.server.getGame().setMove(move);
-//                    synchronized (this){
-//                        this.server.getGame().notify();
-//                    }
+
                 }
                 else {
                     sendMessage("ERROR: It is not your turn");
                 }
                 break;
+            default:
+                System.out.println("[INCOMING FROM "+clientUsername+"] "+input);
         }
     }
 
