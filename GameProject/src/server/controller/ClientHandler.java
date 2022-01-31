@@ -58,6 +58,8 @@ public class ClientHandler implements Runnable {
         String[] parts = input.split(" "); //Wie soll ich Unit und message seperator trennen?
         String command = parts[0];
 
+        System.out.println("[INCOMING FROM "+clientUsername+"] "+input+"\n");
+
         switch (command){
             case "ANNOUNCE":
                 if(parts[1] == null) {
@@ -119,8 +121,6 @@ public class ClientHandler implements Runnable {
                     sendMessage("ERROR: It is not your turn");
                 }
                 break;
-            default:
-                System.out.println("[INCOMING FROM "+clientUsername+"] "+input);
         }
     }
 

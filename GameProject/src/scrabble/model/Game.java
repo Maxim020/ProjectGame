@@ -126,6 +126,7 @@ public class Game {
 			else {
 				ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
 				setMove(computerPlayer.determineMove(board));
+				isMoveValid = true;
 			}
 
 			if(isMoveValid){
