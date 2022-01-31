@@ -98,6 +98,7 @@ public class Game {
 					}
 				}
 			} else {
+				System.out.println("Computerplayer makes move");
 				System.out.println("Currentplayer type: "+PlayerList.getInstance().getCurrentPlayer().toString()); //Returns toString from Player Class
 				ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
 				System.out.println(computerPlayer instanceof ComputerPlayer);

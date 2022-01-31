@@ -75,7 +75,8 @@ public class ClientHandler implements Runnable {
             case "ANNOUNCE":
                 if(parts[1] == null) {
                     sendMessage("Please enter your name");
-                } else  if(parts[1].equalsIgnoreCase("C")){
+                } else if(parts[1].equalsIgnoreCase("C")){
+                    System.out.println("Initializing computer player ... "); //remove
                     this.clientUsername = "ComputerPlayer";
                     clientHandlers.add(this);
                     broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
