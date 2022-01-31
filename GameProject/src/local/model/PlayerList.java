@@ -1,26 +1,22 @@
 package local.model;
 
 import scrabble.model.Player;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * SINGLETON DESIGN PATTERN
  * Makes sure that there is only one list of player throughout the program
- *
- * PlayerList list = PlayerList.getInstance();
- * list.getPlayers()
- *
- * NOT THREAD SAFE
+ * THREAD SAFE
+ * @author Yasin Fahmy
  */
 
 public class PlayerList {
     private static PlayerList instance = null;
-    private List<Player> players = new ArrayList<>(); //Currently, not thread-safe!
+    private List<Player> players = new Vector<>();
     private Player currentPlayer;
 
-    private PlayerList(){}//Private to prevent anyone from instantiating
+    private PlayerList(){}
 
     public static PlayerList getInstance() {
         if (instance == null) {
