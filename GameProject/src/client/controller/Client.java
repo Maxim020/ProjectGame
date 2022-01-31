@@ -1,47 +1,47 @@
 package client.controller;
 
 import client.view.ClientTUI;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * IDEAS:
- * 1) CLientTUI implementation
+ * Provides a Class that represents the Client
+ * @author Yasin Fahmy
  */
+
 public class Client {
     private Socket socket;
     private BufferedWriter out;
     private BufferedReader in;
-    private String username;
-    private ClientTUI clientTUI;
+    private final String username;
+    private final ClientTUI clientTUI;
+
 
     public Client(Socket socket, String username){
         try {
             this.socket = socket;
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.username = username;
-            clientTUI = new ClientTUI();
         } catch (IOException e){
             closeEverything();
         }
-
-        //clientTUI = new ClientTUI(this);
+        this.username = username;
+        clientTUI = new ClientTUI();
     }
 
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME]");
+        ClientTUI.promptToAnnounce();
         String username = scanner.nextLine();
         Socket socket = new Socket("localhost",1234);
         Client client = new Client(socket, username);
-        client.clientTUI.printCommands();
+        ClientTUI.printCommands();
         client.listenForMessages();
         client.sendMessage();
     }
+
 
     public synchronized void sendMessage(){
         try {
@@ -62,15 +62,15 @@ public class Client {
         }
     }
 
-    //Listen for messages, need thread because it is a blocking operation
-    public void listenForMessages(){
+
+    public synchronized void listenForMessages(){
         new Thread(() -> {
-            String messageFromGroupChat;
+            String messageFromServer;
 
             while (socket.isConnected()){
                 try {
-                    messageFromGroupChat = in.readLine();
-                    handleInput(messageFromGroupChat);
+                    messageFromServer = in.readLine();
+                    handleInput(messageFromServer);
                     //System.out.println(messageFromGroupChat);
                 }catch (IOException e){
                     closeEverything();
@@ -79,47 +79,29 @@ public class Client {
         }).start();
     }
 
+
     public void handleInput(String input){
         if(input.startsWith("BOARD")){
             StringBuilder stringBuilder = new StringBuilder(input);
             stringBuilder.delete(0,6);
             input = String.valueOf(stringBuilder);
             clientTUI.updateBoard(input);
-
         }
         else {
             String[] parts = input.split(" ");
             String command = parts[0];
 
-            switch (command) {
-                case "WELCOME":
-                    System.out.println(input + "\n");
-                    break;
-                case "TILES":
-                    System.out.println(input);
-                    break;
-                case "NOTIFYTURN":
-                    System.out.println(input);
-                    break;
-                default: //Leave it theres <-- Needed for chat
-                    System.out.println(input);
+            if ("NOTIFYTURN".equals(command)) {
+                ClientTUI.promptToMakeMove(parts[0], parts[1], parts[2]);
+            } else {
+                //Used for WELCOME, NEWTILES, and group chat
+                ClientTUI.showMessage(input);
             }
         }
     }
 
+
     public void closeEverything(){
-        try{
-            if(in != null){
-                in.close();
-            }
-            if(out != null){
-                out.close();
-            }
-            if(socket != null){
-                socket.close();
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        ClientHandler.closeConnection(in, out, socket);
     }
 }

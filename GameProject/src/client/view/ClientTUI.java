@@ -3,39 +3,51 @@ package client.view;
 import scrabble.model.Board;
 
 /**
- * IDEAS:
- * 1)
+ * provides a ClientTUI
+ * @author Yasin Fahmy
  */
 
 public class ClientTUI {
-    private PlainBoardRepresentation representation;
-    private Board board;
+    private ClientBoard representation;
+    private final Board board;
+
 
     public ClientTUI(){
         board = new Board();
-        representation = new PlainBoardRepresentation(board);
+        representation = new ClientBoard(board);
     }
 
-    public void showMessage(String msg){
+    public static void promptToAnnounce(){
+        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME]");
+    }
+
+    public static void promptToMakeMove(String p0, String p1, String p2){
+        if (p1.equalsIgnoreCase("TRUE")) {
+            System.out.println(p0 + " - Make a move!");
+        } else {
+            System.out.println("It's " + p2 + "'s turn");
+        }
+    }
+
+    public static void printCommands(){
+        System.out.println("\nUse Chat:  CHAT 'Your Message'\nRequest Game: REQUESTGAME 'amount of players (2-4)'\n\n");
+    }
+
+
+    public static void showMessage(String msg){
         System.out.println(msg);
     }
 
 
     public void updateBoard(String tiles){
         board.updateBoard(tiles);
-        setRepresentation(new PlainBoardRepresentation(board));
+        setRepresentation(new ClientBoard(board));
         System.out.println(representation);
     }
 
 
-    public void setRepresentation(PlainBoardRepresentation representation) {
+    public void setRepresentation(ClientBoard representation) {
         this.representation = representation;
     }
-
-    public void printCommands(){
-        System.out.println( "\nUse Chat:  CHAT 'Your Message'\n"+
-                            "Request Game: REQUESTGAME 'amount of players (2-4)'\n");
-    }
-
 }
 

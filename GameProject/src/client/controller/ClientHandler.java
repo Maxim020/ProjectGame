@@ -158,6 +158,10 @@ public class ClientHandler implements Runnable {
 
     public void closeEverything(){
         removeClientHandler();
+        closeConnection(in,out,socket);
+    }
+
+    public static void closeConnection(BufferedReader in, BufferedWriter out,Socket socket){
         try{
             if(in != null){
                 in.close();

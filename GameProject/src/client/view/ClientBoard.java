@@ -4,7 +4,7 @@ import local.model.PlayerList;
 import scrabble.model.Board;
 import scrabble.model.letters.Bag;
 
-public class PlainBoardRepresentation {
+public class ClientBoard {
     // Declaring ANSI_RESET so that we can reset the color
     public static final String ANSI_RESET = "\u001B[0m";
     // Declaring the background color red, blue, purple, cyan
@@ -15,7 +15,7 @@ public class PlainBoardRepresentation {
     public static final String ANSI_GREEN = "\u001B[32m";
     private Board board;
 
-    public PlainBoardRepresentation(Board board){
+    public ClientBoard(Board board){
         this.board = board;
     }
 
