@@ -46,6 +46,11 @@ public class Board {
         playerList = PlayerList.getInstance();
     }
 
+    /**
+     * Updates the ClientBoard for visual representation
+     * @param tiles - a string which appended all tiles on the board reading from top to bottom and left to right
+     *              Empty squares are represented by a space ' '
+     */
     public void updateBoard(String tiles){
         for(int i=0; i<tiles.length(); i++){
             int row = i/15;
@@ -83,10 +88,6 @@ public class Board {
                 fields[i][j] = ' ';
             }
         }
-    }
-
-    public Board deepCopy(){
-        return null;
     }
 
     /**
@@ -209,16 +210,20 @@ public class Board {
         return rowcol;
     }
 
+    /**
+     * @return a string representation of the board.
+     * Contains all tiles, and for empty squares the string has a space ' '
+     */
     @Override
     public String toString(){
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for(int i=0; i<15; i++){
             for(int j=0; j<15; j++){
-                result += fields[i][j];
+                result.append(fields[i][j]);
             }
         }
-        return result;
+        return result.toString();
     }
 
     /**
@@ -343,9 +348,6 @@ public class Board {
         return doubleWordScore;
     }
 
-    public char[][] getFields() {
-        return fields;
-    }
 
     public HashSet<String> getTripleLetterScore() {
         return tripleLetterScore;

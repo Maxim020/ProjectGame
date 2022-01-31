@@ -18,26 +18,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * IDEAS:
- * 1) Rename LocalTUI to ServeTUI or sth like that
- */
 public class Game {
-	//Soll ich auch player mit ClientHandler connecten?
-	private List<ClientHandler> clients;
-	private PlayerList playerList;
-	private int amountOfPlayers;
+	private final List<ClientHandler> clients;
+	private final PlayerList playerList;
+	private final int amountOfPlayers;
+	private final Board board;
+	private final Bag bag;
+	private final ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
+	private final AdjacentWordChecker adjacentWordChecker;
+	private final IsAdjacentChecker isAdjacentChecker;
 	private int numberOfTurn = 0;
 	private int playersTurn;
-	private boolean isMoveIndicated;
-	private boolean isMoveValid;
 	private String move;
 	private String oldMove;
-	private Board board;
-	private Bag bag;
-	private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
-	private AdjacentWordChecker adjacentWordChecker;
-	private IsAdjacentChecker isAdjacentChecker;
 
 	public void start(){
 		while (true){
@@ -57,7 +50,7 @@ public class Game {
 			/** wait until move is not null anymore */
 			while (move == null){
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -65,11 +58,12 @@ public class Game {
 			}
 
 			/** DetermineMove() and Validates input */
+			boolean isMoveValid;
 			while (true){
 				//Wait until client changes value of move
 				while (move.equals(oldMove)) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -169,9 +163,9 @@ public class Game {
 		//Each player's score is reduced by the sum of his or her unplaced letters.
 		for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
 			ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-			for (int j=0; j<letterDeck.size(); j++){
-				sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
-				PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
+			for (Character character : letterDeck) {
+				sumOfUnplacedTiles += letterScoreChecker.scoreChecker(character);
+				PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(character));
 			}
 		}
 
@@ -347,9 +341,8 @@ public class Game {
 				throw new NotEnougTilesException();
 			}
 		}
-
 		//Skip turn
-		else if(parts.length == 1) {
+		else {
 			String command = parts[0];
 
 			if(!command.equalsIgnoreCase("swap")){
@@ -468,7 +461,7 @@ public class Game {
 		this.isAdjacentChecker = new IsAdjacentChecker(board);
 
 		//Connect Clients with a player
-		for (int i=0; i<this.clients.size(); i++){
+		for (int i=0; i<this.clients.size(); i++){ //Computer players
 			this.clients.get(i).setPlayer(new Player(this.clients.get(i).getName(), bag));
 		}
 
@@ -502,17 +495,5 @@ public class Game {
 
 	public Bag getBag() {
 		return bag;
-	}
-
-	public void clientDisconnected(ClientHandler disconnectedClient) {
-//		if(disconnectedClient.equals(ch1)){
-//			ch2.sendMessage("GAME OVER; OTHER CLIENT DISCONNECTED");
-//			ch2.setGame(null);
-//		}
-//		else if (disconnectedClient.equals(ch2)){
-//			ch1.sendMessage("GAME OVER; OTHER CLIENT DISCONNECTED");
-//			ch1.setGame(null);
-//		}
-//	}
 	}
 }

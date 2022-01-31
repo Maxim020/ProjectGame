@@ -21,7 +21,7 @@ public class InputHandler {
     private Board board;
     private Player currentPlayer;
     private Bag bag;
-    private ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
+    private final ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
     private AdjacentWordChecker adjacentWordChecker;
     private IsAdjacentChecker isAdjacentChecker;
     private String lastInput;
@@ -34,16 +34,14 @@ public class InputHandler {
         this.bag = Bag.getInstance();
     }
 
-    public InputHandler(){
-        //this needs to be here smh for the program to work
-    }
+    public InputHandler(){}
 
     /**
-     * @param board
+     * @param board - the board that the game is played on
      * @return an ArrayList of Players
+     * Scans user input for the name of all players and if wanted any computer players
      */
     public List<Player> getPlayers(Board board){
-        /** Scans user input for the name of all players and if wanted any computer players */
         String[] players;
         int amountOfPlayers;
 
@@ -63,13 +61,13 @@ public class InputHandler {
 
         List<Player> playerArrayList = new ArrayList<>();
 
-        for (int i=0; i<players.length; i++){
-            if (players[i].equals("-N")){
+        for (String player : players) {
+            if (player.equals("-N")) {
                 playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board));
-            } else if (players[i].equals("-S")){
+            } else if (player.equals("-S")) {
                 playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board));
             } else {
-                playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
+                playerArrayList.add(new HumanPlayer(player, Bag.getInstance()));
             }
         }
 
@@ -113,6 +111,7 @@ public class InputHandler {
 
     /**
      * Throws IllegalArgumentException provided the input is not valid
+     * The order of these checker is important. Do not change, unless it would solve a new bug
      * @param input from the user
      * @author Yasin Fahmy
      */
@@ -126,9 +125,6 @@ public class InputHandler {
         //Set word
         if(parts.length == 4){
             String command = parts[0]; String startCoordinate = parts[1]; String direction = parts[2]; String word = parts[3];
-            /**
-             * The order of these checker is important. Do not change, unless it would solve a new bug
-             */
 
             if(wordChecker.isValidWord(word) == null) {
                 throw new InvalidWordException();

@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 public class ClientHandler implements Runnable {
-    private Server server;
+    private final Server server;
     public static List<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader in;
@@ -65,15 +65,15 @@ public class ClientHandler implements Runnable {
                     clientHandlers.add(this);
                     broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
                     sendMessage("WELCOME " + clientUsername);
-                    setPlayer(new Player(getName(), Bag.getInstance()));
+                    setPlayer(new Player(getName(), Bag.getInstance())); //Maybe remove this
                 }
                 break;
             case "CHAT":
-                String message = clientUsername+":";
+                StringBuilder message = new StringBuilder(clientUsername + ":");
                 for (int i=1; i<parts.length; i++){
-                    message += " "+parts[i];
+                    message.append(" ").append(parts[i]);
                 }
-                broadcastMessage(message,false);
+                broadcastMessage(message.toString(),false);
                 break;
             case "REQUESTGAME": //Was passiert wenn mehr als players needed in der queue sind?
                 int inQueue = ClientHandler.clientHandlers.size();
@@ -85,11 +85,11 @@ public class ClientHandler implements Runnable {
                     sendMessage("Please type in a number between 2 and 4");
                 }
                 else if(playersStillNeeded == 0){
-                    String msg = "STARTGAME";
+                    StringBuilder msg = new StringBuilder("STARTGAME");
                     for(int i=0; i<playersNeeded; i++){
-                        msg += " "+ClientHandler.clientHandlers.get(i).getName();
+                        msg.append(" ").append(ClientHandler.clientHandlers.get(i).getName());
                     }
-                    broadcastMessage(msg,true);
+                    broadcastMessage(msg.toString(),true);
                     server.setRequestGame(true);
                     //server.setUpGame(); //The game takes all connected clients as arguments in the constructor
                 }
@@ -101,11 +101,11 @@ public class ClientHandler implements Runnable {
             case "MAKEMOVE":
                 if(clientUsername.equals(server.getGame().getCurrentClient().getName())) {
                     System.out.println("TEST");
-                    String move = "";
+                    StringBuilder move = new StringBuilder();
                     for (int i = 1; i < parts.length; i++) {
-                        move += parts[i] + " ";
+                        move.append(parts[i]).append(" ");
                     }
-                    this.server.getGame().setMove(move);
+                    this.server.getGame().setMove(move.toString());
 
                 }
                 else {
