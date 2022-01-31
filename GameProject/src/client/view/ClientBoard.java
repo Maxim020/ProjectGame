@@ -1,19 +1,15 @@
 package client.view;
 
-import local.model.PlayerList;
 import scrabble.model.Board;
-import scrabble.model.letters.Bag;
 
 public class ClientBoard {
-    // Declaring ANSI_RESET so that we can reset the color
     public static final String ANSI_RESET = "\u001B[0m";
-    // Declaring the background color red, blue, purple, cyan
     public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
     public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
     public static final String ANSI_PURPLE_BACKGROUND = "\u001B[45m";
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_GREEN = "\u001B[32m";
-    private Board board;
+    private final Board board;
 
     public ClientBoard(Board board){
         this.board = board;
@@ -26,7 +22,7 @@ public class ClientBoard {
      * @return - The squares of the board that are the fields to place tiles on
      * @author Yasin Fahmy
      */
-    public String printSquare(int row, int column) throws IllegalArgumentException{
+    public static String printSquare(int row, int column, Board board) throws IllegalArgumentException{
         if(!board.isFieldValid(row, column)){throw new IllegalArgumentException();}
 
         if (board.checkFieldType(row, column).equals(Board.FieldType.TRIPLE_WORD_SCORE)){
@@ -51,15 +47,15 @@ public class ClientBoard {
      * @return - A line of the board (Upper bound + Fields)
      * @author Yasin Fahmy
      */
-    public String printLine(int line){//For Loop?
+    public String printLine(int line){
         int row = line-1;
-        String result = "";
-        result += " "+String.format("%2d",line)+" ";
+        StringBuilder result = new StringBuilder();
+        result.append(" ").append(String.format("%2d", line)).append(" ");
         for (int i=0; i<15; i++){
-            result += printSquare(row,i);
+            result.append(printSquare(row, i, board));
         }
-        result += "| "+line;
-        return  result;
+        result.append("| ").append(line);
+        return result.toString();
     }
 
     /**
@@ -67,7 +63,7 @@ public class ClientBoard {
      * @return Strings that will display a visual representation of all special fields
      * @author Yasin Fahmy
      */
-    public String addFieldTypes(int i){
+    public static String addFieldTypes(int i){
         if(i == 0) {
             return "        "+ANSI_RED_BACKGROUND+"Triple Word Score"+ANSI_RESET;
         }
@@ -111,13 +107,12 @@ public class ClientBoard {
      * @author Yasin Fahmy
      */
     public String toString(){
-        String result = "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n";
+        StringBuilder result = new StringBuilder("      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n");
         for (int i=0; i<15; i++){
-            result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
-            result +=printLine(i+1)+addFieldTypes(i)+addInstructions(i)+"\n";
+            result.append("    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n");
+            result.append(printLine(i + 1)).append(addFieldTypes(i)).append(addInstructions(i)).append("\n");
         }
-        result +="    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-                "      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n";
-        return result;
+        result.append("    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n");
+        return result.toString();
     }
 }

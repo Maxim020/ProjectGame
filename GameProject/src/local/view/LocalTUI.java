@@ -3,17 +3,17 @@ package local.view;
 import local.model.PlayerList;
 import scrabble.model.*;
 import scrabble.model.letters.Bag;
-import scrabble.view.TextBoardRepresentation;
+import server.view.ServerBoard;
 
 import java.util.List;
 
 public class LocalTUI {
-    private TextBoardRepresentation representation;
+    private ServerBoard representation;
     private Player currentPlayer;
     private Bag bag;
 
     public LocalTUI(Board board, Player currentPlayer){
-        this.representation = new TextBoardRepresentation(board);
+        this.representation = new ServerBoard(board);
         this.currentPlayer = currentPlayer;
         this.bag = Bag.getInstance();
     }
