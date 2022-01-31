@@ -1,8 +1,8 @@
-package client.controller;
+package server.controller;
 
-import scrabble.model.Player;
+import scrabble.model.player.Player;
 import scrabble.model.letters.Bag;
-import server.controller.Server;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;

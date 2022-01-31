@@ -1,6 +1,8 @@
 package scrabble.model;
 
-import client.controller.ClientHandler;
+import server.controller.ClientHandler;
+import scrabble.model.player.Player;
+import scrabble.model.player.PlayerList;
 import server.view.ServerTUI;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;

@@ -1,4 +1,4 @@
-package scrabble.model;
+package scrabble.model.player;
 
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;

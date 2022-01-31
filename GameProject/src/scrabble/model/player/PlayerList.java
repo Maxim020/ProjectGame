@@ -1,4 +1,4 @@
-package scrabble.model;
+package scrabble.model.player;
 
 import java.util.List;
 import java.util.Vector;

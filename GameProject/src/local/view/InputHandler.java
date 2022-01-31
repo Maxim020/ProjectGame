@@ -1,14 +1,18 @@
 package local.view;
 
-import scrabble.model.PlayerList;
+import scrabble.model.player.ComputerPlayer;
+import scrabble.model.player.HumanPlayer;
+import scrabble.model.player.PlayerList;
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.CrossChecker;
+import scrabble.model.player.Player;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.IsAdjacentChecker;
 import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.strategy.SmartStrategy;
 import scrabble.view.utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;

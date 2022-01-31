@@ -1,6 +1,8 @@
 package client.controller;
 
 import client.view.ClientTUI;
+import server.controller.ClientHandler;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;

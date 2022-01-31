@@ -10,7 +10,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="2" language="java" name="scrabble.model.Strategy" project="GameProject" 
+  <interface id="2" language="java" name="scrabble.strategy.Strategy" project="GameProject"
     file="/GameProject/src/scrabble/model/Strategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="260" x="2999" y="2309"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -28,7 +28,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="scrabble.model.ComputerPlayer" project="GameProject" 
+  <class id="4" language="java" name="scrabble.model.player.ComputerPlayer" project="GameProject"
     file="/GameProject/src/scrabble/model/ComputerPlayer.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="240" x="3446" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -37,7 +37,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="scrabble.model.HumanPlayer" project="GameProject" 
+  <class id="5" language="java" name="scrabble.model.player.HumanPlayer" project="GameProject"
     file="/GameProject/src/scrabble/model/HumanPlayer.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="173" x="3892" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -46,7 +46,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="scrabble.model.NaiveStrategy" project="GameProject" 
+  <class id="6" language="java" name="scrabble.strategy.NaiveStrategy" project="GameProject"
     file="/GameProject/src/scrabble/model/NaiveStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="196" width="332" x="2627" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -55,7 +55,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="scrabble.model.PlayerList" project="GameProject" 
+  <class id="7" language="java" name="scrabble.model.player.PlayerList" project="GameProject"
     file="/GameProject/src/scrabble/model/PlayerList.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="178" width="196" x="3840" y="1519"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -64,7 +64,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="scrabble.model.SmartStrategy" project="GameProject" 
+  <class id="8" language="java" name="scrabble.strategy.SmartStrategy" project="GameProject"
     file="/GameProject/src/scrabble/model/SmartStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="178" width="280" x="2999" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -82,7 +82,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="scrabble.model.Player" project="GameProject" 
+  <class id="10" language="java" name="scrabble.model.player.Player" project="GameProject"
     file="/GameProject/src/scrabble/model/Player.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="286" width="182" x="3892" y="1747"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

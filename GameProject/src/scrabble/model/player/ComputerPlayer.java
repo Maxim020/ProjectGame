@@ -1,6 +1,10 @@
-package scrabble.model;
+package scrabble.model.player;
 
+import scrabble.model.Board;
 import scrabble.model.letters.Bag;
+import scrabble.model.player.Player;
+import scrabble.strategy.NaiveStrategy;
+import scrabble.strategy.Strategy;
 
 public class ComputerPlayer extends Player {
 	

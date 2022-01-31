@@ -9,9 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
-import scrabble.model.Player;
-import scrabble.model.PlayerList;
-import scrabble.model.SmartStrategy;
+import scrabble.model.player.Player;
+import scrabble.model.player.PlayerList;
+import scrabble.strategy.SmartStrategy;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.LetterDeck;
 

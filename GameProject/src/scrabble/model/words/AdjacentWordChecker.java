@@ -2,9 +2,9 @@ package scrabble.model.words;
 
 import java.util.ArrayList;
 
-import scrabble.model.PlayerList;
+import scrabble.model.player.PlayerList;
 import scrabble.model.Board;
-import scrabble.model.ComputerPlayer;
+import scrabble.model.player.ComputerPlayer;
 
 public class AdjacentWordChecker {
 	

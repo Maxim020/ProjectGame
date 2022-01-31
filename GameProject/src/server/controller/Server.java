@@ -1,5 +1,4 @@
 package server.controller;
-import client.controller.ClientHandler;
 import scrabble.model.Game;
 import java.io.*;
 import java.net.*;

@@ -1,7 +1,8 @@
 package server.view;
 
-import scrabble.model.PlayerList;
+import scrabble.model.player.PlayerList;
 import scrabble.model.*;
+import scrabble.model.player.Player;
 
 import java.util.List;
 

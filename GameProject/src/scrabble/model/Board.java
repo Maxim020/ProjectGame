@@ -1,4 +1,5 @@
 package scrabble.model;
+import scrabble.model.player.PlayerList;
 import scrabble.model.words.WordScoreCounter;
 
 import java.util.ArrayList;

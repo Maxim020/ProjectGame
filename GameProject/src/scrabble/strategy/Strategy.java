@@ -1,5 +1,6 @@
-package scrabble.model;
+package scrabble.strategy;
 
+import scrabble.model.Board;
 import scrabble.model.letters.LetterDeck;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.ScrabbleWordChecker;
