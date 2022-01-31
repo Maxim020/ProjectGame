@@ -60,12 +60,20 @@ public class ClientHandler implements Runnable {
 
         switch (command){
             case "ANNOUNCE":
-                if(parts[1] != null) {
+                if(parts[1] == null) {
+                    sendMessage("Please enter a name");
+                }
+                else if(parts[1].equalsIgnoreCase("-C")){
+                    this.clientUsername = "ComputerPlayer";
+                    clientHandlers.add(this);
+                    broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
+                    sendMessage("WELCOME " + clientUsername);
+                }
+                else {
                     this.clientUsername = parts[1];
                     clientHandlers.add(this);
                     broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
                     sendMessage("WELCOME " + clientUsername);
-                    setPlayer(new Player(getName(), Bag.getInstance())); //Maybe remove this
                 }
                 break;
             case "CHAT":
@@ -96,7 +104,6 @@ public class ClientHandler implements Runnable {
                 else {
                     sendMessage("The number of clients connected and the indicated amount of players to start a game must be equal");
                 }
-
                 break;
             case "MAKEMOVE":
                 if(clientUsername.equals(server.getGame().getCurrentClient().getName())) {
@@ -116,8 +123,6 @@ public class ClientHandler implements Runnable {
                 System.out.println("[INCOMING FROM "+clientUsername+"] "+input);
         }
     }
-
-
 
 
     public void broadcastMessage(String msg, boolean includeSender){

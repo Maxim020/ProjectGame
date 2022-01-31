@@ -80,70 +80,6 @@ public class LocalController {
     }
 
     /**
-     * @param bag - a universal bag of letters
-     * @param currentPlayer - The player who has just made a move
-     * @return - winner of the game and adjusts Scores
-     * @author Yasin
-     */
-    public static Player announceWinner(Bag bag, Player currentPlayer){
-        LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
-        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
-        int sumOfUnplacedTiles = 0;
-        Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-
-        //Each player's score is reduced by the sum of his or her unplaced letters.
-        for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
-            ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-            for (int j=0; j<letterDeck.size(); j++){
-                sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
-                PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
-            }
-        }
-
-        //In addition, if a player has used all of his or her letters, the sum of the other players' unplaced letters is added to that player's score.
-        if(goingOut){
-            for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
-                ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-                if(letterDeck.isEmpty()){
-                    PlayerList.getInstance().getPlayers().get(i).addToScore(sumOfUnplacedTiles);
-                }
-            }
-        }
-
-        //Sort PlayerList in descending order
-        Collections.sort(PlayerList.getInstance().getPlayers());
-        Collections.reverse(PlayerList.getInstance().getPlayers());
-        Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-
-        //The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
-        if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
-            return winnerBeforeAdjustment;
-        } else {
-            return winnerAfterAdjustment;
-        }
-    }
-
-    /**
-     * Game ends if:
-     * 1) Either player uses more than 10 minutes of overtime.
-     * 2) The game ends when all letters have been drawn and one player uses his or her last letter (known as "going out")
-     * 3) When all possible plays have been made
-     * @param bag - a universal bag of letters
-     * @param currentPlayer - The player who has just made a move
-     * @return - return true if game ended
-     * @author Yasin
-     */
-    public static boolean checkEndOfGame(Bag bag, Player currentPlayer, Board board){
-        //Either player uses more than 10 minutes of overtime.
-
-        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
-
-        boolean deadEnd = bag.getLetterList().isEmpty() && new DeadEndChecker().isDeadEnd(board);
-
-        return goingOut || deadEnd;
-    }
-
-    /**
      * processes input to make a move and return
      * @requires the input to be valid
      * @param input the input that the user wrote
@@ -245,5 +181,69 @@ public class LocalController {
         }
         bag.shuffleBag();
         currentPlayer.getLetterDeck().addToDeck(1); //Already removes from bag
+    }
+
+    /**
+     * @param bag - a universal bag of letters
+     * @param currentPlayer - The player who has just made a move
+     * @return - winner of the game and adjusts Scores
+     * @author Yasin
+     */
+    public static Player announceWinner(Bag bag, Player currentPlayer){
+        LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
+        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
+        int sumOfUnplacedTiles = 0;
+        Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+
+        //Each player's score is reduced by the sum of his or her unplaced letters.
+        for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+            ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+            for (int j=0; j<letterDeck.size(); j++){
+                sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
+                PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
+            }
+        }
+
+        //In addition, if a player has used all of his or her letters, the sum of the other players' unplaced letters is added to that player's score.
+        if(goingOut){
+            for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+                ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+                if(letterDeck.isEmpty()){
+                    PlayerList.getInstance().getPlayers().get(i).addToScore(sumOfUnplacedTiles);
+                }
+            }
+        }
+
+        //Sort PlayerList in descending order
+        Collections.sort(PlayerList.getInstance().getPlayers());
+        Collections.reverse(PlayerList.getInstance().getPlayers());
+        Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+
+        //The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
+        if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
+            return winnerBeforeAdjustment;
+        } else {
+            return winnerAfterAdjustment;
+        }
+    }
+
+    /**
+     * Game ends if:
+     * 1) Either player uses more than 10 minutes of overtime.
+     * 2) The game ends when all letters have been drawn and one player uses his or her last letter (known as "going out")
+     * 3) When all possible plays have been made
+     * @param bag - a universal bag of letters
+     * @param currentPlayer - The player who has just made a move
+     * @return - return true if game ended
+     * @author Yasin
+     */
+    public static boolean checkEndOfGame(Bag bag, Player currentPlayer, Board board){
+        //Either player uses more than 10 minutes of overtime.
+
+        boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
+
+        boolean deadEnd = bag.getLetterList().isEmpty() && new DeadEndChecker().isDeadEnd(board);
+
+        return goingOut || deadEnd;
     }
 }

@@ -127,8 +127,6 @@ public class Board {
         }
     }
 
-
-
     /**
      * @param startCoordinate - the field of the first letter of a word
      * @param direction - the direction of the word (h/v)
@@ -152,6 +150,13 @@ public class Board {
         return result;
     }
 
+    /**
+     * Checks if word fits on board
+     * @param field - the field of the first letter of a word
+     * @param direction - the direction of the word (h/v)
+     * @param word - word that is or will be on the board
+     * @return
+     */
     public boolean doesWordFit(String field, String direction, String word){
         int[] coordinates = convert(field);
 
@@ -324,6 +329,18 @@ public class Board {
         doubleLetterScore.add("D15");doubleLetterScore.add("L15");
     }
 
+    /**
+     * Necessary for computer player
+     * @param coordinate - the field of the first letter of a word
+     * @param direction - the direction of the word (h/v)
+     * @param word - word that is or will be on the board
+     */
+    public void addPlayedWords(String coordinate, String direction, String word) {
+        playedWords.add(word);
+        wordCoordinateMap.put(word, coordinate);
+        wordDirectionMap.put(word, direction);
+    }
+
     public boolean isBoardEmpty() {
         return isBoardEmpty;
     }
@@ -355,14 +372,6 @@ public class Board {
 
     public HashSet<String> getDoubleLetterScore() {
         return doubleLetterScore;
-    }
-    
-    /** Added by Maxim, might be shit
-     * Still in use? - Yasin*/
-    public void addPlayedWords(String coordinate, String direction, String word) {
-    	playedWords.add(word);
-    	wordCoordinateMap.put(word, coordinate);
-    	wordDirectionMap.put(word, direction);
     }
     
     public ArrayList<String> getPlayedWords(){

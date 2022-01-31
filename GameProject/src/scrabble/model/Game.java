@@ -1,5 +1,7 @@
 package scrabble.model;
 
+import scrabble.model.player.ComputerPlayer;
+import scrabble.model.player.HumanPlayer;
 import server.controller.ClientHandler;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
@@ -27,10 +29,41 @@ public class Game {
 	private final ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
 	private final AdjacentWordChecker adjacentWordChecker;
 	private final IsAdjacentChecker isAdjacentChecker;
+	boolean isMoveValid;
 	private int numberOfTurn = 0;
 	private int playersTurn;
 	private String move;
 	private String oldMove;
+
+	public Game(List<ClientHandler> clients) {
+		/** Instantiates a Board, a Game, a universal PlayerList and Bag*/
+		this.board = new Board();
+		this.bag = Bag.getInstance();
+		this.clients = clients;
+		this.adjacentWordChecker = new AdjacentWordChecker(board);
+		this.isAdjacentChecker = new IsAdjacentChecker(board);
+
+		//Connect Clients with a player
+		for (int i=0; i<this.clients.size(); i++){ //Computer players
+			if(clients.get(i).getName().equalsIgnoreCase("ComputerPlayer")){
+				this.clients.get(i).setPlayer(new ComputerPlayer(bag,board));
+			}
+			else {
+				this.clients.get(i).setPlayer(new HumanPlayer(this.clients.get(i).getName(), bag));
+			}
+
+		}
+
+		//Create PlayerList
+		List<Player> players = new ArrayList<>();
+		for(int i=0; i<this.clients.size(); i++){
+			players.add(clients.get(i).getPlayer());
+		}
+		playerList = PlayerList.getInstance();
+		playerList.setPlayers(players);
+
+		amountOfPlayers = playerList.getPlayers().size();
+	}
 
 	public void start(){
 		while (true){
@@ -47,47 +80,52 @@ public class Game {
 			/** Notify Turn */
 			notifyTurn(clients.get(playersTurn));
 
-			/** wait until move is not null anymore */
-			while (move == null){
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//System.out.println("FOREVER");
-			}
-
-			/** DetermineMove() and Validates input */
-			boolean isMoveValid;
-			while (true){
-				//Wait until client changes value of move
-				while (move.equals(oldMove)) {
+			if(playerList.getCurrentPlayer() instanceof HumanPlayer) {
+				/** wait until move is not null anymore */
+				while (move == null) {
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					//System.out.println("FOREVER");
 				}
 
-				try {
-					validateInput(move);
-					setOldMove(move); //maybe not necessary
-					isMoveValid = true;
-					break;
-				} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
-						UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
+				/** DetermineMove() and Validates input */
+				while (true) {
+					//Wait until client changes value of move
+					while (move.equals(oldMove)) {
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 
-					e.printStackTrace();
-					getCurrentClient().sendMessage("Please type in a valid move");
-					setOldMove(move);
+					try {
+						validateInput(move);
+						setOldMove(move); //maybe not necessary
+						isMoveValid = true;
+						break;
+					} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
+							UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
 
-				} catch (InvalidWordException e) {
-					e.printStackTrace();
-					getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
-					setOldMove(move); //maybe not necessary
-					isMoveValid = false;
-					break;
+						e.printStackTrace();
+						getCurrentClient().sendMessage("Please type in a valid move");
+						setOldMove(move);
+
+					} catch (InvalidWordException e) {
+						e.printStackTrace();
+						getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
+						setOldMove(move); //maybe not necessary
+						isMoveValid = false;
+						break;
+					}
 				}
+			}
+			else {
+				ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
+				setMove(computerPlayer.determineMove(board));
 			}
 
 			if(isMoveValid){
@@ -108,22 +146,36 @@ public class Game {
 							announceWinner(bag, playerList.getCurrentPlayer())));
 	}
 
+	/**
+	 * informs each client about their tiles
+	 */
 	public void sendTiles(){
 		for(ClientHandler clientHandler : clients){
 			clientHandler.sendMessage("TILES "+clientHandler.getPlayer().getLetterDeck().getLettersInDeck()+"\n");
 		}
 	}
 
+	/**
+	 * @return a string representation of board and keyword BOARD in front of it
+	 */
 	public String stringBoard(){
 		return "BOARD "+board;
 	}
 
+	/**
+	 * Broadcasts a message to all clients who are playing this game
+	 * @param msg - Message
+	 */
 	public void broadcastMessage(String msg){
 		for(ClientHandler clientHandler : clients){
 			clientHandler.sendMessage(msg);
 		}
 	}
 
+	/**
+	 * used to ensure a valid input by the user
+	 * @param oldMove - the move that was previous to a new move, indicated by a player
+	 */
 	public void setOldMove(String oldMove) {
 		this.oldMove = oldMove;
 	}
@@ -192,6 +244,10 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Notifies each client about their turn
+	 * @param ch
+	 */
 	public void notifyTurn(ClientHandler ch){
 		for(ClientHandler clientHandler : clients){
 			clientHandler.sendMessage("NOTIFYTURN "+ch.equals(clientHandler)+" "+ch.getName());
@@ -434,46 +490,20 @@ public class Game {
 	public void processMove(String input, Board board, Player currentPlayer, Bag bag) {
 		String[] parts = input.split(" ");
 
-		if(parts[0].equalsIgnoreCase("word")){
+		if (parts[0].equalsIgnoreCase("word")) {
 			//WORD A1 H TEST
 			exchangeTiles(parts, currentPlayer, bag, board, true); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
 			board.setWord(parts[1], parts[2], parts[3]);
 			board.setBoardEmpty(false);
 			board.addPlayedWords(parts[1], parts[2], parts[3]);
-		}
-		else {
-			if(parts.length == 2){
+		} else {
+			if (parts.length == 2) {
 				//SWAP ABC
 				exchangeTiles(parts, currentPlayer, bag, board, false);
 			}
 			//SWAP
 			//Do nothing
 		}
-	}
-
-
-	public Game(List<ClientHandler> clients) {
-		/** Instantiates a Board, a Game, a universal PlayerList and Bag*/
-		this.board = new Board();
-		this.bag = Bag.getInstance();
-		this.clients = clients;
-		this.adjacentWordChecker = new AdjacentWordChecker(board);
-		this.isAdjacentChecker = new IsAdjacentChecker(board);
-
-		//Connect Clients with a player
-		for (int i=0; i<this.clients.size(); i++){ //Computer players
-			this.clients.get(i).setPlayer(new Player(this.clients.get(i).getName(), bag));
-		}
-
-		//Create PlayerList
-		List<Player> players = new ArrayList<>();
-		for(int i=0; i<this.clients.size(); i++){
-			players.add(clients.get(i).getPlayer());
-		}
-		playerList = PlayerList.getInstance();
-		playerList.setPlayers(players);
-
-		amountOfPlayers = playerList.getPlayers().size();
 	}
 
 

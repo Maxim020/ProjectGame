@@ -3,6 +3,7 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,7 @@ class BagTest {
 	
 	@Test
 	void shuffleTest() {
-		ArrayList<Character> a = bag.getLetterList();
+		Vector<Character> a = bag.getLetterList();
 		bag.shuffleBag();
 		assertNotEquals(a.toArray(), bag.getLetterList().toArray());
 	}

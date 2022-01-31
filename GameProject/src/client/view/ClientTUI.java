@@ -18,7 +18,7 @@ public class ClientTUI {
     }
 
     public static void promptToAnnounce(){
-        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME]");
+        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME] (Type ANNOUNCE -C for computer player)");
     }
 
     public static void promptToMakeMove(String p0, String p1, String p2){

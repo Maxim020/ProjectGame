@@ -1,7 +1,5 @@
 package scrabble.model.letters;
 
-import scrabble.model.exceptions.NotEnougTilesException;
-
 import java.util.ArrayList;
 
 public class LetterDeck {

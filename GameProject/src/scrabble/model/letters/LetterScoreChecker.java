@@ -48,7 +48,7 @@ public class LetterScoreChecker {
 	//Methods
 	/**
 	 * This method returns an integer with score for the requested letter
-	 * @param char letter
+	 * @param letter
 	 * @return int score
 	 * @author Maxim
 	 */

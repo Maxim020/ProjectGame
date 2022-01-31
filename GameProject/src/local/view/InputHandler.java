@@ -17,6 +17,10 @@ import scrabble.view.utils.TextIO;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used to receive, process and validate input from a user, when playing a local game
+ */
+
 public class InputHandler {
     private Board board;
     private Player currentPlayer;

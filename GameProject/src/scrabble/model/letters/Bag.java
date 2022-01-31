@@ -2,11 +2,11 @@ package scrabble.model.letters;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Vector;
 
 public class Bag {
-	private static ArrayList<Character> letterList;
+	private static Vector<Character> letterList;
 	private final static String LETTERS = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGHHIIIIIIIIJJKKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ**";
-	//Shorter String for testing purposes: "AAAAABCDDDDEQWFPRGOEEFFGHHIIJJK**";
 
 	private static Bag instance = null;
 
@@ -23,7 +23,7 @@ public class Bag {
 		if (instance == null) {
 			instance = new Bag();
 
-			letterList = new ArrayList<>();
+			letterList = new Vector<>();
 
 			for(int i = 0; i < LETTERS.split("").length; i++) {
 				letterList.add(LETTERS.toCharArray()[i]);
@@ -49,10 +49,7 @@ public class Bag {
 	 * @author Maxim
 	 */
 	public void removeFromBag(char letter) {
-//		if(!letterList.contains(letter)) {throw new IllegalArgumentException("Letter is already not present in the bag");}
-//		else {
-			letterList.remove((Character) letter);
-		//}
+		letterList.remove((Character) letter);
 	}
 
 	/**
@@ -73,11 +70,11 @@ public class Bag {
 		letterList.add(letter);
 	}
 
-	public ArrayList<Character> getLetterList(){
+	public Vector<Character> getLetterList(){
 		return letterList;
 	}
 
-	public void setLetterList(ArrayList<Character> letterList) {
+	public void setLetterList(Vector<Character> letterList) {
 		this.letterList = letterList;
 	}
 

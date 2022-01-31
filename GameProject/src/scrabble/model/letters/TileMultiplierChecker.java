@@ -29,7 +29,7 @@ public class TileMultiplierChecker {
 	//Methods
 	/**
 	 * Returns an int value which represents the letter multiplier for tile given in the argument
-	 * @param fieldType ft
+	 * @param  ft
 	 * @return int multiplier
 	 * @author Maxim
 	 */
@@ -39,7 +39,7 @@ public class TileMultiplierChecker {
 	
 	/**
 	 * Returns an int value which represents the word multiplier for tile given in the argument
-	 * @param fieldType ft
+	 * @param  ft
 	 * @return int multiplier
 	 * @author Maxim
 	 */
