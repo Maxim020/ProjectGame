@@ -50,6 +50,7 @@ public class Server{
     public void startGame(){
         new Thread(() -> {
             while (true){
+                
                 //Another (dirty) solution: Make Thread sleep 100 ms
                 synchronized (this) {
                     if (requestGame) {

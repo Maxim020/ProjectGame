@@ -92,7 +92,10 @@ public class ClientHandler implements Runnable {
                 int playersStillNeeded = playersNeeded - inQueue;
                 broadcastMessage("INFORMQUEUE "+inQueue+" "+playersNeeded, true);
 
-                if(playersStillNeeded == 0){
+                if (playersNeeded < 2 || playersNeeded > 4){
+                    sendMessage("Please type in a number between 2 and 4");
+                }
+                else if(playersStillNeeded == 0){
                     String msg = "STARTGAME";
                     for(int i=0; i<playersNeeded; i++){
                         msg += " "+ClientHandler.clientHandlers.get(i).getName();
@@ -102,8 +105,7 @@ public class ClientHandler implements Runnable {
                     //server.setUpGame(); //The game takes all connected clients as arguments in the constructor
                 }
                 else {
-                    sendMessage("Not enough clients connected");
-                    sendMessage("Too many clients connected");
+                    sendMessage("The number of clients connected and the indicated amount of players to start a game must be equal");
                 }
 
                 break;
