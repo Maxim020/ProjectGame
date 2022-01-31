@@ -3,6 +3,8 @@ package client.controller;
 import local.model.PlayerList;
 import local.view.InputHandler;
 import scrabble.model.Board;
+import scrabble.model.ComputerPlayer;
+import scrabble.model.HumanPlayer;
 import scrabble.model.Player;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
@@ -71,12 +73,20 @@ public class ClientHandler implements Runnable {
 
         switch (command){
             case "ANNOUNCE":
-                if(parts[1] != null) {
+                if(parts[1] == null) {
+                    sendMessage("Please enter your name");
+                } else  if(parts[1].equalsIgnoreCase("C")){
+                    this.clientUsername = "ComputerPlayer";
+                    clientHandlers.add(this);
+                    broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
+                    sendMessage("WELCOME " + clientUsername);
+                    setPlayer(new ComputerPlayer(Bag.getInstance()));
+                } else {
                     this.clientUsername = parts[1];
                     clientHandlers.add(this);
                     broadcastMessage("SERVER: " + clientUsername + " has entered the chat!",false);
                     sendMessage("WELCOME " + clientUsername);
-                    setPlayer(new Player(getName(), Bag.getInstance()));
+                    setPlayer(new HumanPlayer(getName(), Bag.getInstance()));
                 }
                 break;
             case "CHAT":

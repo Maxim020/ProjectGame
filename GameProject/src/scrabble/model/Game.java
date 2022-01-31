@@ -55,53 +55,63 @@ public class Game {
 			/** Notify Turn */
 			notifyTurn(clients.get(playersTurn));
 
-			/** wait until move is not null anymore */
-			while (move == null){
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				//System.out.println("FOREVER");
-			}
-
-			/** DetermineMove() and Validates input */
-			while (true){
-				//Wait until client changes value of move
-				while (move.equals(oldMove)) {
+			if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
+				/** wait until move is not null anymore */
+				while (move == null) {
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+					//System.out.println("FOREVER");
 				}
 
-				try {
-					validateInput(move);
-					setOldMove(move); //maybe not necessary
-					isMoveValid = true;
-					break;
-				} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
-						UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
+				/** DetermineMove() and Validates input */
+				while (true) {
+					//Wait until client changes value of move
+					while (move.equals(oldMove)) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 
-					e.printStackTrace();
-					getCurrentClient().sendMessage("Please type in a valid move");
-					setOldMove(move);
+					try {
+						validateInput(move);
+						setOldMove(move); //maybe not necessary
+						isMoveValid = true;
+						break;
+					} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
+							UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
 
-				} catch (InvalidWordException e) {
-					e.printStackTrace();
-					getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
-					setOldMove(move); //maybe not necessary
-					isMoveValid = false;
-					break;
+						e.printStackTrace();
+						getCurrentClient().sendMessage("Please type in a valid move");
+						setOldMove(move);
+
+					} catch (InvalidWordException e) {
+						e.printStackTrace();
+						getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
+						setOldMove(move); //maybe not necessary
+						isMoveValid = false;
+						break;
+					}
 				}
+			} else {
+				System.out.println("Currentplayer type: "+PlayerList.getInstance().getCurrentPlayer().toString()); //Returns toString from Player Class
+				ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
+				System.out.println(computerPlayer instanceof ComputerPlayer);
+				setMove(computerPlayer.determineMove(board));
+				isMoveValid = true;
 			}
 
 			if(isMoveValid){
 				processMove(move, board, playerList.getCurrentPlayer(), bag);
 			}
+
 			setMove(null);
 			setOldMove(null);
+
 			if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
 				broadcastMessage("Game ends because either a player played all tiles left or there are no more possibilities");
 				break;

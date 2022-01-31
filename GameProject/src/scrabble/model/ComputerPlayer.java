@@ -6,12 +6,12 @@ public class ComputerPlayer extends Player {
 	
 	private Strategy strategy;
 	
-	public ComputerPlayer(Bag bag, Strategy strategy, Board board) {
+	public ComputerPlayer(Bag bag, Strategy strategy) {
 		super("Smart Computer", bag);
 		this.strategy = strategy;
 	}
 
-	public ComputerPlayer(Bag bag, Board board) {
+	public ComputerPlayer(Bag bag) {
 		super("Naive Computer", bag);
 		this.strategy = new NaiveStrategy();
 	}
@@ -23,5 +23,10 @@ public class ComputerPlayer extends Player {
 		else {
 			return "SWAP " + strategy.swapHand(getLetterDeck());
 		}
+	}
+
+	@Override
+	public String toString(){
+		return "Im a computerplayer";
 	}
 }

@@ -34,7 +34,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME]");
+        System.out.println("Please announce yourself by typing: ANNOUNCE Name (C for computer player)");
         String username = scanner.nextLine();
         Socket socket = new Socket("localhost",1234);
         Client client = new Client(socket, username);
