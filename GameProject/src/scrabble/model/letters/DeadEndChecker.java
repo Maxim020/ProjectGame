@@ -5,7 +5,7 @@ import java.util.List;
 
 import scrabble.model.Board;
 import scrabble.model.Player;
-import local.model.PlayerList;
+import scrabble.model.PlayerList;
 import scrabble.model.SmartStrategy;
 import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;

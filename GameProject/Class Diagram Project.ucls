@@ -344,7 +344,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="39" language="java" name="local.view.LocalTUI" project="GameProject" 
+  <class id="39" language="java" name="server.view.ServerTUI" project="GameProject"
     file="/GameProject/src/local/view/LocalTUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="160" width="261" x="3539" y="1519"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

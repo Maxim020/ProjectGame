@@ -1,8 +1,8 @@
 package local;
 
-import local.model.PlayerList;
+import scrabble.model.PlayerList;
 import local.view.InputHandler;
-import local.view.LocalTUI;
+import server.view.ServerTUI;
 import scrabble.model.ComputerPlayer;
 import scrabble.model.HumanPlayer;
 import scrabble.model.*;
@@ -35,8 +35,8 @@ public class LocalController {
                 playerList.setCurrentPlayer(playersTurn);
 
                 /** Creates localTUI and connects it with board and currentPlayer */
-                LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
-                localTUI.updateBoard();
+                ServerTUI serverTUI = new ServerTUI(board, playerList.getCurrentPlayer());
+                serverTUI.updateBoard();
 
                 //Make move
                 InputHandler inputHandlerMove = new InputHandler(board, playerList.getCurrentPlayer());
@@ -69,7 +69,7 @@ public class LocalController {
             }
 
             /** Adjusts scores and prints out final scoreboard*/
-            new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer())
+            new ServerTUI(board, PlayerList.getInstance().getCurrentPlayer())
                     .printFinalScoreBoard(
                             announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
 

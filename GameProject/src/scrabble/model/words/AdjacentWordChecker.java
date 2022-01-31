@@ -1,9 +1,8 @@
 package scrabble.model.words;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import local.model.PlayerList;
+import scrabble.model.PlayerList;
 import scrabble.model.Board;
 import scrabble.model.ComputerPlayer;
 
@@ -26,9 +25,9 @@ public class AdjacentWordChecker {
 	 * Takes a word, it's start coordinates, and checks if there are letters above and below it.
 	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
 	 * If the method does not return false, all vertically adjacent words are correct.
-	 * @param String word
-	 * @param int row
-	 * @param int column
+	 * @param  word
+	 * @param  row
+	 * @param  column
 	 * @requires word != null && 0 >= row < 15 && 0 >= column < 15
 	 * @ensures true or false return
 	 * @return true || false
@@ -196,9 +195,9 @@ public class AdjacentWordChecker {
 	 * Takes a word, it's start coordinates, and checks if there are letters right and left of it.
 	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
 	 * If the method does not return false, all vertically adjacent words are correct.
-	 * @param String word
-	 * @param int row
-	 * @param int column
+	 * @param  word
+	 * @param  row
+	 * @param  column
 	 * @requires word != null && 0 > row < 15 && 0 > column < 15
 	 * @ensures true or false return
 	 * @return true || false
@@ -366,9 +365,9 @@ public class AdjacentWordChecker {
 	 * Adapted method for (coordinate, direction, word) format.
 	 * Combines Horizontal and Vertical adjacent word checkers.
 	 * Calls one or the other depending on direction.
-	 * @param String coordinate
-	 * @param String direction
-	 * @param String word
+	 * @param  coordinate
+	 * @param  direction
+	 * @param  word
 	 * @requires coordinate == {A-O + 1-15} && direction == "h"||"v" && word != null
 	 * @ensures return of true or false
 	 * @return true || false

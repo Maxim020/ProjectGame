@@ -1,7 +1,7 @@
 package server.view;
 import client.view.ClientBoard;
 import scrabble.model.Board;
-import local.model.PlayerList;
+import scrabble.model.PlayerList;
 import scrabble.model.letters.Bag;
 
 /**

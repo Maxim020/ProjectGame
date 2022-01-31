@@ -1,9 +1,7 @@
 package scrabble.model;
 
 import client.controller.ClientHandler;
-import local.model.PlayerList;
-import local.view.InputHandler;
-import local.view.LocalTUI;
+import server.view.ServerTUI;
 import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
 import scrabble.model.letters.CrossChecker;
@@ -13,7 +11,6 @@ import scrabble.model.words.AdjacentWordChecker;
 import scrabble.model.words.InMemoryScrabbleWordChecker;
 import scrabble.model.words.IsAdjacentChecker;
 import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.view.utils.TextIO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,8 +44,8 @@ public class Game {
 			playerList.setCurrentPlayer(playersTurn);
 
 			/** Updates localTUI and broadcasts board to clients */
-			LocalTUI localTUI = new LocalTUI(board, playerList.getCurrentPlayer());
-			localTUI.updateBoard();
+			ServerTUI serverTUI = new ServerTUI(board, playerList.getCurrentPlayer());
+			serverTUI.updateBoard();
 			broadcastMessage(stringBoard());
 			sendTiles();
 
@@ -110,7 +107,7 @@ public class Game {
 			numberOfTurn++;
 		}
 		broadcastMessage(
-				new LocalTUI(board, PlayerList.getInstance().getCurrentPlayer())
+				new ServerTUI(board, PlayerList.getInstance().getCurrentPlayer())
 					.printFinalScoreBoard(
 							announceWinner(bag, playerList.getCurrentPlayer())));
 	}

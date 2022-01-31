@@ -5,14 +5,15 @@ import java.io.*;
 import java.net.*;
 
 /**
- * IDEAS:
- * 1) ServerTUI?
+ * Provides a Class that represents the Server
+ * @author Yasin Fahmy & Maxim Frano
  */
 
 public class Server{
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private Game game;
     private boolean requestGame = false;
+
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -43,29 +44,27 @@ public class Server{
         } catch (IOException e){
             e.printStackTrace();
         }
-        //System.out.println("setting up game ...");
-        //setUpGame();
     }
+
 
     public void startGame(){
         new Thread(() -> {
             while (true){
-                
-                //Another (dirty) solution: Make Thread sleep 100 ms
                 synchronized (this) {
                     if (requestGame) {
                         setUpGame();
+                        break;
                     }
                 }
             }
         }).start();
     }
 
-
     public void setUpGame(){
         game = new Game(ClientHandler.clientHandlers);
-        game.start(); //main method in local controller
+        game.start();
     }
+
 
     public Game getGame() {
         return game;

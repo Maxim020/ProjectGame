@@ -1,44 +1,59 @@
 package server.view;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
+import scrabble.model.PlayerList;
+import scrabble.model.*;
+
+import java.util.List;
 
 public class ServerTUI {
-    private PrintWriter printWriter;
-    private Scanner scanner;
+    private final ServerBoard representation;
+    private final Player currentPlayer;
 
-    public ServerTUI(){
-        printWriter = new PrintWriter(System.out, true);
-        scanner = new Scanner(System.in);
+    public ServerTUI(Board board, Player currentPlayer){
+        this.representation = new ServerBoard(board);
+        this.currentPlayer = currentPlayer;
     }
 
-    public void showMessage(String msg){
-        printWriter.println(msg);
-    }
+    /**
+     * prints Scoreboard after match ends
+     * @author Yasin
+     */
+    public String printFinalScoreBoard(Player winner){
+        PlayerList playerList = PlayerList.getInstance();
+        List<Player> players = playerList.getPlayers();
+        StringBuilder scoreboard = new StringBuilder();
 
-    public int getInt(String question){
-        showMessage(question);
-        String s = scanner.nextLine();
-        if(isNumeric(s)){
-            return Integer.parseInt(s);
+        for (int i=0; i<players.size(); i++){
+            if(!players.get(i).equals(winner)) {
+                scoreboard.append("\n").append(i + 1).append(") ").append(players.get(i));
+            }
         }
-        else {
-            return 0;
-        }
+
+        return  "*******************************\n"+
+                "WINNER WINNER CHICKEN DINNER!\n\n"+
+                winner.getName()+" has won the game!"+
+                scoreboard+"\n\n"+
+                "*******************************";
     }
 
-    public boolean isNumeric(String string){
-        try{
-            Integer.parseInt(string);
-            return true;
-        } catch (NumberFormatException e){
-            return false;
-        }
+    /**
+     * Updates Board with instructions, Board representation and Rack of current Player
+     * @author Yasin
+     */
+    public void updateBoard() {
+        System.out.println("\n\n"+representation);
+        showRack();
     }
 
-    public boolean getBoolean(String question){
-        showMessage(question);
-        showMessage("yes or no?");
-        return scanner.nextLine().equalsIgnoreCase("yes");
+    /**
+     * prints out rack of current Player
+     * @author Yasin
+     */
+    public void showRack() {
+        StringBuilder tiles = new StringBuilder("\n" + currentPlayer.getName() + " has the tiles:");
+        for(int i=0; i<currentPlayer.getLetterDeck().getLettersInDeck().size(); i++){
+            tiles.append(" ").append(currentPlayer.getLetterDeck().getLettersInDeck().get(i));
+        }
+        System.out.println(tiles);
     }
 }

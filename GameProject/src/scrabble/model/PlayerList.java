@@ -1,6 +1,5 @@
-package local.model;
+package scrabble.model;
 
-import scrabble.model.Player;
 import java.util.List;
 import java.util.Vector;
 
