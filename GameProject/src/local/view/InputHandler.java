@@ -65,9 +65,9 @@ public class InputHandler {
 
         for (int i=0; i<players.length; i++){
             if (players[i].equals("-N")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance()));
             } else if (players[i].equals("-S")){
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy()));
             } else {
                 playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
             }

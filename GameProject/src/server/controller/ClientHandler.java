@@ -1,8 +1,19 @@
-package server.controller;
+package client.controller;
 
-import scrabble.model.player.Player;
+import local.model.PlayerList;
+import local.view.InputHandler;
+import scrabble.model.Board;
+import scrabble.model.Player;
+import scrabble.model.exceptions.*;
 import scrabble.model.letters.Bag;
-
+import scrabble.model.letters.CrossChecker;
+import scrabble.model.words.AdjacentWordChecker;
+import scrabble.model.words.InMemoryScrabbleWordChecker;
+import scrabble.model.words.IsAdjacentChecker;
+import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.view.utils.Protocol;
+import scrabble.view.utils.TextIO;
+import server.controller.Server;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -147,10 +158,6 @@ public class ClientHandler implements Runnable {
 
     public void closeEverything(){
         removeClientHandler();
-        closeConnection(in,out,socket);
-    }
-
-    public static void closeConnection(BufferedReader in, BufferedWriter out,Socket socket){
         try{
             if(in != null){
                 in.close();
