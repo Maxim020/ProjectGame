@@ -8,19 +8,16 @@ import scrabble.model.player.ComputerPlayer;
 
 public class AdjacentWordChecker {
 	
-	//Attributes
 	private ScrabbleWordChecker wordChecker;
 	private Board board;
 	private WordScoreCounter scoreCounter;
 	
-	//Constructor
 	public AdjacentWordChecker(Board board) {
 		this.board = board;
 		wordChecker = new InMemoryScrabbleWordChecker();
 		scoreCounter = new WordScoreCounter(board);
 	}
 	
-	//Methods
 	/**
 	 * Takes a word, it's start coordinates, and checks if there are letters above and below it.
 	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
@@ -194,7 +191,7 @@ public class AdjacentWordChecker {
 	/**
 	 * Takes a word, it's start coordinates, and checks if there are letters right and left of it.
 	 * If there are letters found, they are formed into a word and this word is checked if it is present in the dictionary.
-	 * If the method does not return false, all vertically adjacent words are correct.
+	 * If the method does not return false, all horizontally adjacent words are correct.
 	 * @param  word
 	 * @param  row
 	 * @param  column

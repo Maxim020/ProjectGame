@@ -28,6 +28,8 @@ public class NaiveStrategy implements Strategy {
 	}
 
 	/**
+	 * !!!NOT USED!!!
+	 * 
 	 * Recursively makes permutations from given string and adds them to the list.
 	 * The method calls itself until the String "" is added to the list.
 	 * 
@@ -68,11 +70,11 @@ public class NaiveStrategy implements Strategy {
 	 * letter deck
 	 * 
 	 * @param s
-	 * @param    counter - necessary for the switch case
+	 * @param counter - necessary for the switch case
 	 * @requires s != null && counter starts from the length of the letter deck
 	 * @ensures All possible combinations from given letters
 	 * @return ArrayList<String> res
-	 * @author Maxim & Oren Arbiv
+	 * @author Maxim
 	 */
 	public ArrayList<String> determineWord(String s, int counter) {
 
@@ -200,6 +202,8 @@ public class NaiveStrategy implements Strategy {
 	/**
 	 * returns a String in form of "WORD {coordinate} {direction} {word}"
 	 * 
+	 * the description of how the computer player works can be found in the report
+	 * 
 	 * @param Board               board
 	 * @param LetterDeck          letterDeck
 	 * @param ScrabbleWordChecker checker
@@ -216,44 +220,14 @@ public class NaiveStrategy implements Strategy {
 
 		ScrabbleWordChecker checker = new InMemoryScrabbleWordChecker();
 
-		// WHAT THIS DOES AT THIS POINT:
-		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
-		// FROM THESE METHODS WE GET A LIST FOR THIS METHOD
-		// THIS METHOD GOES THROUGH THE LIST TO FIND WORD THAT EXISTS
-		// THEN IF THE COMPUTER GOES FIRST IT PLAYS THIS WORD ON TILE H8 HORIZONTALY
-		// IF NOT THE METHOD CHECKS IF THE WORD WAS ALREADY PLAYED
-		// IF NOT THE METHOD FINDS A LETTER THAT IS CONTAINED IN BOTH THE GENERATED WORD
-		// AND PLAYEDWORD AND SAVES IT
-		// THEN THE METHOD CHECKS IF THE ALREADY PLAYED WORD WAS PLAYED HORIZONTALLY OR
-		// VERTICALLY
-		// THEN WE FIND THE COORDINATE OF THIS LETTER ON THE BOARD, WHILE GETTING THE
-		// INDEX OF THE MATCHING LETTER WITHIN THE WORD STRING
-		// FROM THE WORD STRING INDEX WE KNOW HOW MUCH TO SUBTRACT TO GET THE CORRECT
-		// ROW SO THE MATCHING LETTERS OVERLAP
-		// CREATES A RESPONSE IN FORM "WORD + COORDINATE + DIRECTION + GENERATEDWORD"
-
-		// WORKS WITH BLANK LETTERS NOW
-
-		// TO BE ADDED APPENDING WORDS FROM START OR FINISH, RIGHT NOW IT ONLY PLAYS
-		// VERTICAL WORDS ON HORIZONTALLY PLAYED WORDS AND VICE VERSA
-
-		// TO BE ADDED SWAPPING (HOWEVER PRETTY UNLIKELY THAT A COMPUTER WONT BE ABLE TO
-		// FIND A WORD TO CREATE {After many attempts, seems like it's actually very
-		// likely}) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
-		// THIS METHOD WOULD RETURN AN EMPTY STRING - ADDED
-
-		// THIS IS A STUPID STRATEGY, DOES NOT LOOK FOR WORDS WITH HIGHEST SCORES, IT
-		// ALWAYS TAKES FIRST WORD IT FINDS THAT ACTUALLY CAN BE PLACED
-
 		/** List of all permutations */
 		ArrayList<String> listOfAllPermutations = new ArrayList<>();
 		/** If '*' is present in String, list with all word possibilities */
 		ArrayList<String> listWithBlanksReplaced = new ArrayList<>();
-		/** Calls method to get initial list of permuated Strings */
 
 		/**
-		 * Calls method to permuate a String again but with size of the initial string
-		 * decreased until the word is of length 1
+		 * Calls method to permuate a String with size of the initial string decreased
+		 * until the word is of length 1
 		 */
 		for (int i = 0; i < formString(letterDeck).length(); i++) {
 			listOfAllPermutations.addAll(determineWord(formString(letterDeck), formString(letterDeck).length() - i));
@@ -286,7 +260,7 @@ public class NaiveStrategy implements Strategy {
 					System.out.println("COMPUTER PLAYER MOVE: " + move);
 					return move;
 				}
-				/** If word was not already played */
+				/** Else If word was not already played */
 				else if (!board.getPlayedWords().contains(word)) {
 					/** Cycle though words already on board */
 					for (String playedWord : board.getPlayedWords()) {
@@ -304,7 +278,7 @@ public class NaiveStrategy implements Strategy {
 										if (matchingLetter != ' ') {
 											/** Get index of matching letter in playedWord */
 											int indexMatchingLetterPlayedWord = playedWord.indexOf(matchingLetter);
-											/** Get index of matching letter in word */
+											/** Get index of matching letter in generated word */
 											int indexMatchingLetterWord = word.indexOf(matchingLetter);
 											/** Get start coordinates of played word */
 											int[] playedWordStartCoords = board
@@ -319,7 +293,10 @@ public class NaiveStrategy implements Strategy {
 											boolean flag = true;
 											/** Create Starting coordinate of new word */
 											String startCoordinateOfNewWord = "";
-
+											/**
+											 * If a word would not go out of bounds, create start coordinate of this
+											 * word
+											 */
 											if (playedWordStartCoords[0] - indexMatchingLetterWord < 15
 													&& playedWordStartCoords[0] - indexMatchingLetterWord >= 0) {
 												startCoordinateOfNewWord = board.convert(
@@ -327,6 +304,7 @@ public class NaiveStrategy implements Strategy {
 																- indexMatchingLetterWord,
 														board.convert(coordsOfMatchingLetter)[1]);
 											}
+											/** If a start coordinate was created */
 											if (!startCoordinateOfNewWord.equals("")) {
 												/** How far up does the word go above the matching letter */
 												int up = 0 + indexMatchingLetterWord;
@@ -380,15 +358,6 @@ public class NaiveStrategy implements Strategy {
 
 									else {
 
-										/** Finds matching letters */
-										for (char wordLetters : word.toCharArray()) {
-											for (char letters : playedWord.toCharArray()) {
-												if (wordLetters == letters) {
-													matchingLetter = letters;
-												}
-											}
-										}
-
 										/** If matching letter is not empty */
 										if (matchingLetter != ' ') {
 
@@ -410,6 +379,10 @@ public class NaiveStrategy implements Strategy {
 											boolean flag = true;
 											/** Create Starting coordinate of new word */
 											String startCoordinateOfNewWord = "";
+											/**
+											 * If a word would not go out of bounds, create start coordinate of this
+											 * word
+											 */
 											if (playedWordStartCoords[1] - indexMatchingLetterWord < 15
 													&& playedWordStartCoords[1] - indexMatchingLetterWord >= 0) {
 												startCoordinateOfNewWord = board.convert(
@@ -417,6 +390,7 @@ public class NaiveStrategy implements Strategy {
 														board.convert(coordsOfMatchingLetter)[1]
 																- indexMatchingLetterWord);
 											}
+											/** If a start coordinate was created */
 											if (!startCoordinateOfNewWord.equals("")) {
 
 												/** How far left does the word go left from the matching letter */
@@ -497,6 +471,16 @@ public class NaiveStrategy implements Strategy {
 		return false;
 	}
 
+	/**
+	 * Method called in computer player when the computer cannot find a word to
+	 * play, this is indicated by a return of "" from the determineMove method.
+	 * This method outputs a String with all letters currently on hand.
+	 * 
+	 * @param LetterDeck letterDeck
+	 * @ensures letterDeck.getLettersInDeck() != (old) letterDeck.getLettersInDeck()
+	 * @return String lettersInHand
+	 * @author Maxim
+	 */
 	public String swapHand(LetterDeck letterDeck) {
 
 		String lettersInHand = "";
