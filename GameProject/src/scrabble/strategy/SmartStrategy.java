@@ -14,12 +14,26 @@ import scrabble.model.words.ScrabbleWordChecker;
 import scrabble.model.words.WordScoreCounter;
 import scrabble.strategy.Strategy;
 
+/**
+ * This class is currently not in use due to not being finished. It is an
+ * extension of the naive strategy which would let the computer extend already
+ * played words and would also first evaluate the scores and would pick the word
+ * with highest one.
+ * 
+ * The fundamentals of this extension to the naive strategy are implemented,
+ * however it is not debugged and adapted to most recent changes in the game
+ * logic.
+ * 
+ * @author Maxim
+ *
+ */
+
 public class SmartStrategy implements Strategy {
 
 	/**
 	 * Forms a starting String to be made permutations of
 	 * 
-	 * @param  letterDeck
+	 * @param letterDeck
 	 * @requires letterDeck != null
 	 * @return String s
 	 * @author Maxim
@@ -36,8 +50,8 @@ public class SmartStrategy implements Strategy {
 	 * This method is used to generate all the possible combinations of words from a
 	 * letter deck
 	 * 
-	 * @param  s
-	 * @param     counter - necessary for the switch case
+	 * @param s
+	 * @param counter - necessary for the switch case
 	 * @requires s != null && counter starts from the length of the letter deck
 	 * @ensures All possible combinations from given letters
 	 * @return ArrayList<String> res
@@ -193,37 +207,6 @@ public class SmartStrategy implements Strategy {
 		WordScoreCounter scoreCounter = new WordScoreCounter(board);
 
 		ScrabbleWordChecker checker = new InMemoryScrabbleWordChecker();
-
-		// WHAT THIS DOES AT THIS POINT:
-		// USES TWO ABOVE METHODS TO GET WORDS FROM TILES IN HAND E.G. ADAF AFAF AFFA...
-		// FROM THESE METHODS WE GET A LIST FOR THIS METHOD
-		// THIS METHOD GOES THROUGH THE LIST TO FIND WORD THAT EXISTS
-		// THEN IF THE COMPUTER GOES FIRST IT PLAYS THIS WORD ON TILE H8 HORIZONTALY
-		// IF NOT THE METHOD CHECKS IF THE WORD WAS ALREADY PLAYED
-		// IF NOT THE METHOD FINDS A LETTER THAT IS CONTAINED IN BOTH THE GENERATED WORD
-		// AND PLAYEDWORD AND SAVES IT
-		// THEN THE METHOD CHECKS IF THE ALREADY PLAYED WORD WAS PLAYED HORIZONTALLY OR
-		// VERTICALLY
-		// THEN WE FIND THE COORDINATE OF THIS LETTER ON THE BOARD, WHILE GETTING THE
-		// INDEX OF THE MATCHING LETTER WITHIN THE WORD STRING
-		// FROM THE WORD STRING INDEX WE KNOW HOW MUCH TO SUBTRACT TO GET THE CORRECT
-		// ROW SO THE MATCHING LETTERS OVERLAP
-		// CREATES A RESPONSE IN FORM "WORD + COORDINATE + DIRECTION + GENERATEDWORD"
-
-		// WORKS WITH BLANK LETTERS NOW
-
-		// TO BE ADDED APPENDING WORDS FROM START OR FINISH, RIGHT NOW IT ONLY PLAYS
-		// VERTICAL WORDS ON HORIZONTALLY PLAYED WORDS AND VICE VERSA - ADDED
-
-		// TO BE ADDED SWAPPING (HOWEVER PRETTY UNLIKELY THAT A COMPUTER WONT BE ABLE TO
-		// FIND A WORD TO CREATE {After many attempts, seems like it's actually very
-		// likely}) <- THIS SHOULD BE DONE IN THE COMPUTERPLAYER ITSELF IF
-		// THIS METHOD WOULD RETURN AN EMPTY STRING - ADDED
-
-		// THIS IS A SMART STRATEGY. CAN MAKE WORDS PERPENDICULAR AS WELL AS APPEND
-		// ALREADY EXISTING WORDS.
-		// COLLECTS ALL POSSIBLE WORDS, GETS THEIR SCORES AND PICKS THE WORD THAT NETS
-		// THE HIGHEST SCORE
 
 		/** List of all permutations */
 		ArrayList<String> listOfAllPermutations = new ArrayList<>();

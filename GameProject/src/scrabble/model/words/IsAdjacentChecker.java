@@ -11,7 +11,7 @@ public class IsAdjacentChecker {
 	}
 	
 	/**
-	 * Checks if there is a letter present on all the field adjacent to the placed word.
+	 * Checks if there is a letter present on at least one of the fields adjacent to the placed word.
 	 * @param String coordinate
 	 * @param String direction
 	 * @param String word
@@ -24,11 +24,6 @@ public class IsAdjacentChecker {
 		
 		int[] coords = board.convert(coordinate);
 		
-		if(coords[0] < 0 || coords[0] > 14 || coords[1] < 0 || coords[1] > 14) {
-			return false;
-		}
-		
-		
 		for(int i = 0; i < board.getPlayedWords().size(); i++) {
 			if(word.contains(board.getPlayedWords().get(i))) {
 				return true;
@@ -37,22 +32,22 @@ public class IsAdjacentChecker {
 		
 		if(direction.equalsIgnoreCase("H")) {
 		
-			if(!board.isFieldEmpty(coords[0], coords[1] - 1)) {
+			if(board.isFieldValid(coords[0], coords[1] - 1) && !board.isFieldEmpty(coords[0], coords[1] - 1)) {
 				return true;
 			}
 		
-			if(!board.isFieldEmpty(coords[0], coords[1] + word.length())) {
+			if(board.isFieldValid(coords[0], coords[1] + word.length()) && !board.isFieldEmpty(coords[0], coords[1] + word.length())) {
 				return true;
 			}
 			
 			for(int i = 0; i < word.length(); i++) {
-				if(!board.isFieldEmpty(coords[0] - 1, coords[1] + i)) {
+				if(board.isFieldValid(coords[0] - 1, coords[1] + i) && !board.isFieldEmpty(coords[0] - 1, coords[1] + i)) {
 					return true;
 				}
 			}
 			
 			for(int i = 0; i < word.length(); i++) {
-				if(!board.isFieldEmpty(coords[0] + 1, coords[1] + i)) {
+				if(board.isFieldValid(coords[0] + 1, coords[1] + i) && !board.isFieldEmpty(coords[0] + 1, coords[1] + i)) {
 					return true;
 				}
 			}
@@ -61,22 +56,22 @@ public class IsAdjacentChecker {
 		
 		else if(direction.equalsIgnoreCase("V")) {
 			
-			if(!board.isFieldEmpty(coords[0] - 1, coords[1])) {
+			if(board.isFieldValid(coords[0] - 1, coords[1]) && !board.isFieldEmpty(coords[0] - 1, coords[1])) {
 				return true;
 			}
 		
-			if(!board.isFieldEmpty(coords[0]  + word.length(), coords[1])) {
+			if(board.isFieldValid(coords[0] + word.length(), coords[1]) && !board.isFieldEmpty(coords[0]  + word.length(), coords[1])) {
 				return true;
 			}
 			
 			for(int i = 0; i < word.length(); i++) {
-				if(!board.isFieldEmpty(coords[0] + i, coords[1] - 1)) {
+				if(board.isFieldValid(coords[0] + i, coords[1] - 1) && !board.isFieldEmpty(coords[0] + i, coords[1] - 1)) {
 					return true;
 				}
 			}
 			
 			for(int i = 0; i < word.length(); i++) {
-				if(!board.isFieldEmpty(coords[0] + i, coords[1] + 1)) {
+				if(board.isFieldValid(coords[0] + i, coords[1] + 1) && !board.isFieldEmpty(coords[0] + i, coords[1] + 1)) {
 					return true;
 				}
 			}

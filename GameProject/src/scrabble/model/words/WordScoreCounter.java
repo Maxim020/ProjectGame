@@ -9,12 +9,10 @@ import java.util.ArrayList;
 
 public class WordScoreCounter {
 	
-	//Attributes
 	private LetterScoreChecker letterChecker;
 	private TileMultiplierChecker multiplierChecker;
 	private Board board;
 	
-	//Constructor
 	/**
 	 * WordScoreCounter is constructed using the board as its argument
 	 * @param board
@@ -26,11 +24,9 @@ public class WordScoreCounter {
 		this.board = board;
 	}
 	
-	//Methods
-	
 	/**
 	 * !!CHECKS SCORE FOR HORIZONTAL WORDS!!
-	 * Takes the inserted letters as a character list. Every letter from this list has it's score checked and multiplied either by 1, 2 or 3.
+	 * Takes the inserted letters as a String. Every letter from this String has it's score checked and multiplied either by 1, 2 or 3 depending on the type of tile it is on.
 	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
 	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
 	 * Again in this cycle, all word multiplier tiles are removed and switched to normal tiles.
@@ -97,7 +93,7 @@ public class WordScoreCounter {
 	
 	/**
 	 * !!CHECKS SCORE FOR VERTICAL WORDS!!
-	 * Takes the inserted letters as a character list. Every letter from this list has it's score checked and multiplied either by 1, 2 or 3.
+	 * Takes the inserted letters as a String. Every letter from this String has it's score checked and multiplied either by 1, 2 or 3 depending on the tile they are on.
 	 * The score total is calculated from the first for cycle. Also in this cycle, all multiplier tiles that have been used are removed. In the next for cycle, every tile is checked again but with a word multiplier checker.
 	 * A list is created from all the word multipliers, this is necessary if there are two word multipliers present, and the list elements from the list are multiplied with each other to form the final word multiplier.
 	 * Again in this cycle, all word multiplier tiles are removed and switched to normal tiles.
