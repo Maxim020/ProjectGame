@@ -4,10 +4,8 @@ import java.util.HashMap;
 
 public class LetterScoreChecker {
 	
-	//Attributes
 	private HashMap<Character, Integer> scoreMap;
 	
-	//Constructor
 	/**
 	 * Fills the HashMap scoreMap with letters and their respective scores
 	 * @author Maxim
@@ -45,7 +43,6 @@ public class LetterScoreChecker {
 		this.scoreMap.put('*', 0);
 	}
 	
-	//Methods
 	/**
 	 * This method returns an integer with score for the requested letter
 	 * @param letter

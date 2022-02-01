@@ -26,6 +26,8 @@ public class DeadEndChecker {
 	 * current decks of players. Should be called near the end of the game,
 	 * preferably when the bag is empty.
 	 * 
+	 * NOTE: This class uses the same algorithm as naive computer strategy
+	 * 
 	 * @requires PlayerList to be instantiated
 	 * @ensures return of true when no more words can be created
 	 * @return true || false

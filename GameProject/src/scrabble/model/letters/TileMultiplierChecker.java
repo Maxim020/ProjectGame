@@ -6,11 +6,9 @@ import scrabble.model.Board.FieldType;
 
 public class TileMultiplierChecker {
 	
-	//Attributes
 	private HashMap<FieldType, Integer> letterMultiplierMap;
 	private HashMap<FieldType, Integer> wordMultiplierMap;
 	
-	//Constructor
 	/**
 	 * Initializes a map with int multipliers for each type of tile
 	 * @author Maxim
@@ -26,7 +24,6 @@ public class TileMultiplierChecker {
 		wordMultiplierMap.put(FieldType.DOUBLE_WORD_SCORE, 2);
 	}
 	
-	//Methods
 	/**
 	 * Returns an int value which represents the letter multiplier for tile given in the argument
 	 * @param  ft

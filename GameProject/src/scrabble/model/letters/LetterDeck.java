@@ -4,18 +4,15 @@ import java.util.ArrayList;
 
 public class LetterDeck {
 	
-	//Attributes
 	private ArrayList<Character> lettersInDeck;
 	private Bag bag;
 	
-	//Constructor
 	public LetterDeck(Bag bag) {
 		this.lettersInDeck = new ArrayList<>();
 		this.bag = Bag.getInstance();
 		this.initializeDeck(bag);
 	}
 	
-	//Methods
 	public ArrayList<Character> getLettersInDeck() {
 		return lettersInDeck;
 	}
