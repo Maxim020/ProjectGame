@@ -94,12 +94,17 @@ public class Client {
             String[] parts = input.split(" ");
             String command = parts[0];
 
-            if ("NOTIFYTURN".equals(command)) {
-                ClientTUI.promptToMakeMove(parts[0], parts[1], parts[2]);
-            } else {
-                //Used for WELCOME, NEWTILES, and group chat
-                ClientTUI.showMessage(input);
+            switch (command){
+                case "NOTIFYTURN":
+                    ClientTUI.promptToMakeMove(parts[0], parts[1], parts[2]);
+                    break;
+                case "REQUESTTEAM":
+                    break;
+                default:
+                    ClientTUI.showMessage(input);
             }
+
+
         }
     }
 

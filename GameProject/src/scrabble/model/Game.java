@@ -34,6 +34,8 @@ public class Game {
 	private boolean isMoveValid;
 	private boolean timeLeft;
 	private int numberOfTurn = 0;
+	private boolean oneVsTwo = false;
+	private int indexOfSingle;
 	private int playersTurn;
 	private String move;
 	private String oldMove;
@@ -65,6 +67,27 @@ public class Game {
 		playerList = PlayerList.getInstance();
 		playerList.setPlayers(players);
 
+		for (int i=0; i < playerList.getPlayers().size(); i++){
+			playerList.getPlayers().get(i).setTeammate(clients.get(i).getTeammate());
+		}
+
+		int count = 0;
+		for (Player player : players){
+			if(player.getTeammate() == null){
+				count++;
+			}
+			if(count == 1){
+				oneVsTwo = true;
+			}
+		}
+		if(oneVsTwo) {
+			for (int i=0; i<players.size(); i++) {
+				if (players.get(i).getTeammate() == null) {
+					indexOfSingle = i;
+				}
+			}
+		}
+
 		amountOfPlayers = playerList.getPlayers().size();
 	}
 
@@ -72,6 +95,7 @@ public class Game {
 		while (true){
 			/** Allows for rotation of players turn */
 			playersTurn = numberOfTurn % amountOfPlayers;
+			System.out.println(playersTurn);
 			playerList.setCurrentPlayer(playersTurn);
 
 			/** Updates localTUI and broadcasts board to clients */
@@ -87,7 +111,7 @@ public class Game {
 				/**Timer of Opponent starts */
 				Countdown countdown = new Countdown();
 				getCurrentClient().sendMessage("You have one minute to decide!");
-				countdown.counter(60,this);
+				countdown.counter(60, this);
 				setTimeLeft(true);
 
 				/** wait until move is not null anymore */
@@ -95,7 +119,7 @@ public class Game {
 				while (timeLeft) {
 					while (move == null) {
 						sleep(500);
-						if(!timeLeft){
+						if (!timeLeft) {
 							break outer;
 						}
 					}
@@ -105,7 +129,7 @@ public class Game {
 						//Wait until client changes value of move
 						while (move.equals(oldMove)) {
 							sleep(500);
-							if(!timeLeft){
+							if (!timeLeft) {
 								break outer;
 							}
 						}
@@ -121,6 +145,7 @@ public class Game {
 							e.printStackTrace();
 							getCurrentClient().sendMessage("Please type in a valid move");
 							setOldMove(move);
+							isMoveValid = false;
 
 						} catch (InvalidWordException e) {
 							e.printStackTrace();
@@ -131,9 +156,10 @@ public class Game {
 						}
 					}
 				}
-				if(timeLeft){
+				if (timeLeft) {
 					countdown.getTimerA().cancel();
 				}
+
 			}
 			else {
 				ComputerPlayer computerPlayer = (ComputerPlayer) PlayerList.getInstance().getCurrentPlayer();
@@ -141,21 +167,51 @@ public class Game {
 				isMoveValid = true;
 			}
 
-			if(isMoveValid){
+			if(move != null && isMoveValid){
 				processMove(move, board, playerList.getCurrentPlayer(), bag);
 			}
 			setMove(null);
 			setOldMove(null);
+
 			if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
 				broadcastMessage("\nGame ends because either a player played all tiles left or there are no more possibilities\n");
 				break;
 			}
 
+			//Skip one team player in case of 2v1 to make it more fair
+			if(oneVsTwo){
+				switch (indexOfSingle){
+					case 2:
+						if(playersTurn == 0){
+							numberOfTurn++;
+						}
+						if(numberOfTurn%12 == 2 || numberOfTurn%12 == 8){
+							numberOfTurn++;
+						}
+						break;
+					case 1:
+						if(playersTurn == 2){
+							numberOfTurn++;
+						}
+						if(numberOfTurn%12 == 4 || numberOfTurn%12 == 10){
+							numberOfTurn++;
+						}
+						break;
+					case 0:
+						if(playersTurn == 1){
+							numberOfTurn++;
+						}
+						if(numberOfTurn%12 == 3 || numberOfTurn%12 == 9){
+							numberOfTurn++;
+						}
+						break;
+				}
+			}
 			numberOfTurn++;
 		}
-		broadcastMessage(
-				ServerTUI.printFinalScoreBoard(
-							announceWinner(bag, playerList.getCurrentPlayer())));
+
+		adjustScores(bag, playerList.getCurrentPlayer());
+		broadcastMessage(ServerTUI.printFinalScoreBoard());
 	}
 
 	public void sleep(int ms){
@@ -223,14 +279,14 @@ public class Game {
 	/**
 	 * @param bag - a universal bag of letters
 	 * @param currentPlayer - The player who has just made a move
-	 * @return - winner of the game and adjusts Scores
+	 * @return - adjusts Scores
 	 * @author Yasin
 	 */
-	public Player announceWinner(Bag bag, Player currentPlayer){
+	public void adjustScores(Bag bag, Player currentPlayer){ //Adjust scores
 		LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
 		boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
 		int sumOfUnplacedTiles = 0;
-		Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+		//Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
 
 		//Each player's score is reduced by the sum of his or her unplaced letters.
 		for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
@@ -251,17 +307,17 @@ public class Game {
 			}
 		}
 
-		//Sort PlayerList in descending order
-		Collections.sort(PlayerList.getInstance().getPlayers());
-		Collections.reverse(PlayerList.getInstance().getPlayers());
-		Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-
-		//The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
-		if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
-			return winnerBeforeAdjustment;
-		} else {
-			return winnerAfterAdjustment;
-		}
+//		//Sort PlayerList in descending order
+//		Collections.sort(PlayerList.getInstance().getPlayers());
+//		Collections.reverse(PlayerList.getInstance().getPlayers());
+//		Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+//
+//		//The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
+//		if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
+//			return winnerBeforeAdjustment;
+//		} else {
+//			return winnerAfterAdjustment;
+//		}
 	}
 
 	/**
@@ -516,7 +572,8 @@ public class Game {
 			board.setWord(parts[1], parts[2], parts[3]);
 			board.setBoardEmpty(false);
 			board.addPlayedWords(parts[1], parts[2], parts[3]);
-		} else {
+		}
+		else {
 			if (parts.length == 2) {
 				//SWAP ABC
 				exchangeTiles(parts, currentPlayer, bag, board, false);

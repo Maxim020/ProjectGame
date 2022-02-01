@@ -16,9 +16,6 @@ public class Countdown {
             @Override
             public void run() {
                 if (timer > 0){
-                    if(timer == 15){
-                        game.getCurrentClient().sendMessage("15 seconds left ...");
-                    }
                     timer--;
                 } else {
                     timerA.cancel();

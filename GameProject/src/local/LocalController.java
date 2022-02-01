@@ -70,8 +70,9 @@ public class LocalController {
             }
 
             /** Adjusts scores and prints out final scoreboard*/
-            ServerTUI.printFinalScoreBoard(
-                            announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
+
+            adjustScores(bag, playerList.getCurrentPlayer());
+            ServerTUI.printFinalScoreBoard();
 
             /** Ask for another game */
             continueGame = new InputHandler().askForNextGame();
@@ -185,21 +186,21 @@ public class LocalController {
     /**
      * @param bag - a universal bag of letters
      * @param currentPlayer - The player who has just made a move
-     * @return - winner of the game and adjusts Scores
+     * @return - adjusts Scores
      * @author Yasin
      */
-    public static Player announceWinner(Bag bag, Player currentPlayer){
+    public static void adjustScores(Bag bag, Player currentPlayer){ //Adjust scores
         LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
         boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
         int sumOfUnplacedTiles = 0;
-        Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+        //Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
 
         //Each player's score is reduced by the sum of his or her unplaced letters.
         for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
             ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-            for (int j=0; j<letterDeck.size(); j++){
-                sumOfUnplacedTiles += letterScoreChecker.scoreChecker(letterDeck.get(j));
-                PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(letterDeck.get(j)));
+            for (Character character : letterDeck) {
+                sumOfUnplacedTiles += letterScoreChecker.scoreChecker(character);
+                PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(character));
             }
         }
 
@@ -213,17 +214,17 @@ public class LocalController {
             }
         }
 
-        //Sort PlayerList in descending order
-        Collections.sort(PlayerList.getInstance().getPlayers());
-        Collections.reverse(PlayerList.getInstance().getPlayers());
-        Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-
-        //The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
-        if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
-            return winnerBeforeAdjustment;
-        } else {
-            return winnerAfterAdjustment;
-        }
+//		//Sort PlayerList in descending order
+//		Collections.sort(PlayerList.getInstance().getPlayers());
+//		Collections.reverse(PlayerList.getInstance().getPlayers());
+//		Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+//
+//		//The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
+//		if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
+//			return winnerBeforeAdjustment;
+//		} else {
+//			return winnerAfterAdjustment;
+//		}
     }
 
     /**

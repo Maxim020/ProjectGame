@@ -21,6 +21,10 @@ public class ClientTUI {
         System.out.println("Please announce yourself by typing: ANNOUNCE [NAME] (Type ANNOUNCE -C for computer player)");
     }
 
+    public static void promptToAccept(){
+        System.out.println("");
+    }
+
     public static void promptToMakeMove(String p0, String p1, String p2){
         if (p1.equalsIgnoreCase("TRUE")) {
             System.out.println(p0 + " - Make a move!");
@@ -30,7 +34,7 @@ public class ClientTUI {
     }
 
     public static void printCommands(){
-        System.out.println("\nUse Chat:  CHAT 'Your Message'\nRequest Game: REQUESTGAME 'amount of players (2-4)'\n\n");
+        System.out.println("\nUse Chat:  CHAT 'Your Message'\nRequest Game: REQUESTGAME 'amount of players (2-4)'\nRequest team: REQUESTTEAM 'Name of Teammate'\n");
     }
 
 
