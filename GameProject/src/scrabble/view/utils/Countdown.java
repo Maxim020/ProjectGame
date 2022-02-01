@@ -1,42 +1,36 @@
 package scrabble.view.utils;
 
+import scrabble.model.Game;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Countdown {
     int timer;
+    Timer timerA = new Timer();
 
-    public void counter(int counter){
+    public void counter(int counter, Game game){
         timer = counter;
-
-        Timer timerA = new Timer();
 
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
-                if (timer >= 0){
-
-//                    if(timer == 30) {
-//                        System.out.println("You have "+timer+" seconds left");
-//                    }
-//                    else if(timer == 15 || (timer <= 5 && timer>0)){
-//                        System.out.println(" ... "+timer);
-//                    }
-
+                if (timer > 0){
+                    if(timer == 15){
+                        game.getCurrentClient().sendMessage("15 seconds left ...");
+                    }
                     timer--;
                 } else {
-                    System.out.println("Your time is over");
                     timerA.cancel();
+                    game.setTimeLeft(false);
+                    game.getCurrentClient().sendMessage("Your time is over\n");
                 }
             }
         };
         timerA.schedule(task,0,1000);
     }
 
-    //Timer of Opponent starts --> revert move within timeframe?
-//                    int counter = 60;
-//
-//                    Countdown countdown = new Countdown();
-//                    System.out.println("\nYou have one minute to decide!");
-//                    countdown.counter(counter);
+    public Timer getTimerA() {
+        return timerA;
+    }
 }

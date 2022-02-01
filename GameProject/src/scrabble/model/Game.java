@@ -2,6 +2,7 @@ package scrabble.model;
 
 import scrabble.model.player.ComputerPlayer;
 import scrabble.model.player.HumanPlayer;
+import scrabble.view.utils.Countdown;
 import server.controller.ClientHandler;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
@@ -19,6 +20,7 @@ import scrabble.model.words.ScrabbleWordChecker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
 
 public class Game {
 	private final List<ClientHandler> clients;
@@ -29,7 +31,8 @@ public class Game {
 	private final ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
 	private final AdjacentWordChecker adjacentWordChecker;
 	private final IsAdjacentChecker isAdjacentChecker;
-	boolean isMoveValid;
+	private boolean isMoveValid;
+	private boolean timeLeft;
 	private int numberOfTurn = 0;
 	private int playersTurn;
 	private String move;
@@ -81,38 +84,55 @@ public class Game {
 			notifyTurn(clients.get(playersTurn));
 
 			if(playerList.getCurrentPlayer() instanceof HumanPlayer) {
+				/**Timer of Opponent starts */
+				Countdown countdown = new Countdown();
+				getCurrentClient().sendMessage("You have one minute to decide!");
+				countdown.counter(60,this);
+				setTimeLeft(true);
+
 				/** wait until move is not null anymore */
-				while (move == null) {
-					sleep(500);
-					//System.out.println("FOREVER");
-				}
-
-				/** DetermineMove() and Validates input */
-				while (true) {
-					//Wait until client changes value of move
-					while (move.equals(oldMove)) {
+				outer:
+				while (timeLeft) {
+					while (move == null) {
 						sleep(500);
+						if(!timeLeft){
+							break outer;
+						}
 					}
 
-					try {
-						validateInput(move);
-						setOldMove(move); //maybe not necessary
-						isMoveValid = true;
-						break;
-					} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
-							UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
+					/** DetermineMove() and Validates input */
+					while (true) {
+						//Wait until client changes value of move
+						while (move.equals(oldMove)) {
+							sleep(500);
+							if(!timeLeft){
+								break outer;
+							}
+						}
 
-						e.printStackTrace();
-						getCurrentClient().sendMessage("Please type in a valid move");
-						setOldMove(move);
+						try {
+							validateInput(move);
+							setOldMove(move); //maybe not necessary
+							isMoveValid = true;
+							break outer;
+						} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
+								UnknownCommandException | UnknownDirectionException | WordDoesNotFitException | WordIsNotAdjacentException | InvalidCrossException e) {
 
-					} catch (InvalidWordException e) {
-						e.printStackTrace();
-						getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
-						setOldMove(move); //maybe not necessary
-						isMoveValid = false;
-						break;
+							e.printStackTrace();
+							getCurrentClient().sendMessage("Please type in a valid move");
+							setOldMove(move);
+
+						} catch (InvalidWordException e) {
+							e.printStackTrace();
+							getCurrentClient().sendMessage("Either one or more words were invalid, you lost your turn");
+							setOldMove(move); //maybe not necessary
+							isMoveValid = false;
+							break outer;
+						}
 					}
+				}
+				if(timeLeft){
+					countdown.getTimerA().cancel();
 				}
 			}
 			else {
@@ -506,6 +526,9 @@ public class Game {
 		}
 	}
 
+	public void setTimeLeft(boolean timeLeft) {
+		this.timeLeft = timeLeft;
+	}
 
 	public ClientHandler getCurrentClient() {
 		return clients.get(playersTurn);
