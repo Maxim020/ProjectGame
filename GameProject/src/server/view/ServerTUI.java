@@ -19,15 +19,13 @@ public class ServerTUI {
      * prints Scoreboard after match ends
      * @author Yasin
      */
-    public String printFinalScoreBoard(Player winner){
+    public static String printFinalScoreBoard(Player winner){
         PlayerList playerList = PlayerList.getInstance();
         List<Player> players = playerList.getPlayers();
         StringBuilder scoreboard = new StringBuilder();
 
         for (int i=0; i<players.size(); i++){
-            if(!players.get(i).equals(winner)) {
-                scoreboard.append("\n").append(i + 1).append(") ").append(players.get(i));
-            }
+            scoreboard.append("\n").append(i + 1).append(") ").append(players.get(i));
         }
 
         return  "*******************************\n"+
@@ -56,5 +54,9 @@ public class ServerTUI {
             tiles.append(" ").append(currentPlayer.getLetterDeck().getLettersInDeck().get(i));
         }
         System.out.println(tiles);
+    }
+
+    public static void showMessage(String msg, String clientName){
+        System.out.println("[INCOMING FROM "+clientName+"] "+msg+"\n");
     }
 }

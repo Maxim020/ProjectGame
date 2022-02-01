@@ -70,8 +70,7 @@ public class LocalController {
             }
 
             /** Adjusts scores and prints out final scoreboard*/
-            new ServerTUI(board, PlayerList.getInstance().getCurrentPlayer())
-                    .printFinalScoreBoard(
+            ServerTUI.printFinalScoreBoard(
                             announceWinner(bag, PlayerList.getInstance().getCurrentPlayer())); //Umstellen!
 
             /** Ask for another game */

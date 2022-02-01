@@ -83,11 +83,7 @@ public class Game {
 			if(playerList.getCurrentPlayer() instanceof HumanPlayer) {
 				/** wait until move is not null anymore */
 				while (move == null) {
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					sleep(500);
 					//System.out.println("FOREVER");
 				}
 
@@ -95,11 +91,7 @@ public class Game {
 				while (true) {
 					//Wait until client changes value of move
 					while (move.equals(oldMove)) {
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						sleep(500);
 					}
 
 					try {
@@ -135,16 +127,23 @@ public class Game {
 			setMove(null);
 			setOldMove(null);
 			if(checkEndOfGame(bag, playerList.getCurrentPlayer(), board)){
-				broadcastMessage("Game ends because either a player played all tiles left or there are no more possibilities");
+				broadcastMessage("\nGame ends because either a player played all tiles left or there are no more possibilities\n");
 				break;
 			}
 
 			numberOfTurn++;
 		}
 		broadcastMessage(
-				new ServerTUI(board, PlayerList.getInstance().getCurrentPlayer())
-					.printFinalScoreBoard(
+				ServerTUI.printFinalScoreBoard(
 							announceWinner(bag, playerList.getCurrentPlayer())));
+	}
+
+	public void sleep(int ms){
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

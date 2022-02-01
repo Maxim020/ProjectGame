@@ -2,6 +2,7 @@ package server.controller;
 
 import scrabble.model.player.Player;
 import scrabble.model.letters.Bag;
+import server.view.ServerTUI;
 
 import java.io.*;
 import java.net.Socket;
@@ -54,11 +55,10 @@ public class ClientHandler implements Runnable {
      * @param input - input from client
      */
     public void handleInput(String input) {
-        //
         String[] parts = input.split(" "); //Wie soll ich Unit und message seperator trennen?
         String command = parts[0];
 
-        System.out.println("[INCOMING FROM "+clientUsername+"] "+input+"\n");
+        ServerTUI.showMessage(input,clientUsername);
 
         switch (command){
             case "ANNOUNCE":
@@ -85,7 +85,7 @@ public class ClientHandler implements Runnable {
                 }
                 broadcastMessage(message.toString(),false);
                 break;
-            case "REQUESTGAME": //Was passiert wenn mehr als players needed in der queue sind?
+            case "REQUESTGAME":
                 int inQueue = ClientHandler.clientHandlers.size();
                 int playersNeeded = Integer.parseInt(parts[1]);
                 int playersStillNeeded = playersNeeded - inQueue;
@@ -109,7 +109,7 @@ public class ClientHandler implements Runnable {
                 break;
             case "MAKEMOVE":
                 if(clientUsername.equals(server.getGame().getCurrentClient().getName())) {
-                    System.out.println("TEST");
+
                     StringBuilder move = new StringBuilder();
                     for (int i = 1; i < parts.length; i++) {
                         move.append(parts[i]).append(" ");
