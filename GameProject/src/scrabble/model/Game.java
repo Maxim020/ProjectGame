@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Game {
 	private final List<ClientHandler> clients;
-	private final PlayerList playerList;
+	private PlayerList playerList;
 	private final int amountOfPlayers;
 	private int playersTurn;
 
@@ -48,45 +48,11 @@ public class Game {
 		this.adjacentWordChecker = new AdjacentWordChecker(board);
 		this.isAdjacentChecker = new IsAdjacentChecker(board);
 
-		//Connect Clients with a player
-		for (int i=0; i<this.clients.size(); i++){ //Computer players
-			if(clients.get(i).getName().equalsIgnoreCase("ComputerPlayer")){
-				this.clients.get(i).setPlayer(new ComputerPlayer(bag,"ComputerPlayer"+(i+1)));
-			}
-			else {
-				this.clients.get(i).setPlayer(new HumanPlayer(this.clients.get(i).getName(), bag));
-			}
+		connectClientsWithPlayers();
+		createPlayerlist();
+		connectPlayerWithTeamMates();
 
-		}
-
-		//Create PlayerList
-		List<Player> players = new ArrayList<>();
-		for(int i=0; i<this.clients.size(); i++){
-			players.add(clients.get(i).getPlayer());
-		}
-		playerList = PlayerList.getInstance();
-		playerList.setPlayers(players);
-
-		for (int i=0; i < playerList.getPlayers().size(); i++){
-			playerList.getPlayers().get(i).setTeammate(clients.get(i).getTeammate());
-		}
-
-		int count = 0;
-		for (Player player : players){
-			if(player.getTeammate() == null){
-				count++;
-			}
-			if(count == 1){
-				oneVsTwo = true;
-			}
-		}
-		if(oneVsTwo) {
-			for (int i=0; i<players.size(); i++) {
-				if (players.get(i).getTeammate() == null) {
-					indexOfSingle = i;
-				}
-			}
-		}
+		if(playerList.getPlayers().size() == 3){checkOneVsTwo();}
 
 		amountOfPlayers = playerList.getPlayers().size();
 	}
@@ -95,10 +61,9 @@ public class Game {
 		while (true){
 			/** Allows for rotation of players turn */
 			playersTurn = numberOfTurn % amountOfPlayers;
-			System.out.println(playersTurn);
 			playerList.setCurrentPlayer(playersTurn);
 
-			/** Updates localTUI and broadcasts board to clients */
+			/** Updates ServerTUI and broadcasts board to clients */
 			ServerTUI serverTUI = new ServerTUI(board, playerList.getCurrentPlayer());
 			serverTUI.updateBoard();
 			broadcastMessage(stringBoard());
@@ -114,7 +79,7 @@ public class Game {
 				countdown.counter(60, this);
 				setTimeLeft(true);
 
-				/** wait until move is not null anymore */
+				/** Wait for move from client */
 				outer:
 				while (timeLeft) {
 					while (move == null) {
@@ -124,19 +89,17 @@ public class Game {
 						}
 					}
 
-					/** DetermineMove() and Validates input */
+					/** Wait until Client gives valid input */
 					while (true) {
-						//Wait until client changes value of move
 						while (move.equals(oldMove)) {
 							sleep(500);
 							if (!timeLeft) {
 								break outer;
 							}
 						}
-
 						try {
 							validateInput(move);
-							setOldMove(move); //maybe not necessary
+							setOldMove(move);
 							isMoveValid = true;
 							break outer;
 						} catch (CenterIsNotCoveredException | FieldDoesNotExistException | IllegalSwapException | NotEnougTilesException | NotEnoughBlankTilesException |
@@ -178,35 +141,8 @@ public class Game {
 				break;
 			}
 
-			//Skip one team player in case of 2v1 to make it more fair
-			if(oneVsTwo){
-				switch (indexOfSingle){
-					case 2:
-						if(playersTurn == 0){
-							numberOfTurn++;
-						}
-						if(numberOfTurn%12 == 2 || numberOfTurn%12 == 8){
-							numberOfTurn++;
-						}
-						break;
-					case 1:
-						if(playersTurn == 2){
-							numberOfTurn++;
-						}
-						if(numberOfTurn%12 == 4 || numberOfTurn%12 == 10){
-							numberOfTurn++;
-						}
-						break;
-					case 0:
-						if(playersTurn == 1){
-							numberOfTurn++;
-						}
-						if(numberOfTurn%12 == 3 || numberOfTurn%12 == 9){
-							numberOfTurn++;
-						}
-						break;
-				}
-			}
+			if(oneVsTwo){skipTurn();}
+
 			numberOfTurn++;
 		}
 
@@ -216,31 +152,60 @@ public class Game {
 	}
 
 	/**
-	 * Let thread sleep
-	 * @param ms - duration in ms
+	 * Connects a client with a player to make it possible to play the game
 	 */
-	public void sleep(int ms){
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+	public void connectClientsWithPlayers(){
+		for (int i=0; i<this.clients.size(); i++){
+			if(clients.get(i).getName().equalsIgnoreCase("ComputerPlayer")){
+				this.clients.get(i).setPlayer(new ComputerPlayer(bag,"ComputerPlayer"+(i+1)));
+			}
+			else {
+				this.clients.get(i).setPlayer(new HumanPlayer(this.clients.get(i).getName(), bag));
+			}
 		}
 	}
 
 	/**
-	 * informs each client about their tiles
+	 * creates a universal Playerlist
 	 */
-	public void sendTiles(){
-		for(ClientHandler clientHandler : clients){
-			clientHandler.sendMessage("TILES "+clientHandler.getPlayer().getLetterDeck().getLettersInDeck()+"\n");
+	public void createPlayerlist(){
+		List<Player> players = new ArrayList<>();
+		for (ClientHandler client : this.clients) {
+			players.add(client.getPlayer());
+		}
+		playerList = PlayerList.getInstance();
+		playerList.setPlayers(players);
+	}
+
+	/**
+	 * Connects player with teammates in order to have a correct score baord in the end
+	 */
+	public void connectPlayerWithTeamMates(){
+		for (int i=0; i < playerList.getPlayers().size(); i++){
+			playerList.getPlayers().get(i).setTeammate(clients.get(i).getTeammate());
 		}
 	}
 
 	/**
-	 * @return a string representation of board and keyword BOARD in front of it
+	 * check if there is a 2 vs 1 Situation, updated boolean and determines the index of the solo player
 	 */
-	public String stringBoard(){
-		return "BOARD "+board;
+	public void checkOneVsTwo(){
+		int count = 0;
+		for (Player player : playerList.getPlayers()){
+			if(player.getTeammate() == null){
+				count++;
+			}
+			if(count == 1){
+				oneVsTwo = true;
+			}
+		}
+		if(oneVsTwo) {
+			for (int i=0; i<playerList.getPlayers().size(); i++) {
+				if (playerList.getPlayers().get(i).getTeammate() == null) {
+					indexOfSingle = i;
+				}
+			}
+		}
 	}
 
 	/**
@@ -254,61 +219,18 @@ public class Game {
 	}
 
 	/**
-	 * used to ensure a valid input by the user
-	 * @param oldMove - the move that was previous to a new move, indicated by a player
+	 * @return a string representation of board and keyword BOARD in front of it
 	 */
-	public void setOldMove(String oldMove) {
-		this.oldMove = oldMove;
+	public String stringBoard(){
+		return "BOARD "+board;
 	}
 
 	/**
-	 * Game ends if:
-	 * 1) Either player uses more than 10 minutes of overtime.
-	 * 2) The game ends when all letters have been drawn and one player uses his or her last letter (known as "going out")
-	 * 3) When all possible plays have been made
-	 * @param bag - a universal bag of letters
-	 * @param currentPlayer - The player who has just made a move
-	 * @return - return true if game ended
-	 * @author Yasin
+	 * informs each client about their tiles
 	 */
-	public boolean checkEndOfGame(Bag bag, Player currentPlayer, Board board){
-		//Either player uses more than 10 minutes of overtime.
-
-		boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
-
-		boolean deadEnd = bag.getLetterList().isEmpty() && new DeadEndChecker().isDeadEnd(board);
-
-		return goingOut || deadEnd;
-	}
-
-	/**
-	 * @param bag - a universal bag of letters
-	 * @param currentPlayer - The player who has just made a move
-	 * @author Yasin
-	 */
-	public void adjustScores(Bag bag, Player currentPlayer){ //Adjust scores
-		LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
-		boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
-		int sumOfUnplacedTiles = 0;
-		//Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-
-		//Each player's score is reduced by the sum of his or her unplaced letters.
-		for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
-			ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-			for (Character character : letterDeck) {
-				sumOfUnplacedTiles += letterScoreChecker.scoreChecker(character);
-				PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(character));
-			}
-		}
-
-		//In addition, if a player has used all of his or her letters, the sum of the other players' unplaced letters is added to that player's score.
-		if(goingOut){
-			for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
-				ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
-				if(letterDeck.isEmpty()){
-					PlayerList.getInstance().getPlayers().get(i).addToScore(sumOfUnplacedTiles);
-				}
-			}
+	public void sendTiles(){
+		for(ClientHandler clientHandler : clients){
+			clientHandler.sendMessage("TILES "+clientHandler.getPlayer().getLetterDeck().getLettersInDeck()+"\n");
 		}
 	}
 
@@ -323,57 +245,17 @@ public class Game {
 	}
 
 	/**
-	 * The process of exchanging tiles after placing a word and swapping is different, because
-	 * for after placing a word you need to regard already placed tiles on a board and the correct exchange of blank tiles
-	 * @param parts - String array with the parts of the command/input
-	 * @param currentPlayer - currentPlayer that needs tiles to be exchanged
-	 * @param bag - a universal bag of letters
-	 * @param board - the board that the game is played on
-	 * @param word - true if tiles need to be exchanged after placing a word and false if the player just want to swap
-	 * @author Yasin
+	 * Let thread sleep
+	 * @param ms - duration in ms
 	 */
-	public void exchangeTiles(String[] parts, Player currentPlayer, Bag bag, Board board, boolean word) {
-		if(word){
-			//Declaring String variables out of the parts of the input
-			String coordinate = parts[1];
-			String direction = parts[2];
-			String tiles = parts[3];
-			int[] rowcol = board.convert(coordinate);
-			int tilesUsed = 0;
-
-			//Loops over length of word
-			for (int i = 0; i < tiles.length(); i++) {
-				if(direction.equalsIgnoreCase("h")) {
-					//Only exchange tiles if a square is not already occupied by a tile
-					if(board.isFieldEmpty(rowcol[0],(rowcol[1]+i))){
-						processExchangeTile(tiles, i, currentPlayer, bag, word);
-						tilesUsed++;
-					}
-				}
-				else {
-					//Only exchange tiles if a square is not already occupied by a tile
-					if(board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
-						processExchangeTile(tiles, i, currentPlayer, bag, word);
-						tilesUsed++;
-
-					}
-				}
-			}
-
-			if(tilesUsed == 7){
-				currentPlayer.addToScore(50); //Bingo!
-			}
-		}
-		else {
-			//Declaring String variables out of the parts of the input
-			String tiles = parts[1];
-
-			for (int i = 0; i < tiles.length(); i++) {
-				processExchangeTile(tiles, i, currentPlayer, bag, word);
-
-			}
+	public void sleep(int ms){
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
+
 
 	/**
 	 * Throws IllegalArgumentException provided the input is not valid
@@ -486,7 +368,7 @@ public class Game {
 	 * @return the number of tiles not owned by the player
 	 * @author Yasin
 	 */
-	public int tilesNotOwned(String[] parts, Player currentPlayer, Board board, boolean word){
+	public static int tilesNotOwned(String[] parts, Player currentPlayer, Board board, boolean word){
 		ArrayList<Character> letterDeck = currentPlayer.getLetterDeck().getLettersInDeck();
 
 		int count = 0;
@@ -525,6 +407,85 @@ public class Game {
 	}
 
 	/**
+	 * processes input to make a move and return
+	 * @requires the input to be valid
+	 * @param input the input that the user wrote
+	 * @author Yasin
+	 */
+	public static void processMove(String input, Board board, Player currentPlayer, Bag bag) {
+		String[] parts = input.split(" ");
+
+		if (parts[0].equalsIgnoreCase("word")) {
+			//WORD A1 H TEST
+			exchangeTiles(parts, currentPlayer, bag, board, true);
+			board.setWord(parts[1], parts[2], parts[3]);
+			board.setBoardEmpty(false);
+			board.addPlayedWords(parts[1], parts[2], parts[3]);
+		}
+		else {
+			if (parts.length == 2) {
+				//SWAP ABC
+				exchangeTiles(parts, currentPlayer, bag, board, false);
+			}
+			//SWAP
+			//Do nothing
+		}
+	}
+
+	/**
+	 * The process of exchanging tiles after placing a word and swapping is different, because
+	 * for after placing a word you need to regard already placed tiles on a board and the correct exchange of blank tiles
+	 * @param parts - String array with the parts of the command/input
+	 * @param currentPlayer - currentPlayer that needs tiles to be exchanged
+	 * @param bag - a universal bag of letters
+	 * @param board - the board that the game is played on
+	 * @param word - true if tiles need to be exchanged after placing a word and false if the player just want to swap
+	 * @author Yasin
+	 */
+	public static void exchangeTiles(String[] parts, Player currentPlayer, Bag bag, Board board, boolean word) {
+		if(word){
+			//Declaring String variables out of the parts of the input
+			String coordinate = parts[1];
+			String direction = parts[2];
+			String tiles = parts[3];
+			int[] rowcol = board.convert(coordinate);
+			int tilesUsed = 0;
+
+			//Loops over length of word
+			for (int i = 0; i < tiles.length(); i++) {
+				if(direction.equalsIgnoreCase("h")) {
+					//Only exchange tiles if a square is not already occupied by a tile
+					if(board.isFieldEmpty(rowcol[0],(rowcol[1]+i))){
+						processExchangeTile(tiles, i, currentPlayer, bag, word);
+						tilesUsed++;
+					}
+				}
+				else {
+					//Only exchange tiles if a square is not already occupied by a tile
+					if(board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
+						processExchangeTile(tiles, i, currentPlayer, bag, word);
+						tilesUsed++;
+
+					}
+				}
+			}
+
+			if(tilesUsed == 7){
+				currentPlayer.addToScore(50); //Bingo!
+			}
+		}
+		else {
+			//Declaring String variables out of the parts of the input
+			String tiles = parts[1];
+
+			for (int i = 0; i < tiles.length(); i++) {
+				processExchangeTile(tiles, i, currentPlayer, bag, word);
+
+			}
+		}
+	}
+
+	/**
 	 * Process for exchanging tiles specific for after placing a word
 	 * @param tiles - that need to be exchanged
 	 * @param i - for Iteration of for loop
@@ -532,7 +493,7 @@ public class Game {
 	 * @param bag - a universal bag of letters
 	 * @author Yasin
 	 */
-	public void processExchangeTile(String tiles, int i, Player currentPlayer, Bag bag, boolean word){
+	public static void processExchangeTile(String tiles, int i, Player currentPlayer, Bag bag, boolean word){
 		if (Character.isLowerCase(tiles.charAt(i))) {
 			currentPlayer.getLetterDeck().removeFromDeck('*'); //removes old tiles from deck
 			if(word){
@@ -550,29 +511,88 @@ public class Game {
 	}
 
 	/**
-	 * processes input to make a move and return
-	 * @requires the input to be valid
-	 * @param input the input that the user wrote
+	 * Game ends if:
+	 * 1) Either player uses more than 10 minutes of overtime.
+	 * 2) The game ends when all letters have been drawn and one player uses his or her last letter (known as "going out")
+	 * 3) When all possible plays have been made
+	 * @param bag - a universal bag of letters
+	 * @param currentPlayer - The player who has just made a move
+	 * @return - return true if game ended
 	 * @author Yasin
 	 */
-	public void processMove(String input, Board board, Player currentPlayer, Bag bag) {
-		String[] parts = input.split(" ");
+	public static boolean checkEndOfGame(Bag bag, Player currentPlayer, Board board){
+		boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
 
-		if (parts[0].equalsIgnoreCase("word")) {
-			//WORD A1 H TEST
-			exchangeTiles(parts, currentPlayer, bag, board, true); //HOW DOES THE PROGRAM HANDLE <7 TILES IN THE BAG
-			board.setWord(parts[1], parts[2], parts[3]);
-			board.setBoardEmpty(false);
-			board.addPlayedWords(parts[1], parts[2], parts[3]);
+		boolean deadEnd = bag.getLetterList().isEmpty() && new DeadEndChecker().isDeadEnd(board);
+
+		return goingOut || deadEnd;
+	}
+
+	/**
+	 * Skips turn to make a 2 vs 1 more fair
+	 */
+	public void skipTurn(){
+		switch (indexOfSingle){
+			case 2:
+				if(playersTurn == 0){
+					numberOfTurn++;
+				}
+				if(numberOfTurn%12 == 2 || numberOfTurn%12 == 8){
+					numberOfTurn++;
+				}
+				break;
+			case 1:
+				if(playersTurn == 2){
+					numberOfTurn++;
+				}
+				if(numberOfTurn%12 == 4 || numberOfTurn%12 == 10){
+					numberOfTurn++;
+				}
+				break;
+			case 0:
+				if(playersTurn == 1){
+					numberOfTurn++;
+				}
+				if(numberOfTurn%12 == 3 || numberOfTurn%12 == 9){
+					numberOfTurn++;
+				}
+				break;
 		}
-		else {
-			if (parts.length == 2) {
-				//SWAP ABC
-				exchangeTiles(parts, currentPlayer, bag, board, false);
+	}
+
+	/**
+	 * @param bag - a universal bag of letters
+	 * @param currentPlayer - The player who has just made a move
+	 * @author Yasin
+	 */
+	public static void adjustScores(Bag bag, Player currentPlayer){ //Adjust scores
+		LetterScoreChecker letterScoreChecker = new LetterScoreChecker();
+		boolean goingOut = bag.getLetterList().isEmpty() && currentPlayer.getLetterDeck().getLettersInDeck().isEmpty();
+		int sumOfUnplacedTiles = 0;
+		//Player winnerBeforeAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
+
+		//Each player's score is reduced by the sum of his or her unplaced letters.
+		for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+			ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+			for (Character character : letterDeck) {
+				sumOfUnplacedTiles += letterScoreChecker.scoreChecker(character);
+				PlayerList.getInstance().getPlayers().get(i).subtractScore(letterScoreChecker.scoreChecker(character));
 			}
-			//SWAP
-			//Do nothing
 		}
+
+		//In addition, if a player has used all of his or her letters, the sum of the other players' unplaced letters is added to that player's score.
+		if(goingOut){
+			for (int i=0; i<PlayerList.getInstance().getPlayers().size(); i++){
+				ArrayList<Character> letterDeck = PlayerList.getInstance().getPlayers().get(i).getLetterDeck().getLettersInDeck();
+				if(letterDeck.isEmpty()){
+					PlayerList.getInstance().getPlayers().get(i).addToScore(sumOfUnplacedTiles);
+				}
+			}
+		}
+	}
+
+	public void setOldMove(String oldMove) {
+		this.oldMove = oldMove;
 	}
 
 	public void setTimeLeft(boolean timeLeft) {

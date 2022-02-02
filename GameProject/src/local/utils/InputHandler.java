@@ -137,7 +137,7 @@ public class InputHandler {
                 }
             }
 
-            int lowercase = tilesNotOwned(parts,currentPlayer,board,true);
+            int lowercase = Game.tilesNotOwned(parts,currentPlayer,board,true);
             if(lowercase != 0){
                 int blankTiles =currentPlayer.getLetterDeck().numberOfBlankTiles();
 
@@ -189,7 +189,7 @@ public class InputHandler {
             if(!command.equalsIgnoreCase("swap")){
                 throw new UnknownCommandException();
             }
-            if(tilesNotOwned(parts,currentPlayer,board,false) != 0){
+            if(Game.tilesNotOwned(parts,currentPlayer,board,false) != 0){
                 throw new IllegalSwapException();
             }
             if(tiles.length() > 7){
@@ -208,55 +208,6 @@ public class InputHandler {
                 throw new UnknownCommandException();
             }
         }
-    }
-
-    /**
-     * The process of checking not owned tiles is different when wanting to place a word and swapping, because
-     * the algorithm needs to check the already placed tiles on the board, so that it does not assume they are
-     * not owned by the player
-     * @param parts - String array with the parts of the command/input
-     * @param currentPlayer- currentPlayer that is checked for now owned tiles
-     * @param board - the board that the game is played on
-     * @param word - true if tiles not owned refer to placing a word on the board and false if it refers to swapping
-     * @return the number of tiles not owned by the player
-     * @author Yasin
-     */
-    public int tilesNotOwned(String[] parts, Player currentPlayer, Board board, boolean word){
-        ArrayList<Character> letterDeck = currentPlayer.getLetterDeck().getLettersInDeck();
-
-        int count = 0;
-
-        if(word){
-            String coordinate = parts[1];
-            String direction = parts[2];
-            String tiles = parts[3];
-            int[] rowcol = board.convert(coordinate);
-            int length = tiles.length();
-
-            for (int i = 0; i < length; i++) {
-                if (direction.equalsIgnoreCase("h")) {
-                    if (!letterDeck.contains(tiles.charAt(i)) && board.isFieldEmpty(rowcol[0], (rowcol[1] + i))) {
-                        count++;
-                    }
-                }
-                else{
-                    if (!letterDeck.contains(tiles.charAt(i)) && board.isFieldEmpty((rowcol[0]+i),rowcol[1])){
-                        count++;
-                    }
-                }
-            }
-        }
-        else {
-            String tiles = parts[1];
-            int length = tiles.length();
-
-            for (int i = 0; i < length; i++) {
-                if (!letterDeck.contains(tiles.charAt(i))) {
-                    count++;
-                }
-            }
-        }
-        return count;
     }
 
     /**
