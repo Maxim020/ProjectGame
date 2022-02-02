@@ -1,19 +1,19 @@
-package local.view;
+package local.utils;
 
 import scrabble.model.player.ComputerPlayer;
 import scrabble.model.player.HumanPlayer;
 import scrabble.model.player.PlayerList;
 import scrabble.model.*;
 import scrabble.model.exceptions.*;
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.CrossChecker;
+import scrabble.model.Bag;
+import scrabble.model.checker.CrossChecker;
 import scrabble.model.player.Player;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.IsAdjacentChecker;
-import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.strategy.SmartStrategy;
-import scrabble.view.utils.TextIO;
+import scrabble.model.checker.AdjacentWordChecker;
+import scrabble.model.checker.InMemoryScrabbleWordChecker;
+import scrabble.model.checker.IsAdjacentChecker;
+import scrabble.model.checker.ScrabbleWordChecker;
+import scrabble.model.strategy.SmartStrategy;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +38,12 @@ public class InputHandler {
         this.bag = Bag.getInstance();
     }
 
-    public InputHandler(){}
-
     /**
      * @param board - the board that the game is played on
      * @return an ArrayList of Players
      * Scans user input for the name of all players and if wanted any computer players
      */
-    public List<Player> getPlayers(Board board){
+    public static List<Player> getPlayers(Board board){
         String[] players;
         int amountOfPlayers;
 
@@ -67,9 +65,9 @@ public class InputHandler {
 
         for (int i=0; i<players.length; i++) {
             if (players[i].equals("-N")) {
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board, "NaiveComputerPlayer"+i));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), "NaiveComputerPlayer"+i));
             } else if (players[i].equals("-S")) {
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board,"SmartComputerPlayer"+i));
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), "SmartComputerPlayer"+i));
             } else {
                 playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
             }
@@ -203,7 +201,7 @@ public class InputHandler {
         }
 
         //Skip turn
-        else if(parts.length == 1) {
+        else {
             String command = parts[0];
 
             if(!command.equalsIgnoreCase("swap")){
@@ -265,7 +263,7 @@ public class InputHandler {
      * @return true if user wants to play another game
      * @author Yasin
      */
-    public boolean askForNextGame(){
+    public static boolean askForNextGame(){
         System.out.println("Do you want to play another Game? (y/n)");
         String decision = TextIO.getlnString();
         return decision.equals("y");

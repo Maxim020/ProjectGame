@@ -1,4 +1,4 @@
-package scrabble.strategy;
+package scrabble.model.strategy;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,12 +7,11 @@ import java.util.Objects;
 import java.util.Map.Entry;
 
 import scrabble.model.Board;
-import scrabble.model.letters.LetterDeck;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.model.words.WordScoreCounter;
-import scrabble.strategy.Strategy;
+import scrabble.model.LetterDeck;
+import scrabble.model.checker.AdjacentWordChecker;
+import scrabble.model.checker.InMemoryScrabbleWordChecker;
+import scrabble.model.checker.ScrabbleWordChecker;
+import scrabble.model.checker.WordScoreCounter;
 
 /**
  * This class is currently not in use due to not being finished. It is an

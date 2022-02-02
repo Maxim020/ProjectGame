@@ -1,4 +1,4 @@
-package scrabble.view.utils;
+package server.utils;
 
 import scrabble.model.Game;
 

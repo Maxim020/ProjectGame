@@ -1,6 +1,6 @@
 package scrabble.model.exceptions;
 
-import scrabble.model.letters.Bag;
+import scrabble.model.Bag;
 
 public class NotEnougTilesException extends IllegalArgumentException{
 

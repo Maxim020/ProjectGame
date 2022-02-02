@@ -2,43 +2,43 @@ package scrabble.model;
 
 import scrabble.model.player.ComputerPlayer;
 import scrabble.model.player.HumanPlayer;
-import scrabble.view.utils.Countdown;
+import server.utils.Countdown;
 import server.controller.ClientHandler;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
 import server.view.ServerTUI;
 import scrabble.model.exceptions.*;
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.CrossChecker;
-import scrabble.model.letters.DeadEndChecker;
-import scrabble.model.letters.LetterScoreChecker;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.IsAdjacentChecker;
-import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.checker.CrossChecker;
+import scrabble.model.checker.DeadEndChecker;
+import scrabble.model.checker.LetterScoreChecker;
+import scrabble.model.checker.AdjacentWordChecker;
+import scrabble.model.checker.InMemoryScrabbleWordChecker;
+import scrabble.model.checker.IsAdjacentChecker;
+import scrabble.model.checker.ScrabbleWordChecker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
 
 public class Game {
 	private final List<ClientHandler> clients;
 	private final PlayerList playerList;
 	private final int amountOfPlayers;
+	private int playersTurn;
+
 	private final Board board;
 	private final Bag bag;
+
 	private final ScrabbleWordChecker wordChecker = new InMemoryScrabbleWordChecker();
 	private final AdjacentWordChecker adjacentWordChecker;
 	private final IsAdjacentChecker isAdjacentChecker;
-	private boolean isMoveValid;
-	private boolean timeLeft;
-	private int numberOfTurn = 0;
-	private boolean oneVsTwo = false;
-	private int indexOfSingle;
-	private int playersTurn;
 	private String move;
 	private String oldMove;
+
+	private boolean isMoveValid;
+	private boolean timeLeft;
+	private boolean oneVsTwo = false;
+	private int numberOfTurn = 0;
+	private int indexOfSingle;
 
 	public Game(List<ClientHandler> clients) {
 		/** Instantiates a Board, a Game, a universal PlayerList and Bag*/
@@ -51,7 +51,7 @@ public class Game {
 		//Connect Clients with a player
 		for (int i=0; i<this.clients.size(); i++){ //Computer players
 			if(clients.get(i).getName().equalsIgnoreCase("ComputerPlayer")){
-				this.clients.get(i).setPlayer(new ComputerPlayer(bag,board,"ComputerPlayer"+(i+1)));
+				this.clients.get(i).setPlayer(new ComputerPlayer(bag,"ComputerPlayer"+(i+1)));
 			}
 			else {
 				this.clients.get(i).setPlayer(new HumanPlayer(this.clients.get(i).getName(), bag));
@@ -215,6 +215,10 @@ public class Game {
 		Bag.reset();
 	}
 
+	/**
+	 * Let thread sleep
+	 * @param ms - duration in ms
+	 */
 	public void sleep(int ms){
 		try {
 			Thread.sleep(ms);
@@ -280,7 +284,6 @@ public class Game {
 	/**
 	 * @param bag - a universal bag of letters
 	 * @param currentPlayer - The player who has just made a move
-	 * @return - adjusts Scores
 	 * @author Yasin
 	 */
 	public void adjustScores(Bag bag, Player currentPlayer){ //Adjust scores
@@ -307,23 +310,11 @@ public class Game {
 				}
 			}
 		}
-
-//		//Sort PlayerList in descending order
-//		Collections.sort(PlayerList.getInstance().getPlayers());
-//		Collections.reverse(PlayerList.getInstance().getPlayers());
-//		Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-//
-//		//The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
-//		if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
-//			return winnerBeforeAdjustment;
-//		} else {
-//			return winnerAfterAdjustment;
-//		}
 	}
 
 	/**
 	 * Notifies each client about their turn
-	 * @param ch
+	 * @param ch - ClientHandler that has the turn
 	 */
 	public void notifyTurn(ClientHandler ch){
 		for(ClientHandler clientHandler : clients){

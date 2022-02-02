@@ -1,4 +1,4 @@
-package scrabble.model.letters;
+package scrabble.model;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class LetterDeck {
 	 * @requires lettersInDeck != null
 	 * @ensures lettersInDeck != (old) lettersInDeck && lettersInDeck.contains(letter) = false
 	 * @param letter
-	 * @author Maxim & Yasin
+	 * @author Maxim
 	 */
 	public void removeFromDeck(char letter) {
 		lettersInDeck.remove((Character) letter); //.remove(lettersInDeck.indexOf(letter));

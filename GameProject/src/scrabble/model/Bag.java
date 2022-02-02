@@ -1,6 +1,5 @@
-package scrabble.model.letters;
+package scrabble.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -11,14 +10,17 @@ public class Bag {
 	private static Bag instance = null;
 
 	/**
+	 * Privat constructor to implement Singleton pattern
+	 */
+	private Bag() {}
+
+	/**
 	 * Constructor of the Bag class
 	 * When Bag object is initialized, the attribute letterList is filled with letters contained in the "letters" String
 	 * @requires letters != null;
 	 * @ensures letterList != null;
 	 * @author Maxim
 	 */
-	private Bag() {}
-
 	public static Bag getInstance(){
 		if (instance == null) {
 			instance = new Bag();
@@ -32,6 +34,10 @@ public class Bag {
 		return instance;
 	}
 
+	/**
+	 * Clears list and then refills the bag
+	 * @author Yasin
+	 */
 	public static void reset(){
 		letterList.clear();
 		for(int i = 0; i < LETTERS.split("").length; i++) {

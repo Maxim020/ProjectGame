@@ -1,4 +1,5 @@
-package scrabble.model.words;
+package scrabble.model.checker;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +9,7 @@ import java.util.Map;
 /**
  * A Scrabble Word Checker, which stores all words in Memory.
  */
-public class InMemoryScrabbleWordChecker implements  ScrabbleWordChecker{
+public class InMemoryScrabbleWordChecker implements ScrabbleWordChecker {
 
     /**
      * A static variable to store all words in memory

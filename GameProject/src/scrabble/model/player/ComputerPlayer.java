@@ -1,21 +1,20 @@
 package scrabble.model.player;
 
 import scrabble.model.Board;
-import scrabble.model.letters.Bag;
-import scrabble.model.player.Player;
-import scrabble.strategy.NaiveStrategy;
-import scrabble.strategy.Strategy;
+import scrabble.model.Bag;
+import scrabble.model.strategy.NaiveStrategy;
+import scrabble.model.strategy.Strategy;
 
 public class ComputerPlayer extends Player {
 	
 	private Strategy strategy;
 	
-	public ComputerPlayer(Bag bag, Strategy strategy, Board board, String name) {
+	public ComputerPlayer(Bag bag, Strategy strategy, String name) {
 		super(name, bag);
 		this.strategy = strategy;
 	}
 
-	public ComputerPlayer(Bag bag, Board board, String name) {
+	public ComputerPlayer(Bag bag, String name) {
 		super(name, bag);
 		this.strategy = new NaiveStrategy();
 	}

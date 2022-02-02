@@ -2,15 +2,10 @@ package client.controller;
 
 import client.view.ClientTUI;
 import server.controller.ClientHandler;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-/**
- * Provides a Class that represents the Client
- * @author Yasin Fahmy
- */
 
 public class Client {
     private Socket socket;
@@ -19,7 +14,12 @@ public class Client {
     private final String username;
     private final ClientTUI clientTUI;
 
-
+    /**
+     * Constructor of client
+     * @param socket - socket to connect to server
+     * @param username - A client needs a username to be instantiated
+     * @author Yasin Fahmy
+     */
     public Client(Socket socket, String username){
         try {
             this.socket = socket;
@@ -32,7 +32,13 @@ public class Client {
         clientTUI = new ClientTUI();
     }
 
-
+    /**
+     * Scans for username
+     * Creates new socket on port 1234, localhost
+     * TUI prints commands
+     * Listens for and is ready to send messages at the same time
+     * @author Yasin Fahmy
+     */
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         ClientTUI.promptToAnnounce();
@@ -45,7 +51,10 @@ public class Client {
         client.sendMessage();
     }
 
-
+    /**
+     * Sends messages to clienthandler
+     * @author Yasin Fahmy
+     */
     public synchronized void sendMessage(){
         try {
             out.write(username);
@@ -65,7 +74,10 @@ public class Client {
         }
     }
 
-
+    /**
+     * listens for messages from clienthandler
+     * @author Yasin Fahmy
+     */
     public synchronized void listenForMessages(){
         new Thread(() -> {
             String messageFromServer;
@@ -74,7 +86,7 @@ public class Client {
                 try {
                     messageFromServer = in.readLine();
                     handleInput(messageFromServer);
-                    //System.out.println(messageFromGroupChat);
+
                 }catch (IOException e){
                     closeEverything();
                 }
@@ -82,7 +94,11 @@ public class Client {
         }).start();
     }
 
-
+    /**
+     * handles input from client handler, such as a string representation of the current board
+     * @param input - input that is received by the listenForMessagesThread
+     * @author Yasin Fahmy
+     */
     public void handleInput(String input){
         if(input.startsWith("BOARD")){
             StringBuilder stringBuilder = new StringBuilder(input);
@@ -94,21 +110,18 @@ public class Client {
             String[] parts = input.split(" ");
             String command = parts[0];
 
-            switch (command){
-                case "NOTIFYTURN":
-                    ClientTUI.promptToMakeMove(parts[0], parts[1], parts[2]);
-                    break;
-                case "REQUESTTEAM":
-                    break;
-                default:
-                    ClientTUI.showMessage(input);
+            if ("NOTIFYTURN".equals(command)) {
+                ClientTUI.promptToMakeMove(parts[0], parts[1], parts[2]);
+            } else {
+                ClientTUI.showMessage(input);
             }
-
-
         }
     }
 
-
+    /**
+     * Closes bufferedReader, -writer and socket
+     * @author Yasin Fahmy
+     */
     public void closeEverything(){
         ClientHandler.closeConnection(in, out, socket);
     }

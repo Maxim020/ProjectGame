@@ -1,6 +1,6 @@
 package scrabble.model;
 import scrabble.model.player.PlayerList;
-import scrabble.model.words.WordScoreCounter;
+import scrabble.model.checker.WordScoreCounter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,20 +15,23 @@ import java.util.HashSet;
 
 public class Board {
     public static final int SIZE = 15;
-    public static final String LETTERS = "ABCDEFGHIJKLMNO";
+    public static final String COLUMNS = "ABCDEFGHIJKLMNO";
     private char[][] fields;
+
     public enum FieldType{NORMAL,TRIPLE_WORD_SCORE, DOUBLE_WORD_SCORE, TRIPLE_LETTER_SCORE, DOUBLE_LETTER_SCORE}
     protected HashSet<String> tripleWordScore;
     protected HashSet<String> doubleWordScore;
     protected HashSet<String> tripleLetterScore;
     protected HashSet<String> doubleLetterScore;
-    boolean isBoardEmpty;
-    boolean isCenterCovered;
-    WordScoreCounter wordScoreCounter;
-    PlayerList playerList;
-    ArrayList<String> playedWords = new ArrayList<>();
-    HashMap<String, String> wordCoordinateMap = new HashMap<>();
-    HashMap<String, String> wordDirectionMap = new HashMap<>();
+
+    private boolean isBoardEmpty;
+    private boolean isCenterCovered;
+
+    private WordScoreCounter wordScoreCounter;
+    private PlayerList playerList;
+    private ArrayList<String> playedWords = new ArrayList<>();
+    private HashMap<String, String> wordCoordinateMap = new HashMap<>();
+    private HashMap<String, String> wordDirectionMap = new HashMap<>();
 
     /**
      * Constructor of the Board Class.
@@ -210,7 +213,7 @@ public class Board {
 
         int[] rowcol = new int[2];
         rowcol[0] = number-1;
-        rowcol[1] = LETTERS.indexOf(field.charAt(0));
+        rowcol[1] = COLUMNS.indexOf(field.charAt(0));
 
         return rowcol;
     }
@@ -278,7 +281,7 @@ public class Board {
         } else{
             number = Character.getNumericValue(field.charAt(1)+field.charAt(2));
         }
-        return LETTERS.contains(letter) && number >= 1 && number <= 15;
+        return COLUMNS.contains(letter) && number >= 1 && number <= 15;
     }
 
     /**

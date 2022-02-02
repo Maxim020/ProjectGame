@@ -2,10 +2,10 @@ package server.view;
 import client.view.ClientBoard;
 import scrabble.model.Board;
 import scrabble.model.player.PlayerList;
-import scrabble.model.letters.Bag;
+import scrabble.model.Bag;
 
 /**
- * Class for TUI. It enables the display of the game.
+ * Uses static methods from ClientBoard Class
  */
 
 public class ServerBoard {
@@ -63,7 +63,8 @@ public class ServerBoard {
     }
 
     /**
-     * TESTING
+     * Displays size of bag
+     * @author Yasin Fahmy
      */
     public String addBag(){
         return "Size of Bag: "+bag.getLetterList().size()+"\n"+bag.getLetterList().toString();
@@ -91,7 +92,7 @@ public class ServerBoard {
     }
 
     /**
-     * @return - displays the whole with letters and numbers on the sides board
+     * @return - displays the whole board with letters and numbers on the sides board
      * @author Yasin Fahmy
      */
     public String toString(){

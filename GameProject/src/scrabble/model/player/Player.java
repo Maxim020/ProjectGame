@@ -1,7 +1,7 @@
 package scrabble.model.player;
 
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.LetterDeck;
+import scrabble.model.Bag;
+import scrabble.model.LetterDeck;
 
 public class Player implements Comparable<Player>{
     private String name;

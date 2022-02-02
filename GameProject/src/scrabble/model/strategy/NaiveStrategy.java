@@ -1,13 +1,12 @@
-package scrabble.strategy;
+package scrabble.model.strategy;
 
 import java.util.ArrayList;
 
 import scrabble.model.Board;
-import scrabble.model.letters.LetterDeck;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.ScrabbleWordChecker;
-import scrabble.strategy.Strategy;
+import scrabble.model.LetterDeck;
+import scrabble.model.checker.AdjacentWordChecker;
+import scrabble.model.checker.InMemoryScrabbleWordChecker;
+import scrabble.model.checker.ScrabbleWordChecker;
 
 public class NaiveStrategy implements Strategy {
 
@@ -476,7 +475,7 @@ public class NaiveStrategy implements Strategy {
 	 * play, this is indicated by a return of "" from the determineMove method.
 	 * This method outputs a String with all letters currently on hand.
 	 * 
-	 * @param LetterDeck letterDeck
+	 * @param letterDeck
 	 * @ensures letterDeck.getLettersInDeck() != (old) letterDeck.getLettersInDeck()
 	 * @return String lettersInHand
 	 * @author Maxim

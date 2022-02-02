@@ -1,4 +1,4 @@
-package scrabble.view.utils;
+package server.utils;
 
 public class Protocol {
     public static final char MESSAGE_SEPARATOR = '\u001e';

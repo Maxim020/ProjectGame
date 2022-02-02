@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import scrabble.model.Board;
 import scrabble.model.Board.FieldType;
-import scrabble.model.words.WordScoreCounter;
+import scrabble.model.checker.WordScoreCounter;
 
 class WordScoreTest {
 	

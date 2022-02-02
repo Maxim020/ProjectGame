@@ -1,15 +1,13 @@
-package scrabble.model.letters;
+package scrabble.model.checker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import scrabble.model.Board;
+import scrabble.model.Bag;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
-import scrabble.strategy.SmartStrategy;
-import scrabble.model.words.AdjacentWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.strategy.SmartStrategy;
 
 public class DeadEndChecker {
 

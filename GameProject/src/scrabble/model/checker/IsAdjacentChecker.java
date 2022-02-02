@@ -1,4 +1,4 @@
-package scrabble.model.words;
+package scrabble.model.checker;
 
 import scrabble.model.Board;
 
@@ -12,9 +12,9 @@ public class IsAdjacentChecker {
 	
 	/**
 	 * Checks if there is a letter present on at least one of the fields adjacent to the placed word.
-	 * @param String coordinate
-	 * @param String direction
-	 * @param String word
+	 * @param coordinate
+	 * @param direction
+	 * @param word
 	 * @requires coordinate == {A-O + 1-15} && direction == "h"||"v" && word != null
 	 * @ensures return of true or false
 	 * @return true||false

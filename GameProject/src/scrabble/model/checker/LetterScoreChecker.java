@@ -1,4 +1,4 @@
-package scrabble.model.letters;
+package scrabble.model.checker;
 
 import java.util.HashMap;
 

@@ -2,13 +2,12 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import scrabble.model.letters.Bag;
+import scrabble.model.Bag;
 
 class BagTest {
 	

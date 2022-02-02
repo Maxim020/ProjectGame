@@ -1,17 +1,16 @@
 package local;
 
 import scrabble.model.player.PlayerList;
-import local.view.InputHandler;
+import local.utils.InputHandler;
 import scrabble.model.player.Player;
 import server.view.ServerTUI;
 import scrabble.model.player.ComputerPlayer;
 import scrabble.model.player.HumanPlayer;
 import scrabble.model.*;
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.DeadEndChecker;
-import scrabble.model.letters.LetterScoreChecker;
+import scrabble.model.Bag;
+import scrabble.model.checker.DeadEndChecker;
+import scrabble.model.checker.LetterScoreChecker;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class LocalController {
     public static void main(String[] args) {
@@ -22,7 +21,7 @@ public class LocalController {
             /** Instantiates a Board, a Game, a universal PlayerList and Bag*/
             Board board = new Board();
             PlayerList playerList = PlayerList.getInstance();
-            playerList.setPlayers(new InputHandler().getPlayers(board));
+            playerList.setPlayers(InputHandler.getPlayers(board));
 
             Bag bag = Bag.getInstance();
 
@@ -44,7 +43,6 @@ public class LocalController {
 
                 /** DetermineMove() and Validates input */
                 if(PlayerList.getInstance().getCurrentPlayer() instanceof HumanPlayer) {
-                    //Timer
 
                     //validates and asks for input processes move if word is valid
                     if(inputHandlerMove.askForMove()){
@@ -75,7 +73,7 @@ public class LocalController {
             ServerTUI.printFinalScoreBoard();
 
             /** Ask for another game */
-            continueGame = new InputHandler().askForNextGame();
+            continueGame = InputHandler.askForNextGame();
         }
     }
 
@@ -213,18 +211,6 @@ public class LocalController {
                 }
             }
         }
-
-//		//Sort PlayerList in descending order
-//		Collections.sort(PlayerList.getInstance().getPlayers());
-//		Collections.reverse(PlayerList.getInstance().getPlayers());
-//		Player winnerAfterAdjustment = Collections.max(PlayerList.getInstance().getPlayers());
-//
-//		//The player with the highest final score wins the game. In case of a tie, the player with the highest score before adding or deducting unplaced letters wins
-//		if (PlayerList.getInstance().getPlayers().get(0).getScore() == PlayerList.getInstance().getPlayers().get(1).getScore()){
-//			return winnerBeforeAdjustment;
-//		} else {
-//			return winnerAfterAdjustment;
-//		}
     }
 
     /**

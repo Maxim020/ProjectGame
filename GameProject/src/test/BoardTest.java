@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import scrabble.model.Board;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
-import scrabble.model.letters.Bag;
-import scrabble.model.words.WordScoreCounter;
+import scrabble.model.Bag;
+import scrabble.model.checker.WordScoreCounter;
 
 class BoardTest {
 	

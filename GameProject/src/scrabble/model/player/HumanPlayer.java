@@ -1,8 +1,7 @@
 package scrabble.model.player;
 
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.LetterDeck;
-import scrabble.model.player.Player;
+import scrabble.model.Bag;
+import scrabble.model.LetterDeck;
 
 public class HumanPlayer extends Player {
 

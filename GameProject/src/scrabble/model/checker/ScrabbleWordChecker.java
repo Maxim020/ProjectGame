@@ -1,4 +1,4 @@
-package scrabble.model.words;
+package scrabble.model.checker;
 
 public interface ScrabbleWordChecker {
     /**

@@ -2,9 +2,9 @@ package test;
 
 import java.util.Scanner;
 
-import scrabble.model.words.FileStreamScrabbleWordChecker;
-import scrabble.model.words.InMemoryScrabbleWordChecker;
-import scrabble.model.words.ScrabbleWordChecker;
+import scrabble.model.checker.FileStreamScrabbleWordChecker;
+import scrabble.model.checker.InMemoryScrabbleWordChecker;
+import scrabble.model.checker.ScrabbleWordChecker;
 
 /**
  * A class to test the two WordChecker instances.

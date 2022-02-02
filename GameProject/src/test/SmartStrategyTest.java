@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import scrabble.model.Board;
 import scrabble.model.player.Player;
 import scrabble.model.player.PlayerList;
-import scrabble.strategy.SmartStrategy;
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.LetterDeck;
+import scrabble.model.strategy.SmartStrategy;
+import scrabble.model.Bag;
+import scrabble.model.LetterDeck;
 
 class SmartStrategyTest {
 

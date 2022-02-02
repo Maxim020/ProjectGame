@@ -10,7 +10,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="2" language="java" name="scrabble.strategy.Strategy" project="GameProject"
+  <interface id="2" language="java" name="scrabble.model.strategy.Strategy" project="GameProject"
     file="/GameProject/src/scrabble/model/Strategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="260" x="2999" y="2309"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -46,7 +46,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="scrabble.strategy.NaiveStrategy" project="GameProject"
+  <class id="6" language="java" name="scrabble.model.strategy.NaiveStrategy" project="GameProject"
     file="/GameProject/src/scrabble/model/NaiveStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="196" width="332" x="2627" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -64,7 +64,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="scrabble.strategy.SmartStrategy" project="GameProject"
+  <class id="8" language="java" name="scrabble.model.strategy.SmartStrategy" project="GameProject"
     file="/GameProject/src/scrabble/model/SmartStrategy.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="178" width="280" x="2999" y="2073"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -105,7 +105,7 @@
     <position height="55" width="132" x="3390" y="37"/>    
     <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
   </package>  
-  <class id="13" language="java" name="scrabble.model.words.FileStreamScrabbleWordChecker" project="GameProject" 
+  <class id="13" language="java" name="scrabble.model.checker.FileStreamScrabbleWordChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/words/FileStreamScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="260" x="2622" y="327"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -114,7 +114,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="scrabble.model.words.IsAdjacentChecker" project="GameProject" 
+  <class id="14" language="java" name="scrabble.model.checker.IsAdjacentChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/words/IsAdjacentChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="254" x="3570" y="327"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -123,7 +123,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="scrabble.model.words.ScrabbleWordChecker.WordResponse" project="GameProject" 
+  <class id="15" language="java" name="scrabble.model.checker.ScrabbleWordChecker.WordResponse" project="GameProject"
     file="/GameProject/src/scrabble/model/words/ScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="178" width="195" x="2329" y="1519"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -132,7 +132,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="16" language="java" name="scrabble.model.words.ScrabbleWordChecker" project="GameProject" 
+  <interface id="16" language="java" name="scrabble.model.checker.ScrabbleWordChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/words/ScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="88" width="230" x="2672" y="707"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -141,7 +141,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="17" language="java" name="scrabble.model.words.AdjacentWordChecker" project="GameProject" 
+  <class id="17" language="java" name="scrabble.model.checker.AdjacentWordChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/words/AdjacentWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="142" width="338" x="2943" y="327"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -150,7 +150,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="scrabble.model.words.WordScoreCounter" project="GameProject" 
+  <class id="18" language="java" name="scrabble.model.checker.WordScoreCounter" project="GameProject"
     file="/GameProject/src/scrabble/model/words/WordScoreCounter.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="290" x="3885" y="327"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -159,7 +159,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="19" language="java" name="scrabble.model.words.InMemoryScrabbleWordChecker" project="GameProject" 
+  <class id="19" language="java" name="scrabble.model.checker.InMemoryScrabbleWordChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/words/InMemoryScrabbleWordChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="253" x="2329" y="327"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -177,7 +177,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="21" language="java" name="scrabble.model.letters.TileMultiplierChecker" project="GameProject" 
+  <class id="21" language="java" name="scrabble.model.checker.TileMultiplierChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/TileMultiplierChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="160" width="309" x="4027" y="707"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -186,7 +186,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="22" language="java" name="scrabble.model.letters.LetterDeck" project="GameProject" 
+  <class id="22" language="java" name="scrabble.model.LetterDeck" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/LetterDeck.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="196" width="260" x="3979" y="2309"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -195,7 +195,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="23" language="java" name="scrabble.model.letters.DeadEndChecker" project="GameProject" 
+  <class id="23" language="java" name="scrabble.model.checker.DeadEndChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/DeadEndChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="180" x="2913" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -204,7 +204,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="24" language="java" name="scrabble.model.letters.CrossChecker" project="GameProject" 
+  <class id="24" language="java" name="scrabble.model.checker.CrossChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/CrossChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="106" width="299" x="41" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -213,7 +213,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="25" language="java" name="scrabble.model.letters.Bag" project="GameProject" 
+  <class id="25" language="java" name="scrabble.model.Bag" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/Bag.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="286" width="256" x="3852" y="2545"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -222,7 +222,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="26" language="java" name="scrabble.model.letters.LetterScoreChecker" project="GameProject" 
+  <class id="26" language="java" name="scrabble.model.checker.LetterScoreChecker" project="GameProject"
     file="/GameProject/src/scrabble/model/letters/LetterScoreChecker.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="260" x="3727" y="707"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
@@ -335,7 +335,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="38" language="java" name="local.view.InputHandler" project="GameProject" 
+  <class id="38" language="java" name="local.utils.InputHandler" project="GameProject"
     file="/GameProject/src/local/view/InputHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="250" width="305" x="3845" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 

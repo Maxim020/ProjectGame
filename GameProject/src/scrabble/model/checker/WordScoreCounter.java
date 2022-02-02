@@ -1,9 +1,9 @@
-package scrabble.model.words;
+package scrabble.model.checker;
 
 import scrabble.model.Board;
 import scrabble.model.Board.FieldType;
-import scrabble.model.letters.LetterScoreChecker;
-import scrabble.model.letters.TileMultiplierChecker;
+import scrabble.model.checker.LetterScoreChecker;
+import scrabble.model.checker.TileMultiplierChecker;
 
 import java.util.ArrayList;
 

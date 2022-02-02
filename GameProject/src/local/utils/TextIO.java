@@ -1,4 +1,4 @@
-package scrabble.view.utils;
+package local.utils;
 
 
 import javax.swing.*;

@@ -1,7 +1,6 @@
 package server.controller;
 
 import scrabble.model.player.Player;
-import scrabble.model.letters.Bag;
 import server.view.ServerTUI;
 
 import java.io.*;

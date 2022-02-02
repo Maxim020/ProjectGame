@@ -84,7 +84,7 @@ public class ClientBoard {
     /**
      * @param i - index for the rows
      * @return instructions
-     * @author Yasin
+     * @author Yasin Fahmy
      */
     public String addInstructions(int i){
         if(i == 10){
@@ -112,7 +112,8 @@ public class ClientBoard {
             result.append("    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n");
             result.append(printLine(i + 1)).append(addFieldTypes(i)).append(addInstructions(i)).append("\n");
         }
-        result.append("    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n      A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n");
+        result.append("    +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n      " +
+                "A   B   C   D   E   F   G   H   I   J   K   L   M   N   O\n");
         return result.toString();
     }
 }

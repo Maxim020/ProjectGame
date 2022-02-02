@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import scrabble.model.letters.Bag;
-import scrabble.model.letters.LetterDeck;
+import scrabble.model.Bag;
+import scrabble.model.LetterDeck;
 
 class LetterDeckTest {
 	
