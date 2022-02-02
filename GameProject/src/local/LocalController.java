@@ -17,7 +17,7 @@ public class LocalController {
             /** Instantiates a Board, a Game, a universal PlayerList and Bag*/
             Board board = new Board();
             PlayerList playerList = PlayerList.getInstance();
-            playerList.setPlayers(InputHandler.getPlayers(board));
+            playerList.setPlayers(InputHandler.getPlayers());
 
             Bag bag = Bag.getInstance();
 

@@ -39,11 +39,10 @@ public class InputHandler {
     }
 
     /**
-     * @param board - the board that the game is played on
      * @return an ArrayList of Players
      * Scans user input for the name of all players and if wanted any computer players
      */
-    public static List<Player> getPlayers(Board board){
+    public static List<Player> getPlayers(){
         String[] players;
         int amountOfPlayers;
 
