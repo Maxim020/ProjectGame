@@ -65,13 +65,13 @@ public class InputHandler {
 
         List<Player> playerArrayList = new ArrayList<>();
 
-        for (String player : players) {
-            if (player.equals("-N")) {
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board));
-            } else if (player.equals("-S")) {
-                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board));
+        for (int i=0; i<players.length; i++) {
+            if (players[i].equals("-N")) {
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), board, "NaiveComputerPlayer"+i));
+            } else if (players[i].equals("-S")) {
+                playerArrayList.add(new ComputerPlayer(Bag.getInstance(), new SmartStrategy(), board,"SmartComputerPlayer"+i));
             } else {
-                playerArrayList.add(new HumanPlayer(player, Bag.getInstance()));
+                playerArrayList.add(new HumanPlayer(players[i], Bag.getInstance()));
             }
         }
 

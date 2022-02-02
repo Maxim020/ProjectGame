@@ -32,6 +32,13 @@ public class Bag {
 		return instance;
 	}
 
+	public static void reset(){
+		letterList.clear();
+		for(int i = 0; i < LETTERS.split("").length; i++) {
+			letterList.add(LETTERS.toCharArray()[i]);
+		}
+	}
+
 	/**
 	 * Using the Collections.shuffle method, shuffles (randomizes) the list of letters. Note: I don't know how useful this is, because it could be done with Math.random when player from Player class is first pulling from the bag, but it is a nice touch
 	 * @ensures letterList != (old)letterList;

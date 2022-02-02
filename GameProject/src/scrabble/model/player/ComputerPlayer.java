@@ -10,13 +10,13 @@ public class ComputerPlayer extends Player {
 	
 	private Strategy strategy;
 	
-	public ComputerPlayer(Bag bag, Strategy strategy, Board board) {
-		super("Smart Computer", bag);
+	public ComputerPlayer(Bag bag, Strategy strategy, Board board, String name) {
+		super(name, bag);
 		this.strategy = strategy;
 	}
 
-	public ComputerPlayer(Bag bag, Board board) {
-		super("Naive Computer", bag);
+	public ComputerPlayer(Bag bag, Board board, String name) {
+		super(name, bag);
 		this.strategy = new NaiveStrategy();
 	}
 

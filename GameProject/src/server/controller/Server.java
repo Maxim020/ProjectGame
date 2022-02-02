@@ -52,7 +52,7 @@ public class Server{
                 synchronized (this) {
                     if (requestGame) {
                         setUpGame();
-                        break;
+                        requestGame = false;
                     }
                 }
             }

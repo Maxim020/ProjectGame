@@ -51,7 +51,7 @@ public class Game {
 		//Connect Clients with a player
 		for (int i=0; i<this.clients.size(); i++){ //Computer players
 			if(clients.get(i).getName().equalsIgnoreCase("ComputerPlayer")){
-				this.clients.get(i).setPlayer(new ComputerPlayer(bag,board));
+				this.clients.get(i).setPlayer(new ComputerPlayer(bag,board,"ComputerPlayer"+(i+1)));
 			}
 			else {
 				this.clients.get(i).setPlayer(new HumanPlayer(this.clients.get(i).getName(), bag));
@@ -212,6 +212,7 @@ public class Game {
 
 		adjustScores(bag, playerList.getCurrentPlayer());
 		broadcastMessage(ServerTUI.printFinalScoreBoard());
+		Bag.reset();
 	}
 
 	public void sleep(int ms){
