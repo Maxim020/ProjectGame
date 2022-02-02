@@ -16,7 +16,7 @@ public class ClientTUI {
      * @author Yasin Fahmy
      */
     public static void promptToAnnounce(){
-        System.out.println("Please announce yourself by typing: ANNOUNCE [NAME] (Type ANNOUNCE -C for computer player)");
+        System.out.println("Please announce yourself by typing: ANNOUNCE NAME (Type ANNOUNCE -C for computer player)");
     }
 
     /**
